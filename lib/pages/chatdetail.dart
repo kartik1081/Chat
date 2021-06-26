@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/pages/homepage.dart';
+import 'package:textme/pages/usersprofile.dart';
 
 // ignore: must_be_immutable
 class ChatDetail extends StatefulWidget {
@@ -45,28 +46,45 @@ class _ChatDetailState extends State<ChatDetail> {
         ),
         title: Row(
           children: [
-            new ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              // ignore: unnecessary_null_comparison
-              child: widget.profilePic.isNotEmpty
-                  ? new CachedNetworkImage(
-                      height: 40,
-                      width: 40,
-                      fit: BoxFit.cover,
-                      imageUrl: widget.profilePic,
-                      placeholder: (context, url) {
-                        return new Container(
-                          child: new Center(
-                            child: new CircularProgressIndicator(),
+            new InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new UsersProfile(
+                            name: widget.name,
+                            userId: widget.userId,
+                            profilePic: widget.profilePic,
                           ),
-                        );
-                      },
-                    )
-                  : new Image(
-                      image: AssetImage("assets/avatar.png"),
-                      height: 40,
-                      width: 40,
-                    ),
+                      fullscreenDialog: true),
+                );
+              },
+              child: new Hero(
+                tag: widget.userId,
+                child: new ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  // ignore: unnecessary_null_comparison
+                  child: widget.profilePic.isNotEmpty
+                      ? new CachedNetworkImage(
+                          height: 40,
+                          width: 40,
+                          fit: BoxFit.cover,
+                          imageUrl: widget.profilePic,
+                          placeholder: (context, url) {
+                            return new Container(
+                              child: new Center(
+                                child: new CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                        )
+                      : new Image(
+                          image: AssetImage("assets/avatar.png"),
+                          height: 40,
+                          width: 40,
+                        ),
+                ),
+              ),
             ),
             new SizedBox(
               width: 10,
@@ -84,7 +102,6 @@ class _ChatDetailState extends State<ChatDetail> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: new StreamBuilder<dynamic>(
-                initialData: [],
                 stream: _firestore
                     .collection("Chats")
                     .doc(_auth.currentUser!.uid)

@@ -14,22 +14,6 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        automaticallyImplyLeading: false,
-        title: new Text("Chat"),
-        actions: [
-          new IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => new Search(), fullscreenDialog: true),
-              );
-            },
-            icon: new Icon(Icons.add),
-          ),
-        ],
-      ),
       body: Column(
         children: [
           // new SizedBox(

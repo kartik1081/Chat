@@ -1,14 +1,30 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:textme/pages/editprofile.dart';
 
 // ignore: must_be_immutable
-class EditProfileDetail extends StatelessWidget {
+class EditProfileDetail extends StatefulWidget {
   EditProfileDetail({Key? key}) : super(key: key);
+
+  @override
+  _EditProfileDetailState createState() => _EditProfileDetailState();
+}
+
+class _EditProfileDetailState extends State<EditProfileDetail> {
   FirebaseAuth _auth = FirebaseAuth.instance;
+
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  FirebaseStorage _storage = FirebaseStorage.instance;
+
+  late File _image;
+
   @override
   Widget build(BuildContext context) {
     return new ClipRRect(
@@ -35,18 +51,20 @@ class EditProfileDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       new InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          getImage();
+                        },
                         child: new ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: data["profilePic"] == null
                               ? new Image(
                                   image: AssetImage("assets/avatar.png"),
-                                  height: 75,
-                                  width: 75,
+                                  height: 65,
+                                  width: 65,
                                 )
                               : new CachedNetworkImage(
-                                  height: 75,
-                                  width: 75,
+                                  height: 65,
+                                  width: 65,
                                   fit: BoxFit.cover,
                                   imageUrl: data["profilePic"],
                                   placeholder: (context, url) {
@@ -117,5 +135,37 @@ class EditProfileDetail extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future getImage() async {
+    try {
+      final pickedFile = await ImagePicker()
+          .getImage(source: ImageSource.gallery, imageQuality: 30);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        await _storage
+            .ref()
+            .child("ProfilePic")
+            .child("${_auth.currentUser!.uid}")
+            .putFile(_image)
+            .then((value) {
+          if (value.state == TaskState.running) {}
+          if (value.state == TaskState.success) {
+            value.ref.getDownloadURL().then((value) async {
+              await _firestore
+                  .collection("Users")
+                  .doc("${_auth.currentUser!.uid}")
+                  .update({
+                "profilePic": value,
+              });
+            });
+          }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

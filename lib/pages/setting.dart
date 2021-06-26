@@ -5,11 +5,6 @@ class Setting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: new Text("Setting"),
-      ),
-    );
+    return Scaffold();
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/pages/statusscreen.dart';
 
+// ignore: must_be_immutable
 class Status extends StatelessWidget {
   Status({Key? key}) : super(key: key);
 

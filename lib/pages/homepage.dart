@@ -5,6 +5,9 @@ import 'package:textme/pages/chat.dart';
 import 'package:textme/pages/profile.dart';
 import 'package:textme/pages/setting.dart';
 
+import 'search.dart';
+import 'signin.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -21,6 +24,40 @@ class _HomePageState extends State<HomePage> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        appBar: new AppBar(
+            automaticallyImplyLeading: false,
+            title: _index == 0
+                ? new Text("Chat")
+                : _index == 1
+                    ? new Text("Setting")
+                    : new Text("Profile"),
+            actions: [
+              _index == 0
+                  ? new IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => new Search(),
+                              fullscreenDialog: true),
+                        );
+                      },
+                      icon: new Icon(Icons.add),
+                    )
+                  : _index == 1
+                      ? new Container()
+                      : new IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => new SignIn(),
+                              ),
+                            );
+                          },
+                          icon: new Icon(Icons.logout),
+                        ),
+            ]),
         body: new PageView.builder(
           controller: controller,
           onPageChanged: (value) {
