@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:textme/pages/chat.dart';
+import 'package:textme/pages/chatpage.dart';
 import 'package:textme/pages/profile.dart';
 import 'package:textme/pages/setting.dart';
-
-import 'search.dart';
-import 'signin.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,47 +14,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController controller = PageController();
+
   int _index = 0;
-  List pages = [Chat(), Setting(), Profile()];
+  List pages = [ChatPage(), Setting(), Profile()];
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: new AppBar(
-            automaticallyImplyLeading: false,
-            title: _index == 0
-                ? new Text("Chat")
-                : _index == 1
-                    ? new Text("Setting")
-                    : new Text("Profile"),
-            actions: [
-              _index == 0
-                  ? new IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => new Search(),
-                              fullscreenDialog: true),
-                        );
-                      },
-                      icon: new Icon(Icons.add),
-                    )
-                  : _index == 1
-                      ? new Container()
-                      : new IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => new SignIn(),
-                              ),
-                            );
-                          },
-                          icon: new Icon(Icons.logout),
-                        ),
-            ]),
         body: new PageView.builder(
           controller: controller,
           onPageChanged: (value) {
@@ -105,11 +69,11 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
                 tabs: [
                   GButton(
-                    icon: LineIcons.code,
-                    text: "Chat",
+                    icon: LineIcons.home,
+                    text: "Home",
                   ),
                   GButton(
-                    icon: LineIcons.heart,
+                    icon: LineIcons.search,
                     text: "Setting",
                   ),
                   GButton(

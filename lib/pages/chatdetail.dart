@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -23,6 +24,7 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isTapped = false;
   @override
   Widget build(BuildContext context) {
     TextEditingController msg = TextEditingController();
@@ -95,11 +97,17 @@ class _ChatDetailState extends State<ChatDetail> {
             ),
           ],
         ),
+        actions: [
+          _isTapped
+              ? new IconButton(onPressed: () {}, icon: new Icon(Icons.star))
+              : new Text("")
+        ],
       ),
       body: new Column(
         children: [
           new Expanded(
             child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               alignment: Alignment.bottomCenter,
               child: new StreamBuilder<dynamic>(
                 stream: _firestore
@@ -125,111 +133,107 @@ class _ChatDetailState extends State<ChatDetail> {
                             bottom: 8.0,
                           ),
                           width: MediaQuery.of(context).size.width,
-                          color: Color(0xFF2B2641),
+                          color: _isTapped
+                              ? Colors.white.withOpacity(0.2)
+                              : Color(0xFF2B2641),
                           child: snapshot.data.docs[index]["sendBy"] ==
                                   _auth.currentUser!.uid
-                              ? new Container(
-                                  margin: const EdgeInsets.only(right: 7.0),
-                                  padding: const EdgeInsets.only(
-                                      top: 5.0,
-                                      bottom: 5.0,
-                                      left: 20.0,
-                                      right: 20.0),
-                                  decoration: new BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20.0),
-                                      topRight: Radius.circular(20.0),
-                                      bottomLeft: Radius.circular(20.0),
+                              ? new InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _isTapped = !_isTapped;
+                                    });
+                                  },
+                                  child: new Container(
+                                    margin: const EdgeInsets.only(right: 7.0),
+                                    padding: const EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    decoration: new BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20.0),
+                                        topRight: Radius.circular(20.0),
+                                        bottomLeft: Radius.circular(20.0),
+                                      ),
+                                      color: Color(0xFF8ECECE),
                                     ),
-                                    color: Color(0xFF8ECECE),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          new Text(
-                                            "name",
-                                            style: new TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        new Text(
+                                          snapshot.data.docs[index]["msg"],
+                                          style: new TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600,
                                           ),
-                                          new SizedBox(
-                                            height: 3.0,
-                                          ),
-                                          new Text(
-                                            snapshot.data.docs[index]["msg"],
-                                            style: new TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      new SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      new Text(
-                                        "time",
-                                        style: new TextStyle(
-                                            color: Colors.grey, fontSize: 13),
-                                      ),
-                                    ],
+                                        ),
+                                        new SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        new Text(
+                                          DateTimeFormat.format(
+                                              snapshot.data.docs[index]["time"]
+                                                  .toDate(),
+                                              format: 'H:i'),
+                                          style: new TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
-                              : new Container(
-                                  margin: const EdgeInsets.only(left: 7.0),
-                                  padding: const EdgeInsets.only(
-                                      top: 5.0,
-                                      bottom: 5.0,
-                                      left: 20.0,
-                                      right: 20.0),
-                                  decoration: new BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20.0),
-                                      topRight: Radius.circular(20.0),
-                                      bottomRight: Radius.circular(20.0),
+                              : new InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _isTapped = !_isTapped;
+                                    });
+                                  },
+                                  child: new Container(
+                                    margin: const EdgeInsets.only(left: 7.0),
+                                    padding: const EdgeInsets.only(
+                                        top: 5.0,
+                                        bottom: 5.0,
+                                        left: 20.0,
+                                        right: 20.0),
+                                    decoration: new BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20.0),
+                                        topRight: Radius.circular(20.0),
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                      color: Colors.white60,
                                     ),
-                                    color: Colors.white60,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          new Text(
-                                            widget.name,
-                                            style: new TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        new Text(
+                                          snapshot.data.docs[index]["msg"],
+                                          style: new TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600,
                                           ),
-                                          new SizedBox(
-                                            height: 3.0,
-                                          ),
-                                          new Text(
-                                            snapshot.data.docs[index]["msg"],
-                                            style: new TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      new SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      new Text(
-                                        "time",
-                                        style: new TextStyle(
-                                            color: Colors.grey, fontSize: 13),
-                                      ),
-                                    ],
+                                        ),
+                                        new SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        new Text(
+                                          DateTimeFormat.format(
+                                              snapshot.data.docs[index]["time"]
+                                                  .toDate(),
+                                              format: 'H:i'),
+                                          style: new TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                         );
@@ -298,7 +302,6 @@ class _ChatDetailState extends State<ChatDetail> {
                                 _auth.currentUser!.uid + "_" + widget.userId)
                             .add({
                           "msg": msg.text,
-                          // "name": snapshot.data.docs["name"],
                           "sendBy": _auth.currentUser!.uid,
                           "time": DateTime.now(),
                         }).whenComplete(() async {
@@ -309,7 +312,6 @@ class _ChatDetailState extends State<ChatDetail> {
                                   widget.userId + "_" + _auth.currentUser!.uid)
                               .add({
                             "msg": msg.text,
-                            // "name": snapshot.data.docs["name"],
                             "sendBy": _auth.currentUser!.uid,
                             "time": DateTime.now(),
                           });

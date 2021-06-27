@@ -18,7 +18,6 @@ class ChatList extends StatefulWidget {
 
 class _ChatListState extends State<ChatList> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -38,103 +37,120 @@ class _ChatListState extends State<ChatList> {
                   scrollDirection: Axis.vertical,
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
-                    return new InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => new ChatDetail(
-                                    name: snapshot.data.docs[index]["name"],
-                                    userId: snapshot.data.docs[index]["id"],
-                                    profilePic: snapshot.data.docs[index]
-                                        ["profilePic"])));
-                      },
-                      child: new Container(
-                        height: snapshot.data.docs[index]["id"] !=
-                                _auth.currentUser!.uid
-                            ? 75.0
-                            : 0.0,
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15.0, top: 10.0),
-                          child: Column(
-                            children: [
-                              new Row(
-                                children: [
-                                  new Hero(
-                                    tag: snapshot.data.docs[index]["id"],
-                                    child: new ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: snapshot
-                                              .data
-                                              .docs[index]["profilePic"]
-                                              .isNotEmpty
-                                          ? new CachedNetworkImage(
-                                              height: 49,
-                                              width: 49,
-                                              fit: BoxFit.cover,
-                                              imageUrl: snapshot.data
-                                                  .docs[index]["profilePic"],
-                                              placeholder: (context, url) {
-                                                return new Container(
-                                                  height: 100,
-                                                  child: new Center(
-                                                    child:
-                                                        new CircularProgressIndicator(),
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                          : new Image(
-                                              image: AssetImage(
-                                                  "assets/avatar.png"),
-                                              height: 49,
-                                              width: 49,
-                                            ),
+                    return StreamBuilder<dynamic>(
+                      stream: _firestore
+                          .collection("Users")
+                          .where("id",
+                              isEqualTo: snapshot.data.docs[index]["id"])
+                          .snapshots(),
+                      builder: (context, snapshots) {
+                        Map<String, dynamic> data = snapshots.data.data();
+                        return snapshots.hasData
+                            ? new InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => new ChatDetail(
+                                        name: data["name"],
+                                        userId: data["id"],
+                                        profilePic: data["profilePic"],
+                                      ),
                                     ),
-                                  ),
-                                  new SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  new Expanded(
+                                  );
+                                },
+                                child: new Container(
+                                  height: data["id"] != _auth.currentUser!.uid
+                                      ? 75.0
+                                      : 0.0,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15.0, right: 15.0, top: 10.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
-                                        new Text(
-                                          snapshot.data.docs[index]["name"],
-                                          style: new TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w800),
+                                        new Row(
+                                          children: [
+                                            new Hero(
+                                              tag: snapshot.data.docs[index]
+                                                  ["id"],
+                                              child: new ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: data["profilePic"]
+                                                        .isNotEmpty
+                                                    ? new CachedNetworkImage(
+                                                        height: 49,
+                                                        width: 49,
+                                                        fit: BoxFit.cover,
+                                                        imageUrl:
+                                                            data["profilePic"],
+                                                        placeholder:
+                                                            (context, url) {
+                                                          return new Container(
+                                                            height: 100,
+                                                            child: new Center(
+                                                              child:
+                                                                  new CircularProgressIndicator(),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : new Image(
+                                                        image: AssetImage(
+                                                            "assets/avatar.png"),
+                                                        height: 49,
+                                                        width: 49,
+                                                      ),
+                                              ),
+                                            ),
+                                            new SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            new Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  new Text(
+                                                    data["name"],
+                                                    style: new TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w800),
+                                                  ),
+                                                  new SizedBox(
+                                                    height: 3.0,
+                                                  ),
+                                                  new Text(
+                                                    "Last Messege",
+                                                    style: new TextStyle(
+                                                        color: Colors.white60,
+                                                        fontSize: 11.5),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            new Text(
+                                              DateTimeFormat.format(
+                                                  snapshot
+                                                      .data.docs[index]["time"]
+                                                      .toDate(),
+                                                  format: 'H:i'),
+                                              style: new TextStyle(
+                                                  color: Colors.white60,
+                                                  fontSize: 11.5),
+                                            ),
+                                          ],
                                         ),
-                                        new SizedBox(
-                                          height: 3.0,
-                                        ),
-                                        new Text(
-                                          "Last Messege",
-                                          style: new TextStyle(
-                                              color: Colors.white60,
-                                              fontSize: 11.5),
-                                        ),
+                                        new Divider()
                                       ],
                                     ),
                                   ),
-                                  new Text(
-                                    DateTimeFormat.format(
-                                        snapshot.data.docs[index]["time"]
-                                            .toDate(),
-                                        format: 'H:i'),
-                                    style: new TextStyle(
-                                        color: Colors.white60, fontSize: 11.5),
-                                  ),
-                                ],
-                              ),
-                              new Divider()
-                            ],
-                          ),
-                        ),
-                      ),
+                                ),
+                              )
+                            : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                      },
                     );
                   },
                 )
