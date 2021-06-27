@@ -7,20 +7,19 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'chatdetail.dart';
 
-class Chat extends StatefulWidget {
-  Chat({
-    Key? key,
-  }) : super(key: key);
+// ignore: must_be_immutable
+class Status extends StatefulWidget {
+  Status({Key? key}) : super(key: key);
 
   @override
-  _ChatState createState() => _ChatState();
+  _StatusState createState() => _StatusState();
 }
 
-class _ChatState extends State<Chat> {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+class _StatusState extends State<Status> {
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    FirebaseAuth _auth = FirebaseAuth.instance;
     return new Scaffold(
       body: Column(
         children: [

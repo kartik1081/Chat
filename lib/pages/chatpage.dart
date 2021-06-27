@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:textme/models/widgets/status.dart';
+import 'package:textme/pages/status.dart';
 import 'package:textme/pages/call.dart';
 import 'package:textme/pages/chat.dart';
 import 'package:textme/pages/search.dart';
