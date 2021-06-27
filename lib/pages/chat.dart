@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:textme/models/widgets/chatlist.dart';
-import 'package:textme/models/widgets/searchchat.dart';
-import 'package:textme/models/widgets/status.dart';
-import 'package:textme/pages/search.dart';
 
 class Chat extends StatefulWidget {
   Chat({

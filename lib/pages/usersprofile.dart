@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:textme/pages/chat.dart';
 
+// ignore: must_be_immutable
 class UsersProfile extends StatelessWidget {
   UsersProfile(
       {Key? key,

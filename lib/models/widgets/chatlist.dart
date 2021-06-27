@@ -1,5 +1,3 @@
-import 'package:animations/animations.dart';
-import 'package:date_format/date_format.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_format/date_time_format.dart';
@@ -23,68 +21,69 @@ class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      child: StreamBuilder<dynamic>(
+      child: new StreamBuilder<dynamic>(
         stream: _firestore
             .collection("Users")
             .doc(_auth.currentUser!.uid)
             .collection("Favorites")
             .orderBy("time", descending: true)
             .snapshots(),
-        builder: (context, snapshot) {
-          return snapshot.hasData
+        builder: (context, snapshot0) {
+          return snapshot0.hasData
               ? new ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot0.data.docs.length,
                   itemBuilder: (context, index) {
-                    return StreamBuilder<dynamic>(
+                    return new StreamBuilder<dynamic>(
                       stream: _firestore
                           .collection("Users")
-                          .where("id",
-                              isEqualTo: snapshot.data.docs[index]["id"])
+                          .doc(snapshot0.data.docs[index]["id"])
                           .snapshots(),
-                      builder: (context, snapshots) {
-                        Map<String, dynamic> data = snapshots.data.data();
-                        return snapshots.hasData
+                      builder: (context, snapshot1) {
+                        return snapshot1.hasData
                             ? new InkWell(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => new ChatDetail(
-                                        name: data["name"],
-                                        userId: data["id"],
-                                        profilePic: data["profilePic"],
+                                        name: snapshot1.data["name"],
+                                        userId: snapshot1.data["id"],
+                                        profilePic:
+                                            snapshot1.data["profilePic"],
                                       ),
                                     ),
                                   );
                                 },
                                 child: new Container(
-                                  height: data["id"] != _auth.currentUser!.uid
-                                      ? 75.0
+                                  height: snapshot1.data["id"] !=
+                                          _auth.currentUser!.uid
+                                      ? 80.0
                                       : 0.0,
                                   width: MediaQuery.of(context).size.width,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 15.0, right: 15.0, top: 10.0),
                                     child: Column(
+                                      mainAxisSize: MainAxisSize.max,
                                       children: [
                                         new Row(
                                           children: [
                                             new Hero(
-                                              tag: snapshot.data.docs[index]
-                                                  ["id"],
+                                              tag: snapshot1.data["id"],
                                               child: new ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(100),
-                                                child: data["profilePic"]
+                                                child: snapshot1
+                                                        .data["profilePic"]
                                                         .isNotEmpty
                                                     ? new CachedNetworkImage(
                                                         height: 49,
                                                         width: 49,
                                                         fit: BoxFit.cover,
-                                                        imageUrl:
-                                                            data["profilePic"],
+                                                        imageUrl: snapshot1
+                                                            .data["profilePic"],
                                                         placeholder:
                                                             (context, url) {
                                                           return new Container(
@@ -113,7 +112,7 @@ class _ChatListState extends State<ChatList> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   new Text(
-                                                    data["name"],
+                                                    snapshot1.data["name"],
                                                     style: new TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:
@@ -123,7 +122,7 @@ class _ChatListState extends State<ChatList> {
                                                     height: 3.0,
                                                   ),
                                                   new Text(
-                                                    "Last Messege",
+                                                    "Last Message",
                                                     style: new TextStyle(
                                                         color: Colors.white60,
                                                         fontSize: 11.5),
@@ -133,7 +132,7 @@ class _ChatListState extends State<ChatList> {
                                             ),
                                             new Text(
                                               DateTimeFormat.format(
-                                                  snapshot
+                                                  snapshot0
                                                       .data.docs[index]["time"]
                                                       .toDate(),
                                                   format: 'H:i'),
@@ -149,7 +148,12 @@ class _ChatListState extends State<ChatList> {
                                   ),
                                 ),
                               )
-                            : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                            : new Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 4.0, horizontal: 8.0),
+                                height: 60,
+                                color: Color(0xFF3C355A),
+                              );
                       },
                     );
                   },

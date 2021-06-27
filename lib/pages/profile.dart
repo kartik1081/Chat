@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:textme/pages/signin.dart';
 
 import 'editprofile.dart';
@@ -21,8 +19,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseStorage _storage = FirebaseStorage.instance;
-  late File _image;
 
   @override
   Widget build(BuildContext context) {
@@ -75,35 +71,30 @@ class _ProfileState extends State<Profile> {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                new InkWell(
-                                  onTap: () {
-                                    getImage();
-                                  },
-                                  child: new ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: data["profilePic"].isNotEmpty
-                                        ? new CachedNetworkImage(
-                                            height: 65,
-                                            width: 65,
-                                            fit: BoxFit.cover,
-                                            imageUrl: data["profilePic"],
-                                            placeholder: (context, url) {
-                                              return new Container(
-                                                height: 100,
-                                                child: new Center(
-                                                  child:
-                                                      new CircularProgressIndicator(),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : new Image(
-                                            image:
-                                                AssetImage("assets/avatar.png"),
-                                            height: 65,
-                                            width: 65,
-                                          ),
-                                  ),
+                                new ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: data["profilePic"].isNotEmpty
+                                      ? new CachedNetworkImage(
+                                          height: 65,
+                                          width: 65,
+                                          fit: BoxFit.cover,
+                                          imageUrl: data["profilePic"],
+                                          placeholder: (context, url) {
+                                            return new Container(
+                                              height: 100,
+                                              child: new Center(
+                                                child:
+                                                    new CircularProgressIndicator(),
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      : new Image(
+                                          image:
+                                              AssetImage("assets/avatar.png"),
+                                          height: 65,
+                                          width: 65,
+                                        ),
                                 ),
                                 new SizedBox(
                                   width: 10,
@@ -168,37 +159,5 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
-  }
-
-  Future getImage() async {
-    try {
-      final pickedFile = await ImagePicker()
-          .getImage(source: ImageSource.gallery, imageQuality: 30);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-        await _storage
-            .ref()
-            .child("ProfilePic")
-            .child("${_auth.currentUser!.uid}")
-            .putFile(_image)
-            .then((value) {
-          if (value.state == TaskState.running) {}
-          if (value.state == TaskState.success) {
-            value.ref.getDownloadURL().then((value) async {
-              await _firestore
-                  .collection("Users")
-                  .doc("${_auth.currentUser!.uid}")
-                  .update({
-                "profilePic": value,
-              });
-            });
-          }
-        });
-      }
-    } catch (e) {
-      print(e.toString());
-    }
   }
 }
