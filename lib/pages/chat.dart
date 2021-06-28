@@ -19,6 +19,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  late int item;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -173,7 +174,9 @@ class _ChatState extends State<Chat> {
                           );
                         },
                       )
-                    : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                    : new SpinKitFadingCircle(
+                        color: Color(0xFF2EF7F7),
+                      );
               },
             ),
             height: 500,

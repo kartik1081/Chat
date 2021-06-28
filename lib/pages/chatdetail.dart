@@ -133,6 +133,7 @@ class _ChatDetailState extends State<ChatDetail> {
                             bottom: 8.0,
                           ),
                           width: MediaQuery.of(context).size.width,
+                          height: 30.0,
                           color: _isTapped
                               ? Colors.white.withOpacity(0.2)
                               : Color(0xFF2B2641),

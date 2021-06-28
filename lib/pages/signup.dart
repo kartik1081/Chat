@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:textme/services/fire.dart';
+import 'package:textme/models/services/fire.dart';
 
 import 'signin.dart';
 

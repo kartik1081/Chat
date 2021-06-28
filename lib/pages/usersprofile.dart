@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:textme/pages/chat.dart';
+import 'package:textme/pages/chatpage.dart';
 
 // ignore: must_be_immutable
 class UsersProfile extends StatelessWidget {
@@ -25,11 +26,11 @@ class UsersProfile extends StatelessWidget {
       body: new Column(
         children: [
           new Container(
-            height: 200,
+            // height: 200,
             width: MediaQuery.of(context).size.width,
             child: new CachedNetworkImage(
               imageUrl: profilePic,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitWidth,
             ),
           ),
           new SizedBox(
@@ -46,7 +47,7 @@ class UsersProfile extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => new Chat(),
+                  builder: (context) => new ChatPage(),
                 ),
               );
             },

@@ -78,66 +78,79 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                                 new Column(
                                   children: [
-                                    new Row(
-                                      children: [
-                                        new Icon(
-                                          Icons.person,
-                                          color: Colors.white70,
-                                        ),
-                                        new SizedBox(
-                                          width: 15.0,
-                                        ),
-                                        new Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            new Row(
-                                              children: [
-                                                new Column(
-                                                  children: [
-                                                    new Text(
-                                                      "Name",
-                                                      style: new TextStyle(
-                                                          color: Colors.white70,
-                                                          fontSize: 15.0),
-                                                    ),
-                                                    new SizedBox(
-                                                      height: 5.0,
-                                                    ),
-                                                    new Text(
-                                                      data["name"],
-                                                      style: new TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                                new SizedBox(
-                                                  width: 245.0,
-                                                ),
-                                                new IconButton(
-                                                  onPressed: () {},
-                                                  icon: new Icon(
-                                                    Icons.edit,
-                                                    color: Color(0xFF2EF7F7),
+                                    new Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: new Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          new Icon(
+                                            Icons.person,
+                                            color: Colors.white70,
+                                          ),
+                                          new SizedBox(
+                                            width: 15.0,
+                                          ),
+                                          new Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              new Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  new Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      new Text(
+                                                        "Name",
+                                                        style: new TextStyle(
+                                                            color:
+                                                                Colors.white70,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                      new SizedBox(
+                                                        height: 5.0,
+                                                      ),
+                                                      new Text(
+                                                        data["name"],
+                                                        style: new TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            new SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            new Text(
-                                              "This is not your username or pin. This name will \n be visible to your TextMe contacts.",
-                                              style: new TextStyle(
-                                                  color: Colors.white70,
-                                                  fontSize: 15.0),
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                                  new SizedBox(
+                                                    width: 174.0,
+                                                  ),
+                                                  new IconButton(
+                                                    onPressed: () {},
+                                                    icon: new Icon(
+                                                      Icons.edit,
+                                                      color: Color(0xFF2EF7F7),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              new SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              new Text(
+                                                "This is not your username or pin. This \n name will be visible to your TextMe contacts.",
+                                                style: new TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 13.0),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     new SizedBox(
                                       height: 15.0,

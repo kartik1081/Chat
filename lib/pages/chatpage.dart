@@ -28,68 +28,71 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new DefaultTabController(
-      length: 3,
-      child: new SafeArea(
-        child: new Scaffold(
-          appBar: new AppBar(
-            title: _index == 0
-                ? new Text("Chat")
-                : _index == 1
-                    ? new Text("Status")
-                    : new Text("Calls"),
-            actions: [
-              _index == 0
-                  ? new Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        new IconButton(
-                          onPressed: () {},
-                          icon: new Icon(Icons.search),
-                        ),
-                        new IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => new Search(),
-                                  fullscreenDialog: true),
-                            );
-                          },
-                          icon: new Icon(Icons.add),
-                        ),
-                      ],
-                    )
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: new DefaultTabController(
+        length: 3,
+        child: new SafeArea(
+          child: new Scaffold(
+            appBar: new AppBar(
+              title: _index == 0
+                  ? new Text("Chat")
                   : _index == 1
-                      ? new IconButton(
-                          onPressed: () {}, icon: new Icon(Icons.add))
-                      : new Container()
-            ],
-            bottom: new TabBar(
-              controller: tab,
-              onTap: (value) {
-                setState(() {
-                  _index = value;
-                });
-              },
-              tabs: [
-                new Tab(
-                  text: "Chat",
-                ),
-                new Tab(
-                  text: "Status",
-                ),
-                new Tab(
-                  text: "Calls",
-                )
+                      ? new Text("Status")
+                      : new Text("Calls"),
+              actions: [
+                _index == 0
+                    ? new Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          new IconButton(
+                            onPressed: () {},
+                            icon: new Icon(Icons.search),
+                          ),
+                          new IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => new Search(),
+                                    fullscreenDialog: true),
+                              );
+                            },
+                            icon: new Icon(Icons.add),
+                          ),
+                        ],
+                      )
+                    : _index == 1
+                        ? new IconButton(
+                            onPressed: () {}, icon: new Icon(Icons.add))
+                        : new Container()
               ],
-              indicatorColor: Colors.white,
-              indicatorSize: TabBarIndicatorSize.tab,
+              bottom: new TabBar(
+                controller: tab,
+                onTap: (value) {
+                  setState(() {
+                    _index = value;
+                  });
+                },
+                tabs: [
+                  new Tab(
+                    text: "Chat",
+                  ),
+                  new Tab(
+                    text: "Status",
+                  ),
+                  new Tab(
+                    text: "Calls",
+                  )
+                ],
+                indicatorColor: Colors.white,
+                indicatorSize: TabBarIndicatorSize.tab,
+              ),
+              automaticallyImplyLeading: false,
             ),
-            automaticallyImplyLeading: false,
+            body: new TabBarView(
+                controller: tab, children: [Chat(), Status(), Calls()]),
           ),
-          body: new TabBarView(
-              controller: tab, children: [Chat(), Status(), Calls()]),
         ),
       ),
     );
