@@ -315,6 +315,10 @@ class _ChatDetailState extends State<ChatDetail> {
                             "sendBy": _auth.currentUser!.uid,
                             "time": DateTime.now(),
                           });
+                        }).whenComplete(() {
+                          setState(() {
+                            msg.clear();
+                          });
                         }).whenComplete(() async {
                           await _firestore
                               .collection("Users")
@@ -326,10 +330,6 @@ class _ChatDetailState extends State<ChatDetail> {
                             "profilePic": widget.profilePic,
                             "time": DateTime.now(),
                             "id": widget.userId,
-                          });
-                        }).whenComplete(() {
-                          setState(() {
-                            msg.clear();
                           });
                         });
                       } catch (e) {

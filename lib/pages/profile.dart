@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:textme/models/services/fire.dart';
 import 'package:textme/pages/signin.dart';
 
 import 'editprofile.dart';
@@ -19,6 +20,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Fire _fire = Fire();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class _ProfileState extends State<Profile> {
         actions: [
           new IconButton(
             onPressed: () {
+              _fire.signOut(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(

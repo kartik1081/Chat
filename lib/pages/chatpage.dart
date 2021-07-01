@@ -36,10 +36,40 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           child: new Scaffold(
             appBar: new AppBar(
               title: _index == 0
-                  ? new Text("Chat")
+                  ? TweenAnimationBuilder(
+                      child: new Text("Chat"),
+                      duration: Duration(milliseconds: 1000),
+                      tween: Tween<double>(begin: 0.0, end: 1.0),
+                      builder: (BuildContext context, double value, child) {
+                        return Opacity(
+                          opacity: value,
+                          child: child,
+                        );
+                      },
+                    )
                   : _index == 1
-                      ? new Text("Status")
-                      : new Text("Calls"),
+                      ? TweenAnimationBuilder(
+                          child: new Text("Status"),
+                          duration: Duration(milliseconds: 1000),
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          builder: (BuildContext context, double value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: child,
+                            );
+                          },
+                        )
+                      : TweenAnimationBuilder(
+                          child: new Text("Calls"),
+                          duration: Duration(milliseconds: 1000),
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          builder: (BuildContext context, double value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: child,
+                            );
+                          },
+                        ),
               actions: [
                 _index == 0
                     ? new Row(
