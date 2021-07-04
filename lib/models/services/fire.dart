@@ -111,7 +111,7 @@ class Fire {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      await FirebaseAuth.instance.signInWithCredential(credential).then(
+      return await FirebaseAuth.instance.signInWithCredential(credential).then(
         (value) {
           _firestore.collection("Users").doc("${value.user!.uid}").set(
             {
