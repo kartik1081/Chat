@@ -25,44 +25,44 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: new Text("Profile"),
+        title: Text("Profile"),
         actions: [
-          new IconButton(
+          IconButton(
             onPressed: () {
               _fire.signOut(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => new SignIn(),
+                  builder: (context) => SignIn(),
                 ),
               );
             },
-            icon: new Icon(Icons.logout),
+            icon: Icon(Icons.logout),
           ),
         ],
       ),
-      body: new SafeArea(
-        child: new Stack(
+      body: SafeArea(
+        child: Stack(
           children: [
-            new Positioned(
+            Positioned(
               top: 10.0,
               left: 10.0,
               right: 10.0,
               height: MediaQuery.of(context).size.height * 0.3,
-              child: new ClipRRect(
+              child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                child: new Container(
+                child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: MediaQuery.of(context).size.width,
                   height: 250,
                   color: Colors.white.withOpacity(0.7),
-                  child: new Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      new StreamBuilder<dynamic>(
+                      StreamBuilder<dynamic>(
                         stream: _firestore
                             .collection("Users")
                             .doc("${_auth.currentUser!.uid}")
@@ -70,51 +70,51 @@ class _ProfileState extends State<Profile> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             Map<String, dynamic> data = snapshot.data.data();
-                            return new Row(
+                            return Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                new ClipRRect(
+                                ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: data["profilePic"].isNotEmpty
-                                      ? new CachedNetworkImage(
+                                      ? CachedNetworkImage(
                                           height: 65,
                                           width: 65,
                                           fit: BoxFit.cover,
                                           imageUrl: data["profilePic"],
                                           placeholder: (context, url) {
-                                            return new Container(
+                                            return Container(
                                               height: 100,
-                                              child: new Center(
+                                              child: Center(
                                                 child:
-                                                    new CircularProgressIndicator(),
+                                                    CircularProgressIndicator(),
                                               ),
                                             );
                                           },
                                         )
-                                      : new Image(
+                                      : Image(
                                           image:
                                               AssetImage("assets/avatar.png"),
                                           height: 65,
                                           width: 65,
                                         ),
                                 ),
-                                new SizedBox(
+                                SizedBox(
                                   width: 10,
                                 ),
-                                new Column(
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    new Text(
+                                    Text(
                                       data["name"],
-                                      style: new TextStyle(
+                                      style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18,
                                           fontWeight: FontWeight.w800),
                                     ),
-                                    new Text(
+                                    Text(
                                       data["email"],
-                                      style: new TextStyle(
+                                      style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
@@ -125,16 +125,16 @@ class _ProfileState extends State<Profile> {
                               ],
                             );
                           }
-                          return new CircularProgressIndicator();
+                          return CircularProgressIndicator();
                         },
                       ),
-                      new SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
-                      new Container(
+                      Container(
                         width: 300,
-                        decoration: new BoxDecoration(),
-                        child: new ElevatedButton(
+                        decoration: BoxDecoration(),
+                        child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.white),
@@ -143,13 +143,13 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => new EditProfile(),
+                                  builder: (context) => EditProfile(),
                                   fullscreenDialog: true),
                             );
                           },
-                          child: new Text(
+                          child: Text(
                             "Edit Profile",
-                            style: new TextStyle(color: Colors.black87),
+                            style: TextStyle(color: Colors.black87),
                           ),
                         ),
                       ),

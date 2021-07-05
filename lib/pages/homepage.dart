@@ -19,10 +19,10 @@ class _HomePageState extends State<HomePage> {
   List pages = [ChatPage(), Setting(), Profile()];
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
+    return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        body: new PageView.builder(
+        body: PageView.builder(
           controller: controller,
           onPageChanged: (value) {
             setState(() {
@@ -34,22 +34,22 @@ class _HomePageState extends State<HomePage> {
             return pages[index];
           },
         ),
-        bottomNavigationBar: new Container(
-          decoration: new BoxDecoration(
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
             backgroundBlendMode: BlendMode.darken,
             color: Colors.transparent,
             boxShadow: [
-              new BoxShadow(
+              BoxShadow(
                 blurRadius: 20,
                 color: Colors.black.withOpacity(0.1),
               ),
             ],
           ),
-          child: new SafeArea(
-            child: new Padding(
+          child: SafeArea(
+            child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-              child: new GNav(
+              child: GNav(
                 rippleColor: Color(0xFF2EF7F7),
                 hoverColor: Color(0xFF2EF7F7),
                 gap: 8,

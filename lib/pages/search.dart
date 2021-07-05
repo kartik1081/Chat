@@ -21,10 +21,10 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         titleSpacing: 0,
         title: _isSearching
-            ? new TextFormField(
+            ? TextFormField(
                 onChanged: (value) {
                   setState(() {});
                 },
@@ -36,27 +36,27 @@ class _SearchState extends State<Search> {
                 },
                 controller: search,
                 cursorHeight: 22.0,
-                decoration: new InputDecoration(
+                decoration: InputDecoration(
                   hintText: "Search",
-                  hintStyle: new TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Colors.grey),
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding:
                       const EdgeInsets.fromLTRB(13.0, -5.0, 0.0, -5.0),
-                  focusedBorder: new OutlineInputBorder(
-                      borderSide: new BorderSide(
-                          width: 0.0000000001, color: Colors.black),
-                      borderRadius: new BorderRadius.circular(10.0)),
-                  enabledBorder: new OutlineInputBorder(
-                    borderSide: new BorderSide(
-                        width: 0.0000000001, color: Colors.white),
-                    borderRadius: new BorderRadius.circular(10.0),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(width: 0.0000000001, color: Colors.black),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 0.0000000001, color: Colors.white),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               )
-            : new Text("Search"),
+            : Text("Search"),
         actions: [
-          new IconButton(
+          IconButton(
             onPressed: () {
               setState(() {
                 _isSearching = !_isSearching;
@@ -65,15 +65,15 @@ class _SearchState extends State<Search> {
                 }
               });
             },
-            icon: new Icon(Icons.search),
+            icon: Icon(Icons.search),
           ),
         ],
       ),
-      body: new SafeArea(
+      body: SafeArea(
         child: _isSearching
-            ? new Padding(
+            ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: new StreamBuilder<dynamic>(
+                child: StreamBuilder<dynamic>(
                   stream: _firestore
                       .collection("Users")
                       .where("name", isEqualTo: search.text)
@@ -81,15 +81,15 @@ class _SearchState extends State<Search> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     return snapshot.hasData
-                        ? new ListView.builder(
+                        ? ListView.builder(
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
-                              return new InkWell(
+                              return InkWell(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => new ChatDetail(
+                                      builder: (context) => ChatDetail(
                                         name: snapshot.data.docs[index]["name"],
                                         userId: snapshot.data.docs[index]["id"],
                                         profilePic: snapshot.data.docs[index]
@@ -98,7 +98,7 @@ class _SearchState extends State<Search> {
                                     ),
                                   );
                                 },
-                                child: new Container(
+                                child: Container(
                                   height: snapshot.data.docs[index]["id"] !=
                                           _auth.currentUser!.uid
                                       ? 75.0
@@ -117,19 +117,19 @@ class _SearchState extends State<Search> {
                                           child: child,
                                         );
                                       },
-                                      child: new Row(
+                                      child: Row(
                                         children: [
-                                          new Hero(
+                                          Hero(
                                             tag: snapshot.data.docs[index]
                                                 ["id"],
-                                            child: new ClipRRect(
+                                            child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(100),
                                               child: snapshot
                                                       .data
                                                       .docs[index]["profilePic"]
                                                       .isNotEmpty
-                                                  ? new CachedNetworkImage(
+                                                  ? CachedNetworkImage(
                                                       height: 49,
                                                       width: 49,
                                                       fit: BoxFit.cover,
@@ -138,16 +138,16 @@ class _SearchState extends State<Search> {
                                                           ["profilePic"],
                                                       placeholder:
                                                           (context, url) {
-                                                        return new Container(
+                                                        return Container(
                                                           height: 100,
-                                                          child: new Center(
+                                                          child: Center(
                                                             child:
-                                                                new CircularProgressIndicator(),
+                                                                CircularProgressIndicator(),
                                                           ),
                                                         );
                                                       },
                                                     )
-                                                  : new Image(
+                                                  : Image(
                                                       image: AssetImage(
                                                           "assets/avatar.png"),
                                                       height: 49,
@@ -155,18 +155,18 @@ class _SearchState extends State<Search> {
                                                     ),
                                             ),
                                           ),
-                                          new SizedBox(
+                                          SizedBox(
                                             width: 10.0,
                                           ),
-                                          new Expanded(
-                                            child: new Text(
+                                          Expanded(
+                                            child: Text(
                                               "${snapshot.data.docs[index]["name"]}",
-                                              style: new TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w800),
                                             ),
                                           ),
-                                          new InkWell(
+                                          InkWell(
                                             onTap: () async {
                                               await _firestore
                                                   .collection("Users")
@@ -187,21 +187,21 @@ class _SearchState extends State<Search> {
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(20.0),
-                                              child: new Container(
+                                              child: Container(
                                                 width: 100,
                                                 height: 40,
-                                                decoration: new BoxDecoration(
+                                                decoration: BoxDecoration(
                                                     color: Color(0xFF1D1A2B)),
-                                                child: new Row(
+                                                child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    new Text(
+                                                    Text(
                                                       "add",
-                                                      style: new TextStyle(
+                                                      style: TextStyle(
                                                           color: Colors.green),
                                                     ),
-                                                    new Icon(Icons.add,
+                                                    Icon(Icons.add,
                                                         color: Colors.green),
                                                   ],
                                                 ),
@@ -216,13 +216,13 @@ class _SearchState extends State<Search> {
                               );
                             },
                           )
-                        : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                        : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
                   },
                 ),
               )
-            : new Padding(
+            : Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: new StreamBuilder<dynamic>(
+                child: StreamBuilder<dynamic>(
                   stream: _firestore
                       .collection("Users")
                       // .orderBy("time", descending: true)
@@ -238,18 +238,18 @@ class _SearchState extends State<Search> {
                                 .snapshots(),
                             builder: (context, snapshots) {
                               return snapshots.hasData
-                                  ? new ListView.builder(
+                                  ? ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       itemCount: snapshot.data.docs.length,
                                       itemBuilder: (context, index) {
-                                        return new InkWell(
+                                        return InkWell(
                                           onTap: () {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    new ChatDetail(
+                                                    ChatDetail(
                                                   name: snapshot
                                                       .data.docs[index]["name"],
                                                   userId: snapshot
@@ -261,7 +261,7 @@ class _SearchState extends State<Search> {
                                               ),
                                             );
                                           },
-                                          child: new Container(
+                                          child: Container(
                                             height: snapshot.data.docs[index]
                                                         ["id"] !=
                                                     _auth.currentUser!.uid
@@ -277,12 +277,12 @@ class _SearchState extends State<Search> {
                                                   top: 10.0),
                                               child: Column(
                                                 children: [
-                                                  new Row(
+                                                  Row(
                                                     children: [
-                                                      new Hero(
+                                                      Hero(
                                                         tag: snapshot.data
                                                             .docs[index]["id"],
-                                                        child: new ClipRRect(
+                                                        child: ClipRRect(
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -292,7 +292,7 @@ class _SearchState extends State<Search> {
                                                                   .docs[index][
                                                                       "profilePic"]
                                                                   .isNotEmpty
-                                                              ? new CachedNetworkImage(
+                                                              ? CachedNetworkImage(
                                                                   height: 49,
                                                                   width: 49,
                                                                   fit: BoxFit
@@ -305,18 +305,18 @@ class _SearchState extends State<Search> {
                                                                   placeholder:
                                                                       (context,
                                                                           url) {
-                                                                    return new Container(
+                                                                    return Container(
                                                                       height:
                                                                           100,
                                                                       child:
-                                                                          new Center(
+                                                                          Center(
                                                                         child:
-                                                                            new CircularProgressIndicator(),
+                                                                            CircularProgressIndicator(),
                                                                       ),
                                                                     );
                                                                   },
                                                                 )
-                                                              : new Image(
+                                                              : Image(
                                                                   image: AssetImage(
                                                                       "assets/avatar.png"),
                                                                   height: 49,
@@ -324,13 +324,13 @@ class _SearchState extends State<Search> {
                                                                 ),
                                                         ),
                                                       ),
-                                                      new SizedBox(
+                                                      SizedBox(
                                                         width: 10.0,
                                                       ),
-                                                      new Expanded(
-                                                        child: new Text(
+                                                      Expanded(
+                                                        child: Text(
                                                           "${snapshot.data.docs[index]["name"]}",
-                                                          style: new TextStyle(
+                                                          style: TextStyle(
                                                               color:
                                                                   Colors.white,
                                                               fontWeight:
@@ -338,7 +338,7 @@ class _SearchState extends State<Search> {
                                                                       .w800),
                                                         ),
                                                       ),
-                                                      new InkWell(
+                                                      InkWell(
                                                         onTap: () async {
                                                           await _firestore
                                                               .collection(
@@ -372,26 +372,25 @@ class _SearchState extends State<Search> {
                                                               BorderRadius
                                                                   .circular(
                                                                       20.0),
-                                                          child: new Container(
+                                                          child: Container(
                                                             width: 100,
                                                             height: 40,
                                                             decoration:
-                                                                new BoxDecoration(
+                                                                BoxDecoration(
                                                                     color: Color(
                                                                         0xFF1D1A2B)),
-                                                            child: new Row(
+                                                            child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                new Text(
+                                                                Text(
                                                                   "add",
-                                                                  style: new TextStyle(
+                                                                  style: TextStyle(
                                                                       color: Colors
                                                                           .green),
                                                                 ),
-                                                                new Icon(
-                                                                    Icons.add,
+                                                                Icon(Icons.add,
                                                                     color: Colors
                                                                         .green),
                                                               ],
@@ -401,7 +400,7 @@ class _SearchState extends State<Search> {
                                                       ),
                                                     ],
                                                   ),
-                                                  new Divider()
+                                                  Divider()
                                                 ],
                                               ),
                                             ),
@@ -409,10 +408,10 @@ class _SearchState extends State<Search> {
                                         );
                                       },
                                     )
-                                  : new SpinKitFadingCircle(
+                                  : SpinKitFadingCircle(
                                       color: Color(0xFF2EF7F7));
                             })
-                        : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                        : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
                   },
                 ),
               ),

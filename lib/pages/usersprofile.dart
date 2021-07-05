@@ -19,23 +19,23 @@ class UsersProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text(name),
+      appBar: AppBar(
+        title: Text(name),
       ),
-      body: new Column(
+      body: Column(
         children: [
-          new Container(
+          Container(
             // height: 200,
             width: MediaQuery.of(context).size.width,
-            child: new CachedNetworkImage(
+            child: CachedNetworkImage(
               imageUrl: profilePic,
               fit: BoxFit.fitWidth,
             ),
           ),
-          new SizedBox(
+          SizedBox(
             height: 10.0,
           ),
-          new InkWell(
+          InkWell(
             onTap: () {
               _firestore
                   .collection("Users")
@@ -46,21 +46,21 @@ class UsersProfile extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => new ChatPage(),
+                  builder: (context) => ChatPage(),
                 ),
               );
             },
-            child: new Container(
+            child: Container(
               alignment: Alignment.bottomRight,
               padding: const EdgeInsets.only(right: 10.0),
               child: Container(
-                decoration: new BoxDecoration(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.white,
                 ),
                 height: 40,
                 width: 100,
-                child: Center(child: new Text("Remove")),
+                child: Center(child: Text("Remove")),
               ),
             ),
           )

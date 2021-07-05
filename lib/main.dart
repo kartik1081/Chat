@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             appBarTheme: AppBarTheme(
               titleTextStyle: TextStyle(color: Colors.white70),
               textTheme: TextTheme(
-                caption: new TextStyle(color: Colors.white70),
+                caption: TextStyle(color: Colors.white70),
               ),
               titleSpacing: 40.0.h,
               color: Color(0xFF2B2641),

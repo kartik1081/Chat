@@ -35,28 +35,28 @@ class _SignUpState extends State<SignUp> {
       child: Scaffold(
         backgroundColor: Color(0xFF6E00F3),
         body: _loading
-            ? new SpinKitFadingCircle(
+            ? SpinKitFadingCircle(
                 color: Color(0xFF2EF7F7),
                 size: 50,
               )
-            : new SingleChildScrollView(
+            : SingleChildScrollView(
                 child: Container(
                   height: height,
                   width: width,
-                  child: new Stack(
+                  child: Stack(
                     children: [
-                      new Positioned(
+                      Positioned(
                         top: height * 0.17,
                         height: height * 40,
                         right: 20,
                         left: 20,
-                        child: new ClipRRect(
+                        child: ClipRRect(
                           borderRadius: BorderRadius.all(
                             Radius.circular(40),
                           ),
-                          child: new BackdropFilter(
+                          child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                            child: new Container(
+                            child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.grey[200]!.withOpacity(0.8),
                                 boxShadow: [
@@ -68,32 +68,32 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                 ],
                               ),
-                              child: new Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  new SizedBox(
+                                  SizedBox(
                                     height: 20,
                                   ),
-                                  new Text(
+                                  Text(
                                     "Sign Up",
-                                    style: new TextStyle(
+                                    style: TextStyle(
                                         fontSize: 30,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.grey[850]),
                                   ),
-                                  new SizedBox(
+                                  SizedBox(
                                     height: 50,
                                   ),
-                                  new Form(
-                                    child: new Padding(
+                                  Form(
+                                    child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
-                                      child: new Column(
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          new TextFormField(
+                                          TextFormField(
                                             keyboardType: TextInputType.name,
                                             validator: (value) {
                                               if (value == null ||
@@ -103,41 +103,35 @@ class _SignUpState extends State<SignUp> {
                                             },
                                             controller: name,
                                             cursorHeight: 22.0,
-                                            decoration: new InputDecoration(
+                                            decoration: InputDecoration(
                                               hintText: "Enter your name",
-                                              hintStyle: new TextStyle(
-                                                  color: Colors.grey),
+                                              hintStyle:
+                                                  TextStyle(color: Colors.grey),
                                               fillColor: Colors.white,
                                               filled: true,
                                               contentPadding:
                                                   const EdgeInsets.fromLTRB(
                                                       13.0, -5.0, 0.0, -5.0),
-                                              focusedBorder:
-                                                  new OutlineInputBorder(
-                                                      borderSide:
-                                                          new BorderSide(
-                                                              width:
-                                                                  0.0000000001,
-                                                              color:
-                                                                  Colors.black),
-                                                      borderRadius:
-                                                          new BorderRadius
-                                                              .circular(10.0)),
-                                              enabledBorder:
-                                                  new OutlineInputBorder(
-                                                borderSide: new BorderSide(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      width: 0.0000000001,
+                                                      color: Colors.black),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
                                                     width: 0.0000000001,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    new BorderRadius.circular(
-                                                        10.0),
+                                                    BorderRadius.circular(10.0),
                                               ),
                                             ),
                                           ),
-                                          new SizedBox(
+                                          SizedBox(
                                             height: 10.0,
                                           ),
-                                          new TextFormField(
+                                          TextFormField(
                                             keyboardType:
                                                 TextInputType.emailAddress,
                                             validator: (value) {
@@ -148,41 +142,35 @@ class _SignUpState extends State<SignUp> {
                                             },
                                             controller: email,
                                             cursorHeight: 22.0,
-                                            decoration: new InputDecoration(
+                                            decoration: InputDecoration(
                                               hintText: "Enter your email",
-                                              hintStyle: new TextStyle(
-                                                  color: Colors.grey),
+                                              hintStyle:
+                                                  TextStyle(color: Colors.grey),
                                               fillColor: Colors.white,
                                               filled: true,
                                               contentPadding:
                                                   const EdgeInsets.fromLTRB(
                                                       13.0, -5.0, 0.0, -5.0),
-                                              focusedBorder:
-                                                  new OutlineInputBorder(
-                                                      borderSide:
-                                                          new BorderSide(
-                                                              width:
-                                                                  0.0000000001,
-                                                              color:
-                                                                  Colors.black),
-                                                      borderRadius:
-                                                          new BorderRadius
-                                                              .circular(10.0)),
-                                              enabledBorder:
-                                                  new OutlineInputBorder(
-                                                borderSide: new BorderSide(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      width: 0.0000000001,
+                                                      color: Colors.black),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
                                                     width: 0.0000000001,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    new BorderRadius.circular(
-                                                        10.0),
+                                                    BorderRadius.circular(10.0),
                                               ),
                                             ),
                                           ),
-                                          new SizedBox(
+                                          SizedBox(
                                             height: 10.0,
                                           ),
-                                          new TextFormField(
+                                          TextFormField(
                                             obscureText: true,
                                             keyboardType:
                                                 TextInputType.visiblePassword,
@@ -194,34 +182,28 @@ class _SignUpState extends State<SignUp> {
                                             },
                                             controller: password,
                                             cursorHeight: 30.0,
-                                            decoration: new InputDecoration(
+                                            decoration: InputDecoration(
                                               hintText: "Enter your password",
-                                              hintStyle: new TextStyle(
-                                                  color: Colors.grey),
+                                              hintStyle:
+                                                  TextStyle(color: Colors.grey),
                                               fillColor: Colors.white,
                                               filled: true,
                                               contentPadding:
                                                   const EdgeInsets.fromLTRB(
                                                       13.0, -5.0, 0.0, -5.0),
-                                              focusedBorder:
-                                                  new OutlineInputBorder(
-                                                      borderSide:
-                                                          new BorderSide(
-                                                              width:
-                                                                  0.0000000001,
-                                                              color:
-                                                                  Colors.black),
-                                                      borderRadius:
-                                                          new BorderRadius
-                                                              .circular(10.0)),
-                                              enabledBorder:
-                                                  new OutlineInputBorder(
-                                                borderSide: new BorderSide(
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      width: 0.0000000001,
+                                                      color: Colors.black),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
                                                     width: 0.0000000001,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    new BorderRadius.circular(
-                                                        10.0),
+                                                    BorderRadius.circular(10.0),
                                               ),
                                             ),
                                           ),
@@ -229,25 +211,25 @@ class _SignUpState extends State<SignUp> {
                                       ),
                                     ),
                                   ),
-                                  new Padding(
+                                  Padding(
                                     padding: const EdgeInsets.only(right: 20),
-                                    child: new Container(
+                                    child: Container(
                                       alignment: Alignment.bottomRight,
                                       child: Padding(
                                         padding: const EdgeInsets.all(0.0),
-                                        child: new TextButton(
+                                        child: TextButton(
                                           child: Text(
                                             "Already have account",
-                                            style: new TextStyle(
+                                            style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Colors.black),
                                           ),
                                           onPressed: () {
                                             Navigator.of(context).push(
-                                              new MaterialPageRoute(
+                                              MaterialPageRoute(
                                                 // ignore: non_constant_identifier_names
                                                 builder: (BuildContext) =>
-                                                    new SignIn(),
+                                                    SignIn(),
                                               ),
                                             );
                                           },
@@ -255,9 +237,9 @@ class _SignUpState extends State<SignUp> {
                                       ),
                                     ),
                                   ),
-                                  new Container(
+                                  Container(
                                     width: 110,
-                                    child: new ElevatedButton(
+                                    child: ElevatedButton(
                                       style: ButtonStyle(
                                         elevation: MaterialStateProperty.all(7),
                                         backgroundColor:
@@ -273,21 +255,21 @@ class _SignUpState extends State<SignUp> {
                                         _fire.signUp(context, name.text,
                                             email.text, password.text);
                                       },
-                                      child: new Text("Sign Up"),
+                                      child: Text("Sign Up"),
                                     ),
                                   ),
-                                  new SizedBox(
+                                  SizedBox(
                                     height: 25,
                                   ),
-                                  new Padding(
+                                  Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20),
-                                    child: new Row(
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        new Expanded(
-                                          child: new ElevatedButton(
+                                        Expanded(
+                                          child: ElevatedButton(
                                             style: ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStateProperty.all(
@@ -301,17 +283,17 @@ class _SignUpState extends State<SignUp> {
                                               });
                                               _fire.googleSignIn(context);
                                             },
-                                            child: new Row(
+                                            child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                new Image.asset(
+                                                Image.asset(
                                                     "assets/google.jpg"),
-                                                new SizedBox(
+                                                SizedBox(
                                                   width: 7.0,
                                                 ),
-                                                new Text(
+                                                Text(
                                                   "Google",
-                                                  style: new TextStyle(
+                                                  style: TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -320,9 +302,9 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                           ),
                                         ),
-                                        new SizedBox(width: 15.0),
-                                        new Expanded(
-                                          child: new ElevatedButton(
+                                        SizedBox(width: 15.0),
+                                        Expanded(
+                                          child: ElevatedButton(
                                             style: ButtonStyle(
                                               backgroundColor:
                                                   MaterialStateProperty.all(
@@ -334,16 +316,16 @@ class _SignUpState extends State<SignUp> {
                                             onPressed: () {
                                               // _flutterFire.signInWithFacebook(context);
                                             },
-                                            child: new Row(
+                                            child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                new Icon(Icons.facebook),
-                                                new SizedBox(
+                                                Icon(Icons.facebook),
+                                                SizedBox(
                                                   width: 5.0,
                                                 ),
-                                                new Text(
+                                                Text(
                                                   "Facebook",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,

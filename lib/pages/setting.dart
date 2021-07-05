@@ -6,132 +6,132 @@ class Setting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: new Text("Setting"),
+        title: Text("Setting"),
       ),
-      body: new Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          new ListTile(
-            leading: new Icon(
+          ListTile(
+            leading: Icon(
               Icons.vpn_key,
               color: Colors.white,
             ),
-            title: new Text(
+            title: Text(
               "Account",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            subtitle: new Text(
+            subtitle: Text(
               "Privacy, security, change number",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white60,
               ),
             ),
           ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(
+          Divider(),
+          ListTile(
+            leading: Icon(
               Icons.chat,
               color: Colors.white,
             ),
-            title: new Text(
+            title: Text(
               "Chats",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            subtitle: new Text(
+            subtitle: Text(
               "Themes, wallpapers, chat history",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white60,
               ),
             ),
           ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(
+          Divider(),
+          ListTile(
+            leading: Icon(
               Icons.notifications,
               color: Colors.white,
             ),
-            title: new Text(
+            title: Text(
               "Notifications",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            subtitle: new Text(
+            subtitle: Text(
               "Message, group & call tones",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white60,
               ),
             ),
           ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(
+          Divider(),
+          ListTile(
+            leading: Icon(
               Icons.storage_rounded,
               color: Colors.white,
             ),
-            title: new Text(
+            title: Text(
               "Stirage abd data",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            subtitle: new Text(
+            subtitle: Text(
               "Network usage, auto-download",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white60,
               ),
             ),
           ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(
+          Divider(),
+          ListTile(
+            leading: Icon(
               Icons.help,
               color: Colors.white,
             ),
-            title: new Text(
+            title: Text(
               "Help",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
-            subtitle: new Text(
+            subtitle: Text(
               "Help centre, contact us, privacy policy",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
           ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(
+          Divider(),
+          ListTile(
+            leading: Icon(
               Icons.add_to_photos_rounded,
               color: Colors.white,
             ),
-            title: new Text(
+            title: Text(
               "Invite a friend",
-              style: new TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),
           ),
-          new Divider(),
-          new Expanded(
-            child: new Column(
+          Divider(),
+          Expanded(
+            child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                new Text(
+                Text(
                   "Form",
-                  style: new TextStyle(color: Colors.grey, fontSize: 15.0),
+                  style: TextStyle(color: Colors.grey, fontSize: 15.0),
                 ),
-                new SizedBox(
+                SizedBox(
                   height: 5.0,
                 ),
               ],

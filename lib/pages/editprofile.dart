@@ -23,12 +23,12 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Edit Profile"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit Profile"),
       ),
-      body: new Container(
-        child: new StreamBuilder<dynamic>(
+      body: Container(
+        child: StreamBuilder<dynamic>(
           stream: _firestore
               .collection("Users")
               .doc("${_auth.currentUser!.uid}")
@@ -36,11 +36,11 @@ class _EditProfileState extends State<EditProfile> {
           builder: (context, snapshot) {
             Map<String, dynamic> data = snapshot.data.data();
             return snapshot.hasData
-                ? new Stack(
+                ? Stack(
                     children: [
-                      new Container(
+                      Container(
                         margin: const EdgeInsets.only(top: 30.0),
-                        child: new Center(
+                        child: Center(
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
@@ -48,76 +48,76 @@ class _EditProfileState extends State<EditProfile> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                new ClipRRect(
+                                ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: data["profilePic"].isNotEmpty
-                                      ? new CachedNetworkImage(
+                                      ? CachedNetworkImage(
                                           height: 120,
                                           width: 120,
                                           fit: BoxFit.cover,
                                           imageUrl: data["profilePic"],
                                           placeholder: (context, url) {
-                                            return new Container(
+                                            return Container(
                                               height: 100,
-                                              child: new Center(
+                                              child: Center(
                                                 child:
-                                                    new CircularProgressIndicator(),
+                                                    CircularProgressIndicator(),
                                               ),
                                             );
                                           },
                                         )
-                                      : new Image(
+                                      : Image(
                                           image:
                                               AssetImage("assets/avatar.png"),
                                           height: 120,
                                           width: 120,
                                         ),
                                 ),
-                                new SizedBox(
+                                SizedBox(
                                   height: 40.0,
                                 ),
-                                new Column(
+                                Column(
                                   children: [
-                                    new Container(
+                                    Container(
                                       width: MediaQuery.of(context).size.width,
-                                      child: new Row(
+                                      child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          new Icon(
+                                          Icon(
                                             Icons.person,
                                             color: Colors.white70,
                                           ),
-                                          new SizedBox(
+                                          SizedBox(
                                             width: 15.0,
                                           ),
-                                          new Column(
+                                          Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              new Row(
+                                              Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 children: [
-                                                  new Column(
+                                                  Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      new Text(
+                                                      Text(
                                                         "Name",
-                                                        style: new TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 Colors.white70,
                                                             fontSize: 15.0),
                                                       ),
-                                                      new SizedBox(
+                                                      SizedBox(
                                                         height: 5.0,
                                                       ),
-                                                      new Text(
+                                                      Text(
                                                         data["name"],
-                                                        style: new TextStyle(
+                                                        style: TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 15.0,
                                                             fontWeight:
@@ -126,24 +126,24 @@ class _EditProfileState extends State<EditProfile> {
                                                       ),
                                                     ],
                                                   ),
-                                                  new SizedBox(
+                                                  SizedBox(
                                                     width: 174.0,
                                                   ),
-                                                  new IconButton(
+                                                  IconButton(
                                                     onPressed: () {},
-                                                    icon: new Icon(
+                                                    icon: Icon(
                                                       Icons.edit,
                                                       color: Color(0xFF2EF7F7),
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                              new SizedBox(
+                                              SizedBox(
                                                 height: 5.0,
                                               ),
-                                              new Text(
+                                              Text(
                                                 "This is not your username or pin. This \n name will be visible to your TextMe contacts.",
-                                                style: new TextStyle(
+                                                style: TextStyle(
                                                     color: Colors.white70,
                                                     fontSize: 13.0),
                                               )
@@ -152,77 +152,77 @@ class _EditProfileState extends State<EditProfile> {
                                         ],
                                       ),
                                     ),
-                                    new SizedBox(
+                                    SizedBox(
                                       height: 15.0,
                                     ),
-                                    new Row(
+                                    Row(
                                       children: [
-                                        new Icon(
+                                        Icon(
                                           Icons.help_center,
                                           color: Colors.white70,
                                         ),
-                                        new SizedBox(
+                                        SizedBox(
                                           width: 15.0,
                                         ),
-                                        new Column(
+                                        Column(
                                           children: [
-                                            new Text(
+                                            Text(
                                               "About",
-                                              style: new TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white70,
                                                   fontSize: 15.0),
                                             ),
-                                            new SizedBox(
+                                            SizedBox(
                                               height: 5.0,
                                             ),
-                                            new Text(
+                                            Text(
                                               "About",
-                                              style: new TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w500),
                                             ),
                                           ],
                                         ),
-                                        new SizedBox(
+                                        SizedBox(
                                           width: 240.0,
                                         ),
-                                        new IconButton(
+                                        IconButton(
                                             onPressed: () {},
-                                            icon: new Icon(
+                                            icon: Icon(
                                               Icons.edit,
                                               color: Color(0xFF2EF7F7),
                                             ))
                                       ],
                                     ),
-                                    new SizedBox(
+                                    SizedBox(
                                       height: 15.0,
                                     ),
-                                    new Row(
+                                    Row(
                                       children: [
-                                        new Icon(
+                                        Icon(
                                           Icons.email,
                                           color: Colors.white70,
                                         ),
-                                        new SizedBox(
+                                        SizedBox(
                                           width: 15.0,
                                         ),
-                                        new Column(
+                                        Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            new Text(
+                                            Text(
                                               "Email",
-                                              style: new TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white70,
                                                   fontSize: 15.0),
                                             ),
-                                            new SizedBox(
+                                            SizedBox(
                                               height: 5.0,
                                             ),
-                                            new Text(
+                                            Text(
                                               data["email"],
-                                              style: new TextStyle(
+                                              style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w500),
@@ -238,27 +238,27 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                      new Positioned(
+                      Positioned(
                         top: 115.0,
                         left: 215.0,
-                        child: new InkWell(
+                        child: InkWell(
                           onTap: () {
                             getImage();
                           },
-                          child: new ClipRRect(
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: new Container(
+                            child: Container(
                               height: 40.0,
                               width: 40.0,
                               color: Color(0xFF2EF7F7),
-                              child: new Icon(Icons.add),
+                              child: Icon(Icons.add),
                             ),
                           ),
                         ),
                       )
                     ],
                   )
-                : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
           },
         ),
       ),

@@ -21,10 +21,10 @@ class _SearchChatState extends State<SearchChat> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         titleSpacing: 0,
-        title: new TextFormField(
+        title: TextFormField(
           onChanged: (value) {
             setState(() {});
           },
@@ -36,29 +36,28 @@ class _SearchChatState extends State<SearchChat> {
           },
           controller: search,
           cursorHeight: 22.0,
-          decoration: new InputDecoration(
+          decoration: InputDecoration(
             hintText: "Type your messege",
-            hintStyle: new TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Colors.grey),
             fillColor: Colors.white,
             filled: true,
             contentPadding: const EdgeInsets.fromLTRB(13.0, -5.0, 0.0, -5.0),
-            focusedBorder: new OutlineInputBorder(
+            focusedBorder: OutlineInputBorder(
                 borderSide:
-                    new BorderSide(width: 0.0000000001, color: Colors.black),
-                borderRadius: new BorderRadius.circular(10.0)),
-            enabledBorder: new OutlineInputBorder(
-              borderSide:
-                  new BorderSide(width: 0.0000000001, color: Colors.white),
-              borderRadius: new BorderRadius.circular(10.0),
+                    BorderSide(width: 0.0000000001, color: Colors.black),
+                borderRadius: BorderRadius.circular(10.0)),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 0.0000000001, color: Colors.white),
+              borderRadius: BorderRadius.circular(10.0),
             ),
           ),
         ),
         actions: [
-          new IconButton(
+          IconButton(
             onPressed: () {
               setState(() {});
             },
-            icon: new Icon(Icons.search),
+            icon: Icon(Icons.search),
           ),
         ],
       ),
@@ -75,7 +74,7 @@ class _SearchChatState extends State<SearchChat> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   return snapshot.hasData
-                      ? new ListView.builder(
+                      ? ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           itemCount: snapshot.data.docs.length,
@@ -87,27 +86,23 @@ class _SearchChatState extends State<SearchChat> {
                                     .snapshots(),
                                 builder: (context, snapshots) {
                                   return snapshots.hasData
-                                      ? new InkWell(
+                                      ? InkWell(
                                           onTap: () {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        new ChatDetail(
-                                                            name: snapshot.data
-                                                                    .docs[index]
-                                                                ["name"],
-                                                            userId: snapshot
-                                                                    .data
-                                                                    .docs[index]
-                                                                ["id"],
-                                                            profilePic: snapshots
-                                                                    .data
-                                                                    .docs[index]
-                                                                [
-                                                                "profilePic"])));
+                                                    builder: (context) => ChatDetail(
+                                                        name: snapshot.data
+                                                                .docs[index]
+                                                            ["name"],
+                                                        userId: snapshot.data
+                                                            .docs[index]["id"],
+                                                        profilePic: snapshots
+                                                                .data
+                                                                .docs[index]
+                                                            ["profilePic"])));
                                           },
-                                          child: new Container(
+                                          child: Container(
                                             height: snapshot.data.docs[index]
                                                         ["id"] !=
                                                     _auth.currentUser!.uid
@@ -123,12 +118,12 @@ class _SearchChatState extends State<SearchChat> {
                                                   top: 10.0),
                                               child: Column(
                                                 children: [
-                                                  new Row(
+                                                  Row(
                                                     children: [
-                                                      new Hero(
+                                                      Hero(
                                                         tag: snapshot.data
                                                             .docs[index]["id"],
-                                                        child: new ClipRRect(
+                                                        child: ClipRRect(
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -138,7 +133,7 @@ class _SearchChatState extends State<SearchChat> {
                                                                   .docs[index][
                                                                       "profilePic"]
                                                                   .isNotEmpty
-                                                              ? new CachedNetworkImage(
+                                                              ? CachedNetworkImage(
                                                                   height: 49,
                                                                   width: 49,
                                                                   fit: BoxFit
@@ -151,18 +146,18 @@ class _SearchChatState extends State<SearchChat> {
                                                                   placeholder:
                                                                       (context,
                                                                           url) {
-                                                                    return new Container(
+                                                                    return Container(
                                                                       height:
                                                                           100,
                                                                       child:
-                                                                          new Center(
+                                                                          Center(
                                                                         child:
-                                                                            new CircularProgressIndicator(),
+                                                                            CircularProgressIndicator(),
                                                                       ),
                                                                     );
                                                                   },
                                                                 )
-                                                              : new Image(
+                                                              : Image(
                                                                   image: AssetImage(
                                                                       "assets/avatar.png"),
                                                                   height: 49,
@@ -170,33 +165,33 @@ class _SearchChatState extends State<SearchChat> {
                                                                 ),
                                                         ),
                                                       ),
-                                                      new SizedBox(
+                                                      SizedBox(
                                                         width: 10.0,
                                                       ),
-                                                      new Expanded(
+                                                      Expanded(
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            new Text(
+                                                            Text(
                                                               snapshot.data
                                                                           .docs[
                                                                       index]
                                                                   ["name"],
-                                                              style: new TextStyle(
+                                                              style: TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w800),
                                                             ),
-                                                            new SizedBox(
+                                                            SizedBox(
                                                               height: 3.0,
                                                             ),
-                                                            new Text(
+                                                            Text(
                                                               "Last Messege",
-                                                              style: new TextStyle(
+                                                              style: TextStyle(
                                                                   color: Colors
                                                                       .white60,
                                                                   fontSize:
@@ -205,7 +200,7 @@ class _SearchChatState extends State<SearchChat> {
                                                           ],
                                                         ),
                                                       ),
-                                                      new Text(
+                                                      Text(
                                                         DateTimeFormat.format(
                                                             snapshot
                                                                 .data
@@ -213,25 +208,25 @@ class _SearchChatState extends State<SearchChat> {
                                                                     ["time"]
                                                                 .toDate(),
                                                             format: 'H:i'),
-                                                        style: new TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 Colors.white60,
                                                             fontSize: 11.5),
                                                       ),
                                                     ],
                                                   ),
-                                                  new Divider()
+                                                  Divider()
                                                 ],
                                               ),
                                             ),
                                           ),
                                         )
-                                      : new SpinKitFadingCircle(
+                                      : SpinKitFadingCircle(
                                           color: Color(0xFF2EF7F7));
                                 });
                           },
                         )
-                      : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                      : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
                 },
               ),
             )
@@ -246,7 +241,7 @@ class _SearchChatState extends State<SearchChat> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   return snapshot.hasData
-                      ? new ListView.builder(
+                      ? ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           itemCount: snapshot.data.docs.length,
@@ -258,27 +253,23 @@ class _SearchChatState extends State<SearchChat> {
                                     .snapshots(),
                                 builder: (context, snapshots) {
                                   return snapshots.hasData
-                                      ? new InkWell(
+                                      ? InkWell(
                                           onTap: () {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        new ChatDetail(
-                                                            name: snapshot.data
-                                                                    .docs[index]
-                                                                ["name"],
-                                                            userId: snapshot
-                                                                    .data
-                                                                    .docs[index]
-                                                                ["id"],
-                                                            profilePic: snapshots
-                                                                    .data
-                                                                    .docs[index]
-                                                                [
-                                                                "profilePic"])));
+                                                    builder: (context) => ChatDetail(
+                                                        name: snapshot.data
+                                                                .docs[index]
+                                                            ["name"],
+                                                        userId: snapshot.data
+                                                            .docs[index]["id"],
+                                                        profilePic: snapshots
+                                                                .data
+                                                                .docs[index]
+                                                            ["profilePic"])));
                                           },
-                                          child: new Container(
+                                          child: Container(
                                             height: snapshot.data.docs[index]
                                                         ["id"] !=
                                                     _auth.currentUser!.uid
@@ -294,12 +285,12 @@ class _SearchChatState extends State<SearchChat> {
                                                   top: 10.0),
                                               child: Column(
                                                 children: [
-                                                  new Row(
+                                                  Row(
                                                     children: [
-                                                      new Hero(
+                                                      Hero(
                                                         tag: snapshot.data
                                                             .docs[index]["id"],
-                                                        child: new ClipRRect(
+                                                        child: ClipRRect(
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -309,7 +300,7 @@ class _SearchChatState extends State<SearchChat> {
                                                                   .docs[index][
                                                                       "profilePic"]
                                                                   .isNotEmpty
-                                                              ? new CachedNetworkImage(
+                                                              ? CachedNetworkImage(
                                                                   height: 49,
                                                                   width: 49,
                                                                   fit: BoxFit
@@ -322,18 +313,18 @@ class _SearchChatState extends State<SearchChat> {
                                                                   placeholder:
                                                                       (context,
                                                                           url) {
-                                                                    return new Container(
+                                                                    return Container(
                                                                       height:
                                                                           100,
                                                                       child:
-                                                                          new Center(
+                                                                          Center(
                                                                         child:
-                                                                            new CircularProgressIndicator(),
+                                                                            CircularProgressIndicator(),
                                                                       ),
                                                                     );
                                                                   },
                                                                 )
-                                                              : new Image(
+                                                              : Image(
                                                                   image: AssetImage(
                                                                       "assets/avatar.png"),
                                                                   height: 49,
@@ -341,33 +332,33 @@ class _SearchChatState extends State<SearchChat> {
                                                                 ),
                                                         ),
                                                       ),
-                                                      new SizedBox(
+                                                      SizedBox(
                                                         width: 10.0,
                                                       ),
-                                                      new Expanded(
+                                                      Expanded(
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            new Text(
+                                                            Text(
                                                               snapshot.data
                                                                           .docs[
                                                                       index]
                                                                   ["name"],
-                                                              style: new TextStyle(
+                                                              style: TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w800),
                                                             ),
-                                                            new SizedBox(
+                                                            SizedBox(
                                                               height: 3.0,
                                                             ),
-                                                            new Text(
+                                                            Text(
                                                               "Last Messege",
-                                                              style: new TextStyle(
+                                                              style: TextStyle(
                                                                   color: Colors
                                                                       .white60,
                                                                   fontSize:
@@ -376,7 +367,7 @@ class _SearchChatState extends State<SearchChat> {
                                                           ],
                                                         ),
                                                       ),
-                                                      new Text(
+                                                      Text(
                                                         DateTimeFormat.format(
                                                             snapshot
                                                                 .data
@@ -384,25 +375,25 @@ class _SearchChatState extends State<SearchChat> {
                                                                     ["time"]
                                                                 .toDate(),
                                                             format: 'H:i'),
-                                                        style: new TextStyle(
+                                                        style: TextStyle(
                                                             color:
                                                                 Colors.white60,
                                                             fontSize: 11.5),
                                                       ),
                                                     ],
                                                   ),
-                                                  new Divider()
+                                                  Divider()
                                                 ],
                                               ),
                                             ),
                                           ),
                                         )
-                                      : new SpinKitFadingCircle(
+                                      : SpinKitFadingCircle(
                                           color: Color(0xFF2EF7F7));
                                 });
                           },
                         )
-                      : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                      : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
                 },
               ),
             ),

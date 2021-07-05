@@ -29,31 +29,31 @@ class _ChatDetailState extends State<ChatDetail> {
   Widget build(BuildContext context) {
     TextEditingController msg = TextEditingController();
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         titleSpacing: 0,
         leading: Row(
           children: [
-            new IconButton(
+            IconButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => new HomePage(),
+                    builder: (context) => HomePage(),
                   ),
                 );
               },
-              icon: new Icon(Icons.arrow_back),
+              icon: Icon(Icons.arrow_back),
             ),
           ],
         ),
         title: Row(
           children: [
-            new InkWell(
+            InkWell(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => new UsersProfile(
+                      builder: (context) => UsersProfile(
                             name: widget.name,
                             userId: widget.userId,
                             profilePic: widget.profilePic,
@@ -61,26 +61,26 @@ class _ChatDetailState extends State<ChatDetail> {
                       fullscreenDialog: true),
                 );
               },
-              child: new Hero(
+              child: Hero(
                 tag: widget.userId,
-                child: new ClipRRect(
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   // ignore: unnecessary_null_comparison
                   child: widget.profilePic.isNotEmpty
-                      ? new CachedNetworkImage(
+                      ? CachedNetworkImage(
                           height: 40,
                           width: 40,
                           fit: BoxFit.cover,
                           imageUrl: widget.profilePic,
                           placeholder: (context, url) {
-                            return new Container(
-                              child: new Center(
-                                child: new CircularProgressIndicator(),
+                            return Container(
+                              child: Center(
+                                child: CircularProgressIndicator(),
                               ),
                             );
                           },
                         )
-                      : new Image(
+                      : Image(
                           image: AssetImage("assets/avatar.png"),
                           height: 40,
                           width: 40,
@@ -88,28 +88,28 @@ class _ChatDetailState extends State<ChatDetail> {
                 ),
               ),
             ),
-            new SizedBox(
+            SizedBox(
               width: 10,
             ),
-            new Text(
+            Text(
               "${widget.name}",
-              style: new TextStyle(color: Colors.white70),
+              style: TextStyle(color: Colors.white70),
             ),
           ],
         ),
         actions: [
           _isTapped
-              ? new IconButton(onPressed: () {}, icon: new Icon(Icons.star))
-              : new Text("")
+              ? IconButton(onPressed: () {}, icon: Icon(Icons.star))
+              : Text("")
         ],
       ),
-      body: new Column(
+      body: Column(
         children: [
-          new Expanded(
+          Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               alignment: Alignment.bottomCenter,
-              child: new StreamBuilder<dynamic>(
+              child: StreamBuilder<dynamic>(
                 stream: _firestore
                     .collection("Chats")
                     .doc(_auth.currentUser!.uid)
@@ -119,12 +119,12 @@ class _ChatDetailState extends State<ChatDetail> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return new ListView.builder(
+                    return ListView.builder(
                       reverse: true,
                       shrinkWrap: true,
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
-                        return new Container(
+                        return Container(
                           alignment: snapshot.data.docs[index]["sendBy"] ==
                                   _auth.currentUser!.uid
                               ? Alignment.bottomRight
@@ -138,20 +138,20 @@ class _ChatDetailState extends State<ChatDetail> {
                               : Color(0xFF2B2641),
                           child: snapshot.data.docs[index]["sendBy"] ==
                                   _auth.currentUser!.uid
-                              ? new InkWell(
+                              ? InkWell(
                                   onTap: () {
                                     setState(() {
                                       _isTapped = !_isTapped;
                                     });
                                   },
-                                  child: new Container(
+                                  child: Container(
                                     margin: const EdgeInsets.only(right: 7.0),
                                     padding: const EdgeInsets.only(
                                         top: 5.0,
                                         bottom: 5.0,
                                         left: 20.0,
                                         right: 20.0),
-                                    decoration: new BoxDecoration(
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(20.0),
                                         topRight: Radius.circular(20.0),
@@ -164,22 +164,22 @@ class _ChatDetailState extends State<ChatDetail> {
                                           CrossAxisAlignment.end,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        new Text(
+                                        Text(
                                           snapshot.data.docs[index]["msg"],
-                                          style: new TextStyle(
+                                          style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        new SizedBox(
+                                        SizedBox(
                                           width: 10.0,
                                         ),
-                                        new Text(
+                                        Text(
                                           DateTimeFormat.format(
                                               snapshot.data.docs[index]["time"]
                                                   .toDate(),
                                               format: 'H:i'),
-                                          style: new TextStyle(
+                                          style: TextStyle(
                                               color: Colors.black54,
                                               fontSize: 13),
                                         ),
@@ -187,20 +187,20 @@ class _ChatDetailState extends State<ChatDetail> {
                                     ),
                                   ),
                                 )
-                              : new InkWell(
+                              : InkWell(
                                   onTap: () {
                                     setState(() {
                                       _isTapped = !_isTapped;
                                     });
                                   },
-                                  child: new Container(
+                                  child: Container(
                                     margin: const EdgeInsets.only(left: 7.0),
                                     padding: const EdgeInsets.only(
                                         top: 5.0,
                                         bottom: 5.0,
                                         left: 20.0,
                                         right: 20.0),
-                                    decoration: new BoxDecoration(
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(20.0),
                                         topRight: Radius.circular(20.0),
@@ -213,22 +213,22 @@ class _ChatDetailState extends State<ChatDetail> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        new Text(
+                                        Text(
                                           snapshot.data.docs[index]["msg"],
-                                          style: new TextStyle(
+                                          style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        new SizedBox(
+                                        SizedBox(
                                           width: 10.0,
                                         ),
-                                        new Text(
+                                        Text(
                                           DateTimeFormat.format(
                                               snapshot.data.docs[index]["time"]
                                                   .toDate(),
                                               format: 'H:i'),
-                                          style: new TextStyle(
+                                          style: TextStyle(
                                               color: Colors.black54,
                                               fontSize: 13),
                                         ),
@@ -240,23 +240,23 @@ class _ChatDetailState extends State<ChatDetail> {
                       },
                     );
                   } else {
-                    return new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                    return SpinKitFadingCircle(color: Color(0xFF2EF7F7));
                   }
                 },
               ),
             ),
           ),
-          new Row(
+          Row(
             children: [
-              new Expanded(
+              Expanded(
                 child: Padding(
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 4.0, bottom: 8.0),
-                  child: new ClipRRect(
+                  child: ClipRRect(
                     borderRadius: BorderRadius.all(
                       Radius.circular(35),
                     ),
-                    child: new TextFormField(
+                    child: TextFormField(
                       keyboardType: TextInputType.multiline,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -265,21 +265,21 @@ class _ChatDetailState extends State<ChatDetail> {
                       },
                       controller: msg,
                       cursorHeight: 22.0,
-                      decoration: new InputDecoration(
+                      decoration: InputDecoration(
                         hintText: "Type your messege",
-                        hintStyle: new TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.white,
                         filled: true,
                         contentPadding:
                             const EdgeInsets.fromLTRB(13.0, -5.0, 0.0, -5.0),
-                        focusedBorder: new OutlineInputBorder(
-                            borderSide: new BorderSide(
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
                                 width: 0.0000000001, color: Colors.black),
-                            borderRadius: new BorderRadius.circular(10.0)),
-                        enabledBorder: new OutlineInputBorder(
-                          borderSide: new BorderSide(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
                               width: 0.0000000001, color: Colors.white),
-                          borderRadius: new BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
                     ),
@@ -288,11 +288,11 @@ class _ChatDetailState extends State<ChatDetail> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-                child: new ClipRRect(
+                child: ClipRRect(
                   borderRadius: BorderRadius.all(
                     Radius.circular(100),
                   ),
-                  child: new GestureDetector(
+                  child: GestureDetector(
                     onTap: () async {
                       try {
                         await _firestore
@@ -336,10 +336,10 @@ class _ChatDetailState extends State<ChatDetail> {
                         print(e.toString());
                       }
                     },
-                    child: new Container(
+                    child: Container(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 4.0),
-                        child: new Icon(Icons.send),
+                        child: Icon(Icons.send),
                       ),
                       color: Colors.white,
                       height: 50,

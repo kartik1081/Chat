@@ -16,11 +16,11 @@ class _CallsState extends State<Calls> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: Column(
         children: [
-          new Container(
-            child: new StreamBuilder<dynamic>(
+          Container(
+            child: StreamBuilder<dynamic>(
               stream: _firestore
                   .collection("Users")
                   .doc(_auth.currentUser!.uid)
@@ -29,25 +29,24 @@ class _CallsState extends State<Calls> {
                   .snapshots(),
               builder: (context, snapshot0) {
                 return snapshot0.hasData
-                    ? new ListView.builder(
+                    ? ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         itemCount: snapshot0.data.docs.length,
                         itemBuilder: (context, index) {
-                          return new StreamBuilder<dynamic>(
+                          return StreamBuilder<dynamic>(
                             stream: _firestore
                                 .collection("Users")
                                 .doc(snapshot0.data.docs[index]["id"])
                                 .snapshots(),
                             builder: (context, snapshot1) {
                               return snapshot1.hasData
-                                  ? new InkWell(
+                                  ? InkWell(
                                       onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                new ChatDetail(
+                                            builder: (context) => ChatDetail(
                                               name: snapshot1.data["name"],
                                               userId: snapshot1.data["id"],
                                               profilePic:
@@ -56,7 +55,7 @@ class _CallsState extends State<Calls> {
                                           ),
                                         );
                                       },
-                                      child: new Container(
+                                      child: Container(
                                         height: snapshot1.data["id"] !=
                                                 _auth.currentUser!.uid
                                             ? 80.0
@@ -71,11 +70,11 @@ class _CallsState extends State<Calls> {
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
-                                              new Row(
+                                              Row(
                                                 children: [
-                                                  new Hero(
+                                                  Hero(
                                                     tag: snapshot1.data["id"],
-                                                    child: new ClipRRect(
+                                                    child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               100),
@@ -83,7 +82,7 @@ class _CallsState extends State<Calls> {
                                                               .data[
                                                                   "profilePic"]
                                                               .isNotEmpty
-                                                          ? new CachedNetworkImage(
+                                                          ? CachedNetworkImage(
                                                               height: 49,
                                                               width: 49,
                                                               fit: BoxFit.cover,
@@ -93,17 +92,16 @@ class _CallsState extends State<Calls> {
                                                               placeholder:
                                                                   (context,
                                                                       url) {
-                                                                return new Container(
+                                                                return Container(
                                                                   height: 100,
-                                                                  child:
-                                                                      new Center(
+                                                                  child: Center(
                                                                     child:
-                                                                        new CircularProgressIndicator(),
+                                                                        CircularProgressIndicator(),
                                                                   ),
                                                                 );
                                                               },
                                                             )
-                                                          : new Image(
+                                                          : Image(
                                                               image: AssetImage(
                                                                   "assets/avatar.png"),
                                                               height: 49,
@@ -111,48 +109,48 @@ class _CallsState extends State<Calls> {
                                                             ),
                                                     ),
                                                   ),
-                                                  new SizedBox(
+                                                  SizedBox(
                                                     width: 10.0,
                                                   ),
-                                                  new Expanded(
-                                                    child: new Column(
+                                                  Expanded(
+                                                    child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        new Text(
+                                                        Text(
                                                           snapshot1
                                                               .data["name"],
-                                                          style: new TextStyle(
+                                                          style: TextStyle(
                                                               color:
                                                                   Colors.white,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w800),
                                                         ),
-                                                        new SizedBox(
+                                                        SizedBox(
                                                           height: 3.0,
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                  new Icon(
+                                                  Icon(
                                                     Icons.call,
                                                     color: Colors.grey,
                                                   )
                                                 ],
                                               ),
-                                              new Divider()
+                                              Divider()
                                             ],
                                           ),
                                         ),
                                       ),
                                     )
-                                  : new Container(
+                                  : Container(
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 4.0, horizontal: 8.0),
                                       height: 60,
-                                      decoration: new BoxDecoration(
+                                      decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                         color: Color(0xFF3C355A),
@@ -162,7 +160,7 @@ class _CallsState extends State<Calls> {
                           );
                         },
                       )
-                    : new SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                    : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
               },
             ),
             height: 500,

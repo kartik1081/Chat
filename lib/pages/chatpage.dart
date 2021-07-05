@@ -28,16 +28,16 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
+    return WillPopScope(
       onWillPop: () async => false,
-      child: new DefaultTabController(
+      child: DefaultTabController(
         length: 3,
-        child: new SafeArea(
-          child: new Scaffold(
-            appBar: new AppBar(
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
               title: _index == 0
                   ? TweenAnimationBuilder(
-                      child: new Text("Chat"),
+                      child: Text("Chat"),
                       duration: Duration(milliseconds: 1000),
                       tween: Tween<double>(begin: 0.0, end: 1.0),
                       builder: (BuildContext context, double value, child) {
@@ -49,7 +49,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     )
                   : _index == 1
                       ? TweenAnimationBuilder(
-                          child: new Text("Status"),
+                          child: Text("Status"),
                           duration: Duration(milliseconds: 1000),
                           tween: Tween<double>(begin: 0.0, end: 1.0),
                           builder: (BuildContext context, double value, child) {
@@ -60,7 +60,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                           },
                         )
                       : TweenAnimationBuilder(
-                          child: new Text("Calls"),
+                          child: Text("Calls"),
                           duration: Duration(milliseconds: 1000),
                           tween: Tween<double>(begin: 0.0, end: 1.0),
                           builder: (BuildContext context, double value, child) {
@@ -72,32 +72,31 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         ),
               actions: [
                 _index == 0
-                    ? new Row(
+                    ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          new IconButton(
+                          IconButton(
                             onPressed: () {},
-                            icon: new Icon(Icons.search),
+                            icon: Icon(Icons.search),
                           ),
-                          new IconButton(
+                          IconButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => new Search(),
+                                    builder: (context) => Search(),
                                     fullscreenDialog: true),
                               );
                             },
-                            icon: new Icon(Icons.add),
+                            icon: Icon(Icons.add),
                           ),
                         ],
                       )
                     : _index == 1
-                        ? new IconButton(
-                            onPressed: () {}, icon: new Icon(Icons.add))
-                        : new Container()
+                        ? IconButton(onPressed: () {}, icon: Icon(Icons.add))
+                        : Container()
               ],
-              bottom: new TabBar(
+              bottom: TabBar(
                 controller: tab,
                 onTap: (value) {
                   setState(() {
@@ -105,13 +104,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                   });
                 },
                 tabs: [
-                  new Tab(
+                  Tab(
                     text: "Chat",
                   ),
-                  new Tab(
+                  Tab(
                     text: "Status",
                   ),
-                  new Tab(
+                  Tab(
                     text: "Calls",
                   )
                 ],
@@ -120,7 +119,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               ),
               automaticallyImplyLeading: false,
             ),
-            body: new TabBarView(
+            body: TabBarView(
                 controller: tab, children: [Chat(), Status(), Calls()]),
           ),
         ),

@@ -29,7 +29,7 @@ class Fire {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => new HomePage(),
+              builder: (context) => HomePage(),
             ),
           );
         },
@@ -62,7 +62,7 @@ class Fire {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => new HomePage(),
+              builder: (context) => HomePage(),
             ),
           );
         });
@@ -77,7 +77,7 @@ class Fire {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => new SignUp(),
+            builder: (context) => SignUp(),
           ),
         );
       } else if (e.code == 'email-already-in-use') {
@@ -85,7 +85,7 @@ class Fire {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => new SignUp(),
+            builder: (context) => SignUp(),
           ),
         );
       }
@@ -95,7 +95,7 @@ class Fire {
           context: context,
           builder: (context) {
             return AlertDialog(
-              content: new Text("User Already Exist!"),
+              content: Text("User Already Exist!"),
             );
           });
       Navigator.pop(context);
@@ -127,7 +127,7 @@ class Fire {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => new HomePage(),
+            builder: (context) => HomePage(),
           ),
         );
       });
@@ -141,7 +141,7 @@ class Fire {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new SignIn(),
+          builder: (context) => SignIn(),
         ),
       );
     });
