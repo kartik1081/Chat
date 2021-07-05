@@ -240,8 +240,8 @@ class _SignInState extends State<SignIn> {
                                                       Navigator.of(context)
                                                           .push(
                                                         MaterialPageRoute(
-                                                          // ignore: non_constant_identifier_names
                                                           builder:
+                                                              // ignore: non_constant_identifier_names
                                                               (BuildContext) =>
                                                                   SignUp(),
                                                         ),
@@ -573,8 +573,8 @@ class _SignInState extends State<SignIn> {
                                                       Navigator.of(context)
                                                           .push(
                                                         MaterialPageRoute(
-                                                          // ignore: non_constant_identifier_names
                                                           builder:
+                                                              // ignore: non_constant_identifier_names
                                                               (BuildContext) =>
                                                                   SignUp(),
                                                         ),
