@@ -42,8 +42,9 @@ class _SignUpState extends State<SignUp> {
                 size: 50,
               )
             : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 // ignore: unrelated_type_equality_checks
-                child: SizerUtil.orientation == DeviceOrientation.portraitUp
+                child: SizerUtil.orientation == Orientation.portrait
                     ? Container(
                         height: height,
                         width: width,
@@ -115,7 +116,8 @@ class _SignUpState extends State<SignUp> {
                                                   decoration: InputDecoration(
                                                     hintText: "Enter your name",
                                                     hintStyle: TextStyle(
-                                                        color: Colors.grey),
+                                                      color: Colors.grey,
+                                                    ),
                                                     fillColor: Colors.white,
                                                     filled: true,
                                                     contentPadding:
@@ -400,8 +402,8 @@ class _SignUpState extends State<SignUp> {
                             Positioned(
                               top: height * 0.17,
                               height: height * 40,
-                              right: 20,
-                              left: 20,
+                              right: 210,
+                              left: 210,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(40),
@@ -434,12 +436,12 @@ class _SignUpState extends State<SignUp> {
                                         Text(
                                           "Sign Up",
                                           style: TextStyle(
-                                              fontSize: 30,
+                                              fontSize: 20,
                                               fontWeight: FontWeight.w500,
                                               color: Colors.grey[850]),
                                         ),
                                         SizedBox(
-                                          height: 50,
+                                          height: 30,
                                         ),
                                         Form(
                                           child: Padding(
@@ -450,6 +452,8 @@ class _SignUpState extends State<SignUp> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 TextFormField(
+                                                  autocorrect: true,
+                                                  autofocus: true,
                                                   keyboardType:
                                                       TextInputType.name,
                                                   validator: (value) {
@@ -459,17 +463,16 @@ class _SignUpState extends State<SignUp> {
                                                     }
                                                   },
                                                   controller: name,
-                                                  cursorHeight: 22.0,
                                                   decoration: InputDecoration(
                                                     hintText: "Enter your name",
                                                     hintStyle: TextStyle(
-                                                        color: Colors.grey),
+                                                        color: Colors.grey,
+                                                        fontSize: 13.0),
                                                     fillColor: Colors.white,
                                                     filled: true,
                                                     contentPadding:
-                                                        const EdgeInsets
-                                                                .fromLTRB(13.0,
-                                                            -5.0, 0.0, -5.0),
+                                                        const EdgeInsets.only(
+                                                            left: 13.0),
                                                     focusedBorder:
                                                         OutlineInputBorder(
                                                             borderSide: BorderSide(
@@ -511,7 +514,8 @@ class _SignUpState extends State<SignUp> {
                                                     hintText:
                                                         "Enter your email",
                                                     hintStyle: TextStyle(
-                                                        color: Colors.grey),
+                                                        color: Colors.grey,
+                                                        fontSize: 13.0),
                                                     fillColor: Colors.white,
                                                     filled: true,
                                                     contentPadding:
@@ -520,16 +524,13 @@ class _SignUpState extends State<SignUp> {
                                                             -5.0, 0.0, -5.0),
                                                     focusedBorder:
                                                         OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                width:
-                                                                    0.0000000001,
-                                                                color:
-                                                                    Colors
-                                                                        .black),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0)),
+                                                      borderSide: BorderSide(
+                                                          width: 0.0000000001,
+                                                          color: Colors.black),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
                                                     enabledBorder:
                                                         OutlineInputBorder(
                                                       borderSide: BorderSide(
@@ -560,7 +561,9 @@ class _SignUpState extends State<SignUp> {
                                                     hintText:
                                                         "Enter your password",
                                                     hintStyle: TextStyle(
-                                                        color: Colors.grey),
+                                                      color: Colors.grey,
+                                                      fontSize: 13.0,
+                                                    ),
                                                     fillColor: Colors.white,
                                                     filled: true,
                                                     contentPadding:
