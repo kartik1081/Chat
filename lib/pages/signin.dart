@@ -46,24 +46,27 @@ class _SignInState extends State<SignIn> {
                 )
               : SingleChildScrollView(
                   // ignore: unrelated_type_equality_checks
-                  child: SizerUtil.orientation == DeviceOrientation.portraitUp
+                  child: SizerUtil.orientation ==
+                              DeviceOrientation.portraitDown ||
+                          // ignore: unrelated_type_equality_checks
+                          SizerUtil.orientation == DeviceOrientation.portraitUp
                       ? Container(
                           height: height,
                           width: width,
                           child: Stack(
                             children: [
                               Positioned(
-                                top: height * 0.25.h,
-                                height: height * 40.h,
-                                right: 20.w,
-                                left: 20.w,
+                                top: height * 0.25,
+                                height: height * 40,
+                                right: 20,
+                                left: 20,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(40.sp),
                                   ),
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 5.w, sigmaY: 5.h),
+                                    filter:
+                                        ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color:
@@ -85,7 +88,7 @@ class _SignInState extends State<SignIn> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           SizedBox(
-                                            height: 20.h,
+                                            height: 20,
                                           ),
                                           Text(
                                             "Sign In",
@@ -96,7 +99,7 @@ class _SignInState extends State<SignIn> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 50.h,
+                                            height: 50,
                                           ),
                                           Form(
                                             key: _form,
@@ -135,8 +138,7 @@ class _SignInState extends State<SignIn> {
                                                       focusedBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            width:
-                                                                0.0000000001.w,
+                                                            width: 0.0000000001,
                                                             color:
                                                                 Colors.black),
                                                         borderRadius:
@@ -147,7 +149,7 @@ class _SignInState extends State<SignIn> {
                                                       enabledBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          width: 0.0000000001.w,
+                                                          width: 0.0000000001,
                                                           color: Colors.white,
                                                         ),
                                                         borderRadius:
@@ -159,7 +161,7 @@ class _SignInState extends State<SignIn> {
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                    height: 10.0.h,
+                                                    height: 10.0,
                                                   ),
                                                   TextFormField(
                                                     obscureText: true,
@@ -189,8 +191,7 @@ class _SignInState extends State<SignIn> {
                                                       focusedBorder: OutlineInputBorder(
                                                           borderSide: BorderSide(
                                                               width:
-                                                                  0.0000000001
-                                                                      .w,
+                                                                  0.0000000001,
                                                               color: Colors
                                                                   .black),
                                                           borderRadius:
@@ -200,8 +201,7 @@ class _SignInState extends State<SignIn> {
                                                       enabledBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            width:
-                                                                0.0000000001.w,
+                                                            width: 0.0000000001,
                                                             color:
                                                                 Colors.white),
                                                         borderRadius:
@@ -245,7 +245,7 @@ class _SignInState extends State<SignIn> {
                                             ),
                                           ),
                                           Container(
-                                            width: 110.w,
+                                            width: 110,
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                 elevation:
@@ -269,7 +269,7 @@ class _SignInState extends State<SignIn> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 25.h,
+                                            height: 25,
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -303,7 +303,7 @@ class _SignInState extends State<SignIn> {
                                                         Image.asset(
                                                             "assets/google.jpg"),
                                                         SizedBox(
-                                                          width: 7.0.w,
+                                                          width: 7.0,
                                                         ),
                                                         Text(
                                                           "Google",
@@ -318,7 +318,7 @@ class _SignInState extends State<SignIn> {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width: 15.0.w,
+                                                  width: 15.0,
                                                 ),
                                                 Expanded(
                                                   child: ElevatedButton(
@@ -342,7 +342,7 @@ class _SignInState extends State<SignIn> {
                                                       children: [
                                                         Icon(Icons.facebook),
                                                         SizedBox(
-                                                          width: 5.0.w,
+                                                          width: 5.0,
                                                         ),
                                                         Text(
                                                           "Facebook",
@@ -367,327 +367,326 @@ class _SignInState extends State<SignIn> {
                             ],
                           ),
                         )
-                      : Container(
-                          height: height,
-                          width: width,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                top: height * 0.25.h,
-                                height: height * 40.h,
-                                right: 20.w,
-                                left: 20.w,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(40.sp),
-                                  ),
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 5.w, sigmaY: 5.h),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Colors.grey[200]!.withOpacity(0.8),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey[900]!
-                                                .withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 7,
-                                            offset: Offset(0, 2),
-                                          )
-                                        ],
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: 20.h,
-                                          ),
-                                          Text(
-                                            "Sign In",
-                                            style: TextStyle(
-                                              fontSize: 30.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.grey[850],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 50.h,
-                                          ),
-                                          Form(
-                                            key: _form,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  TextFormField(
-                                                    keyboardType: TextInputType
-                                                        .emailAddress,
-                                                    validator: (value) {
-                                                      if (value == null ||
-                                                          value.isEmpty) {
-                                                        return "Enter your email";
-                                                      }
-                                                    },
-                                                    controller: email,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          "Enter your email",
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.grey),
-                                                      fillColor: Colors.white,
-                                                      filled: true,
-                                                      contentPadding:
-                                                          const EdgeInsets
-                                                                  .fromLTRB(
-                                                              13.0,
-                                                              -5.0,
-                                                              0.0,
-                                                              -5.0),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width:
-                                                                0.0000000001.w,
-                                                            color:
-                                                                Colors.black),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    10.0.sp),
-                                                      ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          width: 0.0000000001.w,
-                                                          color: Colors.white,
-                                                        ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                          10.0.sp,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10.0.h,
-                                                  ),
-                                                  TextFormField(
-                                                    obscureText: true,
-                                                    keyboardType: TextInputType
-                                                        .visiblePassword,
-                                                    validator: (value) {
-                                                      if (value == null ||
-                                                          value.isEmpty) {
-                                                        return "Enter your password";
-                                                      }
-                                                    },
-                                                    controller: password,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          "Enter your password",
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.grey),
-                                                      fillColor: Colors.white,
-                                                      filled: true,
-                                                      contentPadding:
-                                                          const EdgeInsets
-                                                                  .fromLTRB(
-                                                              13.0,
-                                                              -5.0,
-                                                              0.0,
-                                                              -5.0),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              width:
-                                                                  0.0000000001
-                                                                      .w,
-                                                              color: Colors
-                                                                  .black),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0.sp)),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            width:
-                                                                0.0000000001.w,
-                                                            color:
-                                                                Colors.white),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    10.0.sp),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 20),
-                                            child: Container(
-                                              alignment: Alignment.bottomRight,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                child: TextButton(
-                                                  child: Text(
-                                                    "Create account",
-                                                    style: TextStyle(
-                                                        fontSize: 14.0.sp,
-                                                        color: Colors.black),
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder:
-                                                            // ignore: non_constant_identifier_names
-                                                            (BuildContext) =>
-                                                                SignUp(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 110.w,
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                elevation:
-                                                    MaterialStateProperty.all(
-                                                        7),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.green),
-                                                overlayColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.lightGreen),
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                _fire.signIn(context,
-                                                    email.text, password.text);
-                                              },
-                                              child: Text("Sign In"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 25.h,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty
-                                                              .all(
-                                                                  Colors.white),
-                                                      elevation:
-                                                          MaterialStateProperty
-                                                              .all(7.0.sp),
-                                                    ),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        _loading = true;
-                                                      });
-                                                      _fire.googleSignIn(
-                                                          context);
-                                                    },
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Image.asset(
-                                                            "assets/google.jpg"),
-                                                        SizedBox(
-                                                          width: 7.0.w,
-                                                        ),
-                                                        Text(
-                                                          "Google",
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 15.0.w,
-                                                ),
-                                                Expanded(
-                                                  child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty
-                                                              .all(Colors.blue),
-                                                      elevation:
-                                                          MaterialStateProperty
-                                                              .all(7.0),
-                                                    ),
-                                                    onPressed: () {
-                                                      // _flutterFire.signInWithFacebook(context);
-                                                    },
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Icon(Icons.facebook),
-                                                        SizedBox(
-                                                          width: 5.0.w,
-                                                        ),
-                                                        Text(
-                                                          "Facebook",
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                ),
+                      : Container()
+                  // : Container(
+                  //     height: height,
+                  //     width: width,
+                  //     child: Stack(
+                  //       children: [
+                  //         Positioned(
+                  //           top: height * 0.25,
+                  //           height: height * 40,
+                  //           right: 20,
+                  //           left: 20,
+                  //           child: ClipRRect(
+                  //             borderRadius: BorderRadius.all(
+                  //               Radius.circular(40.sp),
+                  //             ),
+                  //             child: BackdropFilter(
+                  //               filter:
+                  //                   ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  //               child: Container(
+                  //                 decoration: BoxDecoration(
+                  //                   color:
+                  //                       Colors.grey[200]!.withOpacity(0.8),
+                  //                   boxShadow: [
+                  //                     BoxShadow(
+                  //                       color: Colors.grey[900]!
+                  //                           .withOpacity(0.5),
+                  //                       spreadRadius: 5,
+                  //                       blurRadius: 7,
+                  //                       offset: Offset(0, 2),
+                  //                     )
+                  //                   ],
+                  //                 ),
+                  //                 child: Column(
+                  //                   mainAxisAlignment:
+                  //                       MainAxisAlignment.start,
+                  //                   crossAxisAlignment:
+                  //                       CrossAxisAlignment.center,
+                  //                   children: [
+                  //                     SizedBox(
+                  //                       height: 20,
+                  //                     ),
+                  //                     Text(
+                  //                       "Sign In",
+                  //                       style: TextStyle(
+                  //                         fontSize: 30.sp,
+                  //                         fontWeight: FontWeight.w500,
+                  //                         color: Colors.grey[850],
+                  //                       ),
+                  //                     ),
+                  //                     SizedBox(
+                  //                       height: 50,
+                  //                     ),
+                  //                     Form(
+                  //                       key: _form,
+                  //                       child: Padding(
+                  //                         padding:
+                  //                             const EdgeInsets.symmetric(
+                  //                                 horizontal: 20),
+                  //                         child: Column(
+                  //                           mainAxisAlignment:
+                  //                               MainAxisAlignment.center,
+                  //                           children: [
+                  //                             TextFormField(
+                  //                               keyboardType: TextInputType
+                  //                                   .emailAddress,
+                  //                               validator: (value) {
+                  //                                 if (value == null ||
+                  //                                     value.isEmpty) {
+                  //                                   return "Enter your email";
+                  //                                 }
+                  //                               },
+                  //                               controller: email,
+                  //                               decoration: InputDecoration(
+                  //                                 hintText:
+                  //                                     "Enter your email",
+                  //                                 hintStyle: TextStyle(
+                  //                                     color: Colors.grey),
+                  //                                 fillColor: Colors.white,
+                  //                                 filled: true,
+                  //                                 contentPadding:
+                  //                                     const EdgeInsets
+                  //                                             .fromLTRB(
+                  //                                         13.0,
+                  //                                         -5.0,
+                  //                                         0.0,
+                  //                                         -5.0),
+                  //                                 focusedBorder:
+                  //                                     OutlineInputBorder(
+                  //                                   borderSide: BorderSide(
+                  //                                       width: 0.0000000001,
+                  //                                       color:
+                  //                                           Colors.black),
+                  //                                   borderRadius:
+                  //                                       BorderRadius
+                  //                                           .circular(
+                  //                                               10.0.sp),
+                  //                                 ),
+                  //                                 enabledBorder:
+                  //                                     OutlineInputBorder(
+                  //                                   borderSide: BorderSide(
+                  //                                     width: 0.0000000001,
+                  //                                     color: Colors.white,
+                  //                                   ),
+                  //                                   borderRadius:
+                  //                                       BorderRadius
+                  //                                           .circular(
+                  //                                     10.0.sp,
+                  //                                   ),
+                  //                                 ),
+                  //                               ),
+                  //                             ),
+                  //                             SizedBox(
+                  //                               height: 10.0,
+                  //                             ),
+                  //                             TextFormField(
+                  //                               obscureText: true,
+                  //                               keyboardType: TextInputType
+                  //                                   .visiblePassword,
+                  //                               validator: (value) {
+                  //                                 if (value == null ||
+                  //                                     value.isEmpty) {
+                  //                                   return "Enter your password";
+                  //                                 }
+                  //                               },
+                  //                               controller: password,
+                  //                               decoration: InputDecoration(
+                  //                                 hintText:
+                  //                                     "Enter your password",
+                  //                                 hintStyle: TextStyle(
+                  //                                     color: Colors.grey),
+                  //                                 fillColor: Colors.white,
+                  //                                 filled: true,
+                  //                                 contentPadding:
+                  //                                     const EdgeInsets
+                  //                                             .fromLTRB(
+                  //                                         13.0,
+                  //                                         -5.0,
+                  //                                         0.0,
+                  //                                         -5.0),
+                  //                                 focusedBorder: OutlineInputBorder(
+                  //                                     borderSide: BorderSide(
+                  //                                         width:
+                  //                                             0.0000000001
+                  //                                                 .w,
+                  //                                         color: Colors
+                  //                                             .black),
+                  //                                     borderRadius:
+                  //                                         BorderRadius
+                  //                                             .circular(
+                  //                                                 10.0.sp)),
+                  //                                 enabledBorder:
+                  //                                     OutlineInputBorder(
+                  //                                   borderSide: BorderSide(
+                  //                                       width: 0.0000000001,
+                  //                                       color:
+                  //                                           Colors.white),
+                  //                                   borderRadius:
+                  //                                       BorderRadius
+                  //                                           .circular(
+                  //                                               10.0.sp),
+                  //                                 ),
+                  //                               ),
+                  //                             ),
+                  //                           ],
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.only(
+                  //                           right: 20),
+                  //                       child: Container(
+                  //                         alignment: Alignment.bottomRight,
+                  //                         child: Padding(
+                  //                           padding:
+                  //                               const EdgeInsets.all(0.0),
+                  //                           child: TextButton(
+                  //                             child: Text(
+                  //                               "Create account",
+                  //                               style: TextStyle(
+                  //                                   fontSize: 14.0.sp,
+                  //                                   color: Colors.black),
+                  //                             ),
+                  //                             onPressed: () {
+                  //                               Navigator.of(context).push(
+                  //                                 MaterialPageRoute(
+                  //                                   builder:
+                  //                                       // ignore: non_constant_identifier_names
+                  //                                       (BuildContext) =>
+                  //                                           SignUp(),
+                  //                                 ),
+                  //                               );
+                  //                             },
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                     Container(
+                  //                       width: 110,
+                  //                       child: ElevatedButton(
+                  //                         style: ButtonStyle(
+                  //                           elevation:
+                  //                               MaterialStateProperty.all(
+                  //                                   7),
+                  //                           backgroundColor:
+                  //                               MaterialStateProperty.all(
+                  //                                   Colors.green),
+                  //                           overlayColor:
+                  //                               MaterialStateProperty.all(
+                  //                                   Colors.lightGreen),
+                  //                         ),
+                  //                         onPressed: () {
+                  //                           setState(() {
+                  //                             _loading = true;
+                  //                           });
+                  //                           _fire.signIn(context,
+                  //                               email.text, password.text);
+                  //                         },
+                  //                         child: Text("Sign In"),
+                  //                       ),
+                  //                     ),
+                  //                     SizedBox(
+                  //                       height: 25,
+                  //                     ),
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.symmetric(
+                  //                           horizontal: 20),
+                  //                       child: Row(
+                  //                         crossAxisAlignment:
+                  //                             CrossAxisAlignment.center,
+                  //                         children: [
+                  //                           Expanded(
+                  //                             child: ElevatedButton(
+                  //                               style: ButtonStyle(
+                  //                                 backgroundColor:
+                  //                                     MaterialStateProperty
+                  //                                         .all(
+                  //                                             Colors.white),
+                  //                                 elevation:
+                  //                                     MaterialStateProperty
+                  //                                         .all(7.0.sp),
+                  //                               ),
+                  //                               onPressed: () {
+                  //                                 setState(() {
+                  //                                   _loading = true;
+                  //                                 });
+                  //                                 _fire.googleSignIn(
+                  //                                     context);
+                  //                               },
+                  //                               child: Row(
+                  //                                 mainAxisSize:
+                  //                                     MainAxisSize.min,
+                  //                                 children: [
+                  //                                   Image.asset(
+                  //                                       "assets/google.jpg"),
+                  //                                   SizedBox(
+                  //                                     width: 7.0,
+                  //                                   ),
+                  //                                   Text(
+                  //                                     "Google",
+                  //                                     style: TextStyle(
+                  //                                       color: Colors.black,
+                  //                                       fontWeight:
+                  //                                           FontWeight.bold,
+                  //                                     ),
+                  //                                   ),
+                  //                                 ],
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                           SizedBox(
+                  //                             width: 15.0,
+                  //                           ),
+                  //                           Expanded(
+                  //                             child: ElevatedButton(
+                  //                               style: ButtonStyle(
+                  //                                 backgroundColor:
+                  //                                     MaterialStateProperty
+                  //                                         .all(Colors.blue),
+                  //                                 elevation:
+                  //                                     MaterialStateProperty
+                  //                                         .all(7.0),
+                  //                               ),
+                  //                               onPressed: () {
+                  //                                 // _flutterFire.signInWithFacebook(context);
+                  //                               },
+                  //                               child: Row(
+                  //                                 mainAxisAlignment:
+                  //                                     MainAxisAlignment
+                  //                                         .center,
+                  //                                 mainAxisSize:
+                  //                                     MainAxisSize.max,
+                  //                                 children: [
+                  //                                   Icon(Icons.facebook),
+                  //                                   SizedBox(
+                  //                                     width: 5.0,
+                  //                                   ),
+                  //                                   Text(
+                  //                                     "Facebook",
+                  //                                     style: TextStyle(
+                  //                                       fontWeight:
+                  //                                           FontWeight.bold,
+                  //                                     ),
+                  //                                   ),
+                  //                                 ],
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                         ],
+                  //                       ),
+                  //                     )
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  ),
         ),
       ),
     );
