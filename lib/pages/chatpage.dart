@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:textme/pages/status.dart';
 import 'package:textme/pages/call.dart';
 import 'package:textme/pages/chat.dart';
@@ -35,41 +36,17 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: _index == 0
-                  ? TweenAnimationBuilder(
-                      child: Text("Chat"),
-                      duration: Duration(milliseconds: 1000),
-                      tween: Tween<double>(begin: 0.0, end: 1.0),
-                      builder: (BuildContext context, double value, child) {
-                        return Opacity(
-                          opacity: value,
-                          child: child,
-                        );
-                      },
-                    )
-                  : _index == 1
-                      ? TweenAnimationBuilder(
-                          child: Text("Status"),
-                          duration: Duration(milliseconds: 1000),
-                          tween: Tween<double>(begin: 0.0, end: 1.0),
-                          builder: (BuildContext context, double value, child) {
-                            return Opacity(
-                              opacity: value,
-                              child: child,
-                            );
-                          },
-                        )
-                      : TweenAnimationBuilder(
-                          child: Text("Calls"),
-                          duration: Duration(milliseconds: 1000),
-                          tween: Tween<double>(begin: 0.0, end: 1.0),
-                          builder: (BuildContext context, double value, child) {
-                            return Opacity(
-                              opacity: value,
-                              child: child,
-                            );
-                          },
-                        ),
+              title: (_index == 0 &&
+                          SizerUtil.orientation == Orientation.portrait) ||
+                      (_index == 0 &&
+                          SizerUtil.orientation == Orientation.landscape)
+                  ? Text("Chat")
+                  : (_index == 1 &&
+                              SizerUtil.orientation == Orientation.portrait) ||
+                          (_index == 1 &&
+                              SizerUtil.orientation == Orientation.landscape)
+                      ? Text("Status")
+                      : Text("Calls"),
               actions: [
                 _index == 0
                     ? Row(

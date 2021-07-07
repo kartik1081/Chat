@@ -354,9 +354,9 @@ class _SignInState extends State<SignIn> {
                           children: [
                             Positioned(
                               top: 8.h,
-                              height: height * 40,
-                              right: 55.0.w,
-                              left: 55.0.w,
+                              height: 46.5.h,
+                              right: 57.0.w,
+                              left: 57.0.w,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(40.sp),
@@ -408,7 +408,7 @@ class _SignInState extends State<SignIn> {
                                               children: [
                                                 TextFormField(
                                                   autocorrect: true,
-                                                  // autofocus: true,
+                                                  autofocus: true,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   validator: (value) {
@@ -454,7 +454,7 @@ class _SignInState extends State<SignIn> {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 10.0,
+                                                  height: 1.3.h,
                                                 ),
                                                 TextFormField(
                                                   obscureText: true,
@@ -592,7 +592,7 @@ class _SignInState extends State<SignIn> {
                                                       Image.asset(
                                                           "assets/google.jpg"),
                                                       SizedBox(
-                                                        width: 7.0,
+                                                        width: 1.5.w,
                                                       ),
                                                       Text(
                                                         "Google",
@@ -607,7 +607,7 @@ class _SignInState extends State<SignIn> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: 15.0,
+                                                width: 4.0.w,
                                               ),
                                               Expanded(
                                                 child: ElevatedButton(
@@ -631,7 +631,7 @@ class _SignInState extends State<SignIn> {
                                                     children: [
                                                       Icon(Icons.facebook),
                                                       SizedBox(
-                                                        width: 5.0,
+                                                        width: 1.5.w,
                                                       ),
                                                       Text(
                                                         "Facebook",

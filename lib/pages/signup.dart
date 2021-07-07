@@ -379,9 +379,9 @@ class _SignUpState extends State<SignUp> {
                         children: [
                           Positioned(
                             top: 2.h,
-                            height: height * 40,
-                            right: 55.0.w,
-                            left: 55.0.w,
+                            height: 51.5.h,
+                            right: 57.0.w,
+                            left: 57.0.w,
                             child: ClipRRect(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(40),
@@ -429,7 +429,7 @@ class _SignUpState extends State<SignUp> {
                                             children: [
                                               TextFormField(
                                                 autocorrect: true,
-                                                // autofocus: true,
+                                                autofocus: true,
                                                 keyboardType:
                                                     TextInputType.name,
                                                 validator: (value) {
@@ -477,7 +477,7 @@ class _SignUpState extends State<SignUp> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 10.0,
+                                                height: 1.3.h,
                                               ),
                                               TextFormField(
                                                 keyboardType:
@@ -522,7 +522,7 @@ class _SignUpState extends State<SignUp> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 10.0,
+                                                height: 1.3.h,
                                               ),
                                               TextFormField(
                                                 obscureText: true,
@@ -551,20 +551,17 @@ class _SignUpState extends State<SignUp> {
                                                           13.0, 8.0, 0.0, 8.0),
                                                   focusedBorder:
                                                       OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  width:
-                                                                      0.0000000001,
-                                                                  color: Colors
-                                                                      .black),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0)),
+                                                    borderSide: BorderSide(
+                                                        width: 0.0000000001.w,
+                                                        color: Colors.black),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
-                                                        width: 0.0000000001,
+                                                        width: 0.0000000001.w,
                                                         color: Colors.white),
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -604,7 +601,7 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                       ),
                                       Container(
-                                        width: 110,
+                                        width: 29.w,
                                         child: ElevatedButton(
                                           style: ButtonStyle(
                                             elevation:
@@ -658,7 +655,7 @@ class _SignUpState extends State<SignUp> {
                                                     Image.asset(
                                                         "assets/google.jpg"),
                                                     SizedBox(
-                                                      width: 7.0,
+                                                      width: 1.5.w,
                                                     ),
                                                     Text(
                                                       "Google",
@@ -672,7 +669,9 @@ class _SignUpState extends State<SignUp> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(width: 15.0),
+                                            SizedBox(
+                                              width: 4.0.w,
+                                            ),
                                             Expanded(
                                               child: ElevatedButton(
                                                 style: ButtonStyle(
@@ -694,7 +693,7 @@ class _SignUpState extends State<SignUp> {
                                                   children: [
                                                     Icon(Icons.facebook),
                                                     SizedBox(
-                                                      width: 5.0,
+                                                      width: 1.5.w,
                                                     ),
                                                     Text(
                                                       "Facebook",
