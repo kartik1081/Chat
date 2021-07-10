@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:textme/pages/setting.dart';
 import 'package:textme/pages/status.dart';
 import 'package:textme/pages/call.dart';
 import 'package:textme/pages/chat.dart';
-import 'package:textme/pages/search.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -36,38 +35,32 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: (_index == 0 &&
-                          SizerUtil.orientation == Orientation.portrait) ||
-                      (_index == 0 &&
-                          SizerUtil.orientation == Orientation.landscape)
-                  ? Text("Chat")
-                  : (_index == 1 &&
-                              SizerUtil.orientation == Orientation.portrait) ||
-                          (_index == 1 &&
-                              SizerUtil.orientation == Orientation.landscape)
-                      ? Text("Status")
-                      : Text("Calls"),
+              title: _index == 0
+                  ? Text(
+                      "Chats",
+                      style: TextStyle(fontSize: 20.0),
+                    )
+                  : _index == 1
+                      ? Text(
+                          "Status",
+                          style: TextStyle(fontSize: 20.0),
+                        )
+                      : Text(
+                          "Calls",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
               actions: [
                 _index == 0
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.search),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Search(),
-                                    fullscreenDialog: true),
-                              );
-                            },
-                            icon: Icon(Icons.add),
-                          ),
-                        ],
+                    ? IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Setting(),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.more_vert),
                       )
                     : _index == 1
                         ? IconButton(onPressed: () {}, icon: Icon(Icons.add))

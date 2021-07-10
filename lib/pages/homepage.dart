@@ -3,7 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:textme/pages/chatpage.dart';
 import 'package:textme/pages/profile.dart';
-import 'package:textme/pages/setting.dart';
+import 'package:textme/pages/search.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   PageController controller = PageController();
 
   int _index = 0;
-  List pages = [ChatPage(), Setting(), Profile()];
+  List pages = [ChatPage(), Search(), Profile()];
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GButton(
                     icon: LineIcons.search,
-                    text: "Setting",
+                    text: "Search",
                   ),
                   GButton(
                     icon: LineIcons.user,

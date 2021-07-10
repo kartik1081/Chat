@@ -24,13 +24,14 @@ class MyApp extends StatelessWidget {
               textTheme: TextTheme(
                 caption: TextStyle(color: Colors.white70),
               ),
-              titleSpacing: 40.0.h,
+              titleSpacing: 4.0.w,
               color: Color(0xFF2B2641),
               elevation: 1,
               iconTheme: IconThemeData(
                 color: Colors.white,
               ),
-              actionsIconTheme: IconThemeData(color: Colors.white70, size: 40),
+              actionsIconTheme:
+                  IconThemeData(color: Colors.white70, size: 4.sp),
             ),
           ),
           title: 'TextMe',
