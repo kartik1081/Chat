@@ -489,7 +489,7 @@ class _SignUpState extends State<SignUp> {
                                                   }
                                                 },
                                                 controller: email,
-                                                cursorHeight: 22.0,
+                                                autocorrect: true,
                                                 decoration: InputDecoration(
                                                   hintText: "Enter your email",
                                                   hintStyle: TextStyle(
@@ -535,7 +535,7 @@ class _SignUpState extends State<SignUp> {
                                                   }
                                                 },
                                                 controller: password,
-                                                cursorHeight: 30.0,
+                                                autocorrect: true,
                                                 decoration: InputDecoration(
                                                   hintText:
                                                       "Enter your password",

@@ -467,6 +467,7 @@ class _SignInState extends State<SignIn> {
                                                     }
                                                   },
                                                   controller: password,
+                                                  autocorrect: true,
                                                   decoration: InputDecoration(
                                                     hintText:
                                                         "Enter your password",
