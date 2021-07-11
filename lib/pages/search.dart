@@ -141,7 +141,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                         ? ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,
-                            itemCount: snapshot.data.docs.length,
+                            itemCount: snapshot.data.docs.length - 1,
                             itemBuilder: (context, index) {
                               return StreamBuilder<dynamic>(
                                   stream: _firestore
