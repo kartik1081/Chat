@@ -4,8 +4,6 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:textme/pages/chatpage.dart';
-import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/usersprofile.dart';
 
 // ignore: must_be_immutable

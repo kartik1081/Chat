@@ -43,7 +43,6 @@ class _StatusState extends State<Status> {
                     .doc("${_auth.currentUser!.uid}")
                     .snapshots(),
                 builder: (context, snapshot) {
-                  Map<String, dynamic> data = snapshot.data.data();
                   return snapshot.hasData
                       ? InkWell(
                           onTap: () {
