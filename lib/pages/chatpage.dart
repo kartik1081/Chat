@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:textme/pages/addstatus.dart';
 import 'package:textme/pages/setting.dart';
 import 'package:textme/pages/status.dart';
 import 'package:textme/pages/call.dart';
@@ -62,9 +68,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         },
                         icon: Icon(Icons.more_vert),
                       )
-                    : _index == 1
-                        ? IconButton(onPressed: () {}, icon: Icon(Icons.add))
-                        : Container()
+                    : Container()
               ],
               bottom: TabBar(
                 controller: tab,
@@ -90,7 +94,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               automaticallyImplyLeading: false,
             ),
             body: TabBarView(
-                controller: tab, children: [Chat(), Status(), Calls()]),
+              controller: tab,
+              children: [Chat(), Status(), Calls()],
+            ),
           ),
         ),
       ),

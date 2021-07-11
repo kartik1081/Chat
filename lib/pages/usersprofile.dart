@@ -36,8 +36,8 @@ class UsersProfile extends StatelessWidget {
             height: 10.0,
           ),
           InkWell(
-            onTap: () {
-              _firestore
+            onTap: () async {
+              await _firestore
                   .collection("Users")
                   .doc(_auth.currentUser!.uid)
                   .collection("Favorites")
