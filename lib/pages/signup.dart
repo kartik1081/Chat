@@ -106,6 +106,8 @@ class _SignUpState extends State<SignUp> {
                                                 }
                                               },
                                               controller: name,
+                                              autofocus: true,
+                                              autocorrect: true,
                                               cursorHeight: 22.0,
                                               decoration: InputDecoration(
                                                 hintText: "Enter your name",
@@ -152,6 +154,7 @@ class _SignUpState extends State<SignUp> {
                                               },
                                               controller: email,
                                               cursorHeight: 22.0,
+                                              autocorrect: true,
                                               decoration: InputDecoration(
                                                 hintText: "Enter your email",
                                                 hintStyle: TextStyle(
@@ -196,6 +199,7 @@ class _SignUpState extends State<SignUp> {
                                                 }
                                               },
                                               controller: password,
+                                              autocorrect: true,
                                               cursorHeight: 30.0,
                                               decoration: InputDecoration(
                                                 hintText: "Enter your password",
@@ -241,7 +245,7 @@ class _SignUpState extends State<SignUp> {
                                             child: Text(
                                               "Already have account",
                                               style: TextStyle(
-                                                  fontSize: 14.0,
+                                                  fontSize: 11.0.sp,
                                                   color: Colors.black),
                                             ),
                                             onPressed: () {

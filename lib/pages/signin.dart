@@ -112,6 +112,8 @@ class _SignInState extends State<SignIn> {
                                                   }
                                                 },
                                                 controller: email,
+                                                autocorrect: true,
+                                                autofocus: true,
                                                 decoration: InputDecoration(
                                                   hintText: "Enter your email",
                                                   hintStyle: TextStyle(
@@ -160,6 +162,7 @@ class _SignInState extends State<SignIn> {
                                                   }
                                                 },
                                                 controller: password,
+                                                autocorrect: true,
                                                 decoration: InputDecoration(
                                                   hintText:
                                                       "Enter your password",
@@ -210,7 +213,7 @@ class _SignInState extends State<SignIn> {
                                               child: Text(
                                                 "Create account",
                                                 style: TextStyle(
-                                                    fontSize: 14.0.sp,
+                                                    fontSize: 11.0.sp,
                                                     color: Colors.black),
                                               ),
                                               onPressed: () {

@@ -35,6 +35,10 @@ class _StatusState extends State<Status> {
         Stack(
           children: [
             Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
+              decoration: BoxDecoration(
+                  color: Color(0xFF3E375C),
+                  borderRadius: BorderRadius.circular(7.0)),
               height: 90.0,
               padding: const EdgeInsets.symmetric(vertical: 12.5),
               child: StreamBuilder<dynamic>(
@@ -98,8 +102,9 @@ class _StatusState extends State<Status> {
                                     child: Text(
                                       "Add Status",
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w800),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -135,10 +140,10 @@ class _StatusState extends State<Status> {
             ),
           ],
         ),
-        Divider(
-          color: Colors.white.withOpacity(0.2),
-          thickness: 1.0,
-        ),
+        // Divider(
+        //   color: Colors.white.withOpacity(0.2),
+        //   thickness: 1.0,
+        // ),
         Expanded(
           child: Container(
             child: StreamBuilder<dynamic>(
@@ -296,7 +301,7 @@ class _StatusState extends State<Status> {
   Future getImage() async {
     try {
       final pickedFile = await ImagePicker()
-          .getImage(source: ImageSource.gallery, imageQuality: 100);
+          .getImage(source: ImageSource.camera, imageQuality: 100);
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
