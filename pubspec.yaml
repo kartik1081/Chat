@@ -25,7 +25,7 @@ dependencies:
     sdk: flutter
   animations: ^2.0.0
   cached_network_image: ^3.0.0
-  cloud_firestore: ^2.2.2
+  cloud_firestore: ^1.0.0
   cupertino_icons: ^1.0.2
   date_format: ^2.0.2
   date_time_format: ^2.0.1
@@ -40,6 +40,7 @@ dependencies:
   image_picker: ^0.8.1+1
   line_icons: ^2.0.1
   sizer: ^2.0.13
+  flutter_instagram_stories: ^1.0.0
 
 dev_dependencies:
   flutter_test:

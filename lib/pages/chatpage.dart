@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:textme/pages/setting.dart';
 import 'package:textme/pages/status.dart';
-import 'package:textme/pages/call.dart';
 import 'package:textme/pages/chat.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  ChatPage({Key? key, this.index}) : super(key: key);
+  int? index;
 
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
-  late TabController tab = TabController(length: 3, vsync: this);
-  int _index = 0;
+  late TabController tab = TabController(length: 2, vsync: this);
+  int? _index = 0;
 
   @override
   void initState() {
     super.initState();
+    if (widget.index != 0) {
+      setState(() {
+        _index = widget.index;
+      });
+    }
   }
 
   @override
@@ -31,7 +36,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     return WillPopScope(
       onWillPop: () async => false,
       child: DefaultTabController(
-        length: 3,
+        length: 2,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
@@ -40,15 +45,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       "Chats",
                       style: TextStyle(fontSize: 20.0),
                     )
-                  : _index == 1
-                      ? Text(
-                          "Status",
-                          style: TextStyle(fontSize: 20.0),
-                        )
-                      : Text(
-                          "Calls",
-                          style: TextStyle(fontSize: 20.0),
-                        ),
+                  : Text(
+                      "Status",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
               actions: [
                 _index == 0
                     ? IconButton(
@@ -76,11 +76,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     text: "Chat",
                   ),
                   Tab(
-                    text: "Status",
+                    text: "Room",
                   ),
-                  Tab(
-                    text: "Calls",
-                  )
                 ],
                 indicatorColor: Colors.white,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -89,7 +86,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             ),
             body: TabBarView(
               controller: tab,
-              children: [Chat(), Status(), Calls()],
+              children: [Chat(), Status()],
             ),
           ),
         ),

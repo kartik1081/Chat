@@ -16,7 +16,13 @@ class _HomePageState extends State<HomePage> {
   PageController controller = PageController();
 
   int _index = 0;
-  List pages = [ChatPage(), Search(), Profile()];
+  List pages = [
+    ChatPage(
+      index: 0,
+    ),
+    Search(),
+    Profile()
+  ];
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
