@@ -1,12 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:story_view/story_view.dart';
 import 'package:textme/pages/chatpage.dart';
 
 // ignore: must_be_immutable
 class StatusDetail extends StatefulWidget {
-  StatusDetail({Key? key, required this.userID}) : super(key: key);
-  String userID;
+  StatusDetail({Key? key, required this.userID, required this.profilePic})
+      : super(key: key);
+  String userID, profilePic;
 
   @override
   _StatusDetailState createState() => _StatusDetailState();
@@ -15,6 +18,7 @@ class StatusDetail extends StatefulWidget {
 class _StatusDetailState extends State<StatusDetail> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final controller = StoryController();
+  List<StoryItem> storyList = [];
 
   @override
   void initState() {
@@ -23,44 +27,115 @@ class _StatusDetailState extends State<StatusDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final List<StoryItem> storyItems = [
-      StoryItem.text(
-          title: '''“When you talk, you are only repeating something you know.
-       But if you listen, you may learn something new.” 
-       – Dalai Lama''', backgroundColor: Colors.blueGrey),
-      StoryItem.pageImage(
-          url:
-              "https://images.unsplash.com/photo-1553531384-cc64ac80f931?ixid=MnwxMjA3fDF8MHxzZWFyY2h8MXx8bW91bnRhaW58ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-          controller: controller),
-      StoryItem.pageImage(
-          url: "https://wp-modula.com/wp-content/uploads/2018/12/gifgif.gif",
-          controller: controller,
-          imageFit: BoxFit.contain),
-    ];
     return WillPopScope(
       onWillPop: () async => true,
       child: Material(
-        child: StreamBuilder<dynamic>(
-            stream:
-                _firestore.collection("Users").where("profilePic").snapshots(),
-            builder: (context, snapshot) {
-              return StoryView(
-                storyItems: storyItems,
-                controller: controller,
-                progressPosition: ProgressPosition.top,
-                inline: false,
-                repeat: false,
-                onComplete: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(),
+        child: Stack(
+          children: [
+            StreamBuilder<dynamic>(
+              stream: _firestore
+                  .collection("Status")
+                  .where("id", isEqualTo: widget.userID)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                for (var i in snapshot.data.docs) {
+                  storyList.add(StoryItem.pageImage(
+                      url: i["status"], controller: controller));
+                }
+                return snapshot.hasData
+                    ? StoryView(
+                        storyItems: storyList.length != 0
+                            ? storyList
+                            : [
+                                StoryItem.text(
+                                  title: "No Story",
+                                  backgroundColor: Color(0xFF2B2641),
+                                ),
+                              ],
+                        controller: controller,
+                        progressPosition: ProgressPosition.top,
+                        inline: false,
+                        repeat: false,
+                        onComplete: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatPage(),
+                            ),
+                          );
+                        },
+                      )
+                    : SpinKitFadingCircle(
+                        color: Color(0xFF2EF7F7),
+                        size: 50,
+                      );
+              },
+            ),
+            Positioned(
+              top: 40.0,
+              left: 20.0,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                height: 70.0,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  children: [
+                    Hero(
+                      tag: widget.userID,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: CachedNetworkImage(
+                          height: 55,
+                          width: 55,
+                          fit: BoxFit.cover,
+                          imageUrl: widget.profilePic,
+                          placeholder: (context, url) {
+                            return Container(
+                              height: 100,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  );
-                },
-              );
-            }),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    StreamBuilder<dynamic>(
+                        stream: _firestore
+                            .collection("Users")
+                            .doc(widget.userID)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          return snapshot.hasData
+                              ? Text(
+                                  snapshot.data["name"],
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  "Name",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                );
+                        }),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  show(
+    String url,
+  ) {
+    return StoryItem.pageImage(url: url, controller: controller);
   }
 }

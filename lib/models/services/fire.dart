@@ -136,6 +136,69 @@ class Fire {
     }
   }
 
+  Future phoneSignIn(BuildContext context, String number) async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: number,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth
+            .signInWithCredential(credential)
+            .then(
+              (value) =>
+                  _firestore.collection("Users").doc(value.user!.uid).set(
+                {
+                  "id": value.user!.uid,
+                  "phoneNumber": number,
+                  "lastSignIn": DateTime.now(),
+                  "profilePic": ""
+                },
+              ),
+            )
+            .whenComplete(
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              ),
+            );
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        String smsCode = 'xxxx';
+
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: smsCode);
+        _auth
+            .signInWithCredential(credential)
+            .then(
+              (value) =>
+                  _firestore.collection("Users").doc(value.user!.uid).set(
+                {
+                  "id": value.user!.uid,
+                  "phoneNumber": number,
+                  "lastSignIn": DateTime.now(),
+                  "profilePic": ""
+                },
+              ),
+            )
+            .whenComplete(
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              ),
+            );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
   Future signOut(BuildContext context) async {
     await _auth.signOut().whenComplete(() {
       Navigator.push(

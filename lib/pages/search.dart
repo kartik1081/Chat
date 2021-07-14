@@ -141,7 +141,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                         ? ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.vertical,
-                            itemCount: snapshot.data.docs.length - 1,
+                            itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
                               return StreamBuilder<dynamic>(
                                   stream: _firestore
@@ -200,6 +200,17 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
     );
   }
 }
+
+// showToast(BuildContext context, String add_remove) {
+//   Fluttertoast.showToast(
+//       msg: add_remove,
+//       toastLength: Toast.LENGTH_SHORT,
+//       gravity: ToastGravity.BOTTOM,
+//       timeInSecForIosWeb: 1,
+//       backgroundColor: Colors.grey,
+//       textColor: Colors.white.withOpacity(0.5),
+//       fontSize: 16.0);
+// }
 
 // ignore: must_be_immutable
 class ListItem extends StatefulWidget {
@@ -260,11 +271,13 @@ class _ListItemState extends State<ListItem>
       if (status == AnimationStatus.completed) {
         setState(() {
           add_remove = "Remove";
+          // showToast(context, "Added");
         });
       }
       if (status == AnimationStatus.dismissed) {
         setState(() {
           add_remove = "Add";
+          // showToast(context, "Removed");
         });
       }
     });

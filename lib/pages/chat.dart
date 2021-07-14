@@ -56,7 +56,10 @@ class _ChatState extends State<Chat> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => StatusDetail(
-                                            userID: snapshot.data["id"]),
+                                          userID: snapshot.data["id"],
+                                          profilePic:
+                                              snapshot.data["profilePic"],
+                                        ),
                                       ),
                                     );
                                   },
@@ -108,7 +111,7 @@ class _ChatState extends State<Chat> {
                       top: 55.0,
                       left: 55.0,
                       child: InkWell(
-                        onTap: () async => await getImage(),
+                        onTap: () => getImage(),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Color(0xFF2EF7F7),
@@ -157,13 +160,15 @@ class _ChatState extends State<Chat> {
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           StatusDetail(
-                                                              userID:
-                                                                  data["id"]),
+                                                        userID: data["id"],
+                                                        profilePic: snapshot1
+                                                            .data["profilePic"],
+                                                      ),
                                                     ),
                                                   );
                                                 },
                                                 child: Hero(
-                                                  tag: snapshot1.data["id"],
+                                                  tag: data["id"],
                                                   child: ClipRRect(
                                                     borderRadius:
                                                         BorderRadius.circular(
