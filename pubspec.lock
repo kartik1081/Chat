@@ -70,21 +70,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "2.3.0"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.3"
+    version: "5.2.0"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "2.2.0"
   collection:
     dependency: transitive
     description:
@@ -120,13 +120,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  dotted_border:
-    dependency: transitive
-    description:
-      name: dotted_border
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -230,13 +223,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.2"
-  flutter_instagram_stories:
-    dependency: "direct main"
-    description:
-      name: flutter_instagram_stories
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -359,13 +345,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.1"
   line_icons:
     dependency: "direct main"
     description:
@@ -401,20 +380,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  path_drawing:
-    dependency: transitive
-    description:
-      name: path_drawing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.1"
-  path_parsing:
-    dependency: transitive
-    description:
-      name: path_parsing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
   path_provider:
     dependency: transitive
     description:
@@ -539,6 +504,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  story_view:
+    dependency: "direct main"
+    description:
+      name: story_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.1"
   stream_channel:
     dependency: transitive
     description:
@@ -603,7 +575,7 @@ packages:
     source: hosted
     version: "2.1.0"
   video_player:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: video_player
       url: "https://pub.dartlang.org"

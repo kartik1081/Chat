@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:textme/pages/room.dart';
 import 'package:textme/pages/setting.dart';
-import 'package:textme/pages/status.dart';
 import 'package:textme/pages/chat.dart';
 
+// ignore: must_be_immutable
 class ChatPage extends StatefulWidget {
   ChatPage({Key? key, this.index}) : super(key: key);
   int? index;
@@ -86,7 +87,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             ),
             body: TabBarView(
               controller: tab,
-              children: [Chat(), Status()],
+              children: [Chat(), ChatRoom()],
             ),
           ),
         ),

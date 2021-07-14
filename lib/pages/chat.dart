@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_instagram_stories/flutter_instagram_stories.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -27,73 +26,204 @@ class _ChatState extends State<Chat> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   late int item;
   late File _image;
-  bool _loading = false;
   late String url;
-  static String collectionDbName = 'Status';
   @override
   Widget build(BuildContext context) {
-    CollectionReference dbInstance = _firestore.collection(collectionDbName);
     return Scaffold(
       body: Column(
         children: [
-          // FlutterInstagramStories(
-          //   collectionDbName: collectionDbName,
-          //   showTitleOnIcon: true,
-          //   backFromStories: () {
-          //     _backFromStoriesAlert();
-          //   },
-          //   iconTextStyle: TextStyle(
-          //     fontSize: 14.0,
-          //     color: Colors.white,
-          //   ),
-          //   iconImageBorderRadius: BorderRadius.circular(15.0),
-          //   iconBoxDecoration: BoxDecoration(
-          //     borderRadius: BorderRadius.all(Radius.circular(15.0)),
-          //     color: Color(0xFFffffff),
-          //     boxShadow: [
-          //       BoxShadow(
-          //         color: Color(0xff333333),
-          //         blurRadius: 10.0,
-          //         offset: Offset(
-          //           0.0,
-          //           4.0,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //   iconWidth: 150.0,
-          //   iconHeight: 150.0,
-          //   textInIconPadding:
-          //       EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0),
-          //   //how long story lasts in seconds
-          //   imageStoryDuration: 7,
-          //   progressPosition: ProgressPosition.top,
-          //   repeat: true,
-          //   inline: false,
-          //   languageCode: 'en',
-          //   backgroundColorBetweenStories: Colors.black,
-          //   closeButtonIcon: Icon(
-          //     Icons.close,
-          //     color: Colors.white,
-          //     size: 28.0,
-          //   ),
-          //   closeButtonBackgroundColor: Color(0x11000000),
-          //   sortingOrderDesc: true,
-          //   lastIconHighlight: true,
-          //   lastIconHighlightColor: Colors.deepOrange,
-          //   lastIconHighlightRadius: const Radius.circular(15.0),
-          //   captionTextStyle: TextStyle(
-          //     fontSize: 22,
-          //     color: Colors.white,
-          //   ),
-          //   captionMargin: EdgeInsets.only(
-          //     bottom: 50,
-          //   ),
-          //   captionPadding: EdgeInsets.symmetric(
-          //     horizontal: 24,
-          //     vertical: 8,
-          //   ),
-          // ),
+          Container(
+            height: 100.0,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                      width: 80.0,
+                      height: 80.0,
+                      child: StreamBuilder<dynamic>(
+                        stream: _firestore
+                            .collection("Users")
+                            .doc(_auth.currentUser!.uid)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          return snapshot.hasData
+                              ? InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => StatusDetail(
+                                            userID: snapshot.data["id"]),
+                                      ),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: snapshot.data["id"],
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
+                                      child: snapshot
+                                              .data["profilePic"].isNotEmpty
+                                          ? CachedNetworkImage(
+                                              height: 49,
+                                              width: 49,
+                                              fit: BoxFit.cover,
+                                              imageUrl:
+                                                  snapshot.data["profilePic"],
+                                              placeholder: (context, url) {
+                                                return Container(
+                                                  height: 100,
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Image(
+                                              image: AssetImage(
+                                                  "assets/avatar.png"),
+                                              height: 49,
+                                              width: 49,
+                                            ),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 8.0),
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Color(0xFF3C355A),
+                                  ),
+                                );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      top: 55.0,
+                      left: 55.0,
+                      child: InkWell(
+                        onTap: () async => await getImage(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF2EF7F7),
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
+                          child: Icon(Icons.add),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    height: 80.0,
+                    child: StreamBuilder<dynamic>(
+                      stream: _firestore
+                          .collection("Users")
+                          .doc(_auth.currentUser!.uid)
+                          .collection("Favorites")
+                          .snapshots(),
+                      builder: (context, snapshot0) {
+                        return snapshot0.hasData
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot0.data.docs.length,
+                                itemBuilder: (context, index) {
+                                  Map<String, dynamic> data =
+                                      snapshot0.data.docs[index].data();
+                                  return Container(
+                                    width: 80.0,
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, left: 10.0),
+                                    child: StreamBuilder<dynamic>(
+                                      stream: _firestore
+                                          .collection("Users")
+                                          .doc(data["id"])
+                                          .snapshots(),
+                                      builder: (context, snapshot1) {
+                                        return snapshot1.hasData
+                                            ? InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          StatusDetail(
+                                                              userID:
+                                                                  data["id"]),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Hero(
+                                                  tag: snapshot1.data["id"],
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100.0),
+                                                    child: snapshot1
+                                                            .data["profilePic"]
+                                                            .isNotEmpty
+                                                        ? CachedNetworkImage(
+                                                            height: 49,
+                                                            width: 49,
+                                                            fit: BoxFit.cover,
+                                                            imageUrl: snapshot1
+                                                                    .data[
+                                                                "profilePic"],
+                                                            placeholder:
+                                                                (context, url) {
+                                                              return Container(
+                                                                height: 100,
+                                                                child: Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(),
+                                                                ),
+                                                              );
+                                                            },
+                                                          )
+                                                        : Image(
+                                                            image: AssetImage(
+                                                                "assets/avatar.png"),
+                                                            height: 49,
+                                                            width: 49,
+                                                          ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0,
+                                                        horizontal: 8.0),
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  color: Color(0xFF3C355A),
+                                                ),
+                                              );
+                                      },
+                                    ),
+                                  );
+                                },
+                              )
+                            : SpinKitFadingCircle(color: Color(0xFF2EF7F7));
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Divider(
             color: Colors.white.withOpacity(0.15),
             thickness: 0.5,
@@ -287,7 +417,6 @@ class _ChatState extends State<Chat> {
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
-          _loading = true;
         });
         Navigator.push(
           context,
@@ -299,9 +428,7 @@ class _ChatState extends State<Chat> {
               },
               fullscreenDialog: true),
         ).whenComplete(() {
-          setState(() {
-            _loading = false;
-          });
+          setState(() {});
         });
       } else if (pickedFile == null) {
         WillPopScope(
@@ -312,25 +439,5 @@ class _ChatState extends State<Chat> {
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  _backFromStoriesAlert() {
-    showDialog(
-      context: context,
-      builder: (_) => SimpleDialog(
-        title: Text(
-          "User have looked stories and closed them.",
-          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18.0),
-        ),
-        children: <Widget>[
-          SimpleDialogOption(
-            child: Text("Dismiss"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
   }
 }
