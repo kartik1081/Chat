@@ -19,25 +19,28 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 4), () {
-      _auth.authStateChanges().listen((event) {
-        if (event != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SignIn(),
-            ),
-          );
-        }
-      });
-    });
+    Timer(
+      Duration(seconds: 4),
+      () {
+        _auth.authStateChanges().listen(
+          (event) {
+            event != null
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  )
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignIn(),
+                    ),
+                  );
+          },
+        );
+      },
+    );
   }
 
   @override

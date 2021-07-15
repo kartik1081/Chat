@@ -39,8 +39,10 @@ class _StatusDetailState extends State<StatusDetail> {
                   .snapshots(),
               builder: (context, snapshot) {
                 for (var i in snapshot.data.docs) {
-                  storyList.add(StoryItem.pageImage(
-                      url: i["status"], controller: controller));
+                  storyList.add(
+                    StoryItem.pageImage(
+                        url: i["status"], controller: controller),
+                  );
                 }
                 return snapshot.hasData
                     ? StoryView(
