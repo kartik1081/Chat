@@ -40,8 +40,12 @@ class _ChatState extends State<Chat> {
                 Stack(
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                      width: 80.0,
+                      padding: const EdgeInsets.only(
+                        top: 10.0,
+                        left: 10.0,
+                        right: 10.0,
+                      ),
+                      width: 90.0,
                       height: 80.0,
                       child: StreamBuilder<dynamic>(
                         stream: _firestore
@@ -145,77 +149,78 @@ class _ChatState extends State<Chat> {
                                   return Container(
                                     width: 80.0,
                                     padding: const EdgeInsets.only(
-                                        top: 10.0, left: 10.0),
+                                        top: 10.0, left: 5.0, right: 5.0),
                                     child: StreamBuilder<dynamic>(
                                       stream: _firestore
-                                          .collection("Users")
-                                          .doc(data["id"])
+                                          .collection("Status")
+                                          .where("id", isEqualTo: data["id"])
                                           .snapshots(),
                                       builder: (context, snapshot1) {
-                                        return snapshot1.hasData
-                                            ? InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          StatusDetail(
-                                                        userID: data["id"],
-                                                        profilePic: snapshot1
-                                                            .data["profilePic"],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Hero(
-                                                  tag: data["id"],
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100.0),
-                                                    child: snapshot1
-                                                            .data["profilePic"]
-                                                            .isNotEmpty
-                                                        ? CachedNetworkImage(
-                                                            height: 49,
-                                                            width: 49,
-                                                            fit: BoxFit.cover,
-                                                            imageUrl: snapshot1
-                                                                    .data[
-                                                                "profilePic"],
-                                                            placeholder:
-                                                                (context, url) {
-                                                              return Container(
-                                                                height: 100,
-                                                                child: Center(
-                                                                  child:
-                                                                      CircularProgressIndicator(),
-                                                                ),
-                                                              );
-                                                            },
-                                                          )
-                                                        : Image(
-                                                            image: AssetImage(
-                                                                "assets/avatar.png"),
-                                                            height: 49,
-                                                            width: 49,
-                                                          ),
+                                        if (snapshot1.hasData) {
+                                          return InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      StatusDetail(
+                                                    userID: data["id"],
+                                                    profilePic:
+                                                        data["profilePic"],
                                                   ),
                                                 ),
-                                              )
-                                            : Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4.0,
-                                                        horizontal: 8.0),
-                                                height: 60,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  color: Color(0xFF3C355A),
-                                                ),
                                               );
+                                            },
+                                            child: Hero(
+                                              tag: data["id"],
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        100.0),
+                                                child: data["profilePic"]
+                                                        .isNotEmpty
+                                                    ? CachedNetworkImage(
+                                                        height: 49,
+                                                        width: 49,
+                                                        fit: BoxFit.cover,
+                                                        imageUrl:
+                                                            data["profilePic"],
+                                                        placeholder:
+                                                            (context, url) {
+                                                          return Container(
+                                                            height: 100,
+                                                            child: Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : Image(
+                                                        image: AssetImage(
+                                                            "assets/avatar.png"),
+                                                        height: 49,
+                                                        width: 49,
+                                                      ),
+                                              ),
+                                            ),
+                                          );
+                                        } else if (!snapshot1.hasData) {
+                                          return Container(
+                                            color: Color(0xFF2B2641),
+                                          );
+                                        } else {
+                                          return Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 8.0),
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              color: Color(0xFF3C355A),
+                                            ),
+                                          );
+                                        }
                                       },
                                     ),
                                   );

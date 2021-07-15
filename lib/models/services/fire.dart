@@ -56,7 +56,8 @@ class Fire {
             "email": email,
             "password": password,
             "lastSignIn": DateTime.now(),
-            "profilePic": ""
+            "profilePic":
+                "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
           });
         }).whenComplete(() {
           Navigator.push(
@@ -182,7 +183,8 @@ class Fire {
                   "id": value.user!.uid,
                   "phoneNumber": number,
                   "lastSignIn": DateTime.now(),
-                  "profilePic": ""
+                  "profilePic":
+                      "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
                 },
               ),
             )

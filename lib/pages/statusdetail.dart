@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:story_view/story_view.dart';
 import 'package:textme/pages/chatpage.dart';
+import 'package:textme/pages/homepage.dart';
 
 // ignore: must_be_immutable
 class StatusDetail extends StatefulWidget {
@@ -62,7 +63,7 @@ class _StatusDetailState extends State<StatusDetail> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ChatPage(),
+                              builder: (context) => HomePage(),
                             ),
                           );
                         },
