@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:story_view/story_view.dart';
-import 'package:textme/pages/chatpage.dart';
 import 'package:textme/pages/homepage.dart';
 
 // ignore: must_be_immutable
