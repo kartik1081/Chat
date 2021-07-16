@@ -20,6 +20,8 @@ class _EditProfileState extends State<EditProfile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
   late File _image;
+  bool edit = false;
+  TextEditingController name = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,7 @@ class _EditProfileState extends State<EditProfile> {
                                       width: MediaQuery.of(context).size.width,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
                                         children: [
                                           Icon(
                                             Icons.person,
@@ -95,57 +97,31 @@ class _EditProfileState extends State<EditProfile> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "Name",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white70,
-                                                            fontSize: 15.0),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 5.0,
-                                                      ),
-                                                      Text(
-                                                        data["name"],
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15.0,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 174.0,
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () {},
-                                                    icon: Icon(
-                                                      Icons.edit,
-                                                      color: Color(0xFF2EF7F7),
-                                                    ),
-                                                  ),
-                                                ],
+                                              Text(
+                                                "Name",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 15.0),
                                               ),
                                               SizedBox(
                                                 height: 5.0,
                                               ),
                                               Text(
-                                                "This is not your username or pin. This \n name will be visible to your TextMe contacts.",
+                                                data["name"],
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Text(
+                                                "This is not your username or pin. This name \n will be visible to your TextMe users.",
                                                 style: TextStyle(
                                                     color: Colors.white70,
-                                                    fontSize: 13.0),
+                                                    fontSize: 15.0),
                                               )
                                             ],
                                           )
@@ -184,15 +160,6 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          width: 240.0,
-                                        ),
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              Icons.edit,
-                                              color: Color(0xFF2EF7F7),
-                                            ))
                                       ],
                                     ),
                                     SizedBox(

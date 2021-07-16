@@ -35,7 +35,7 @@ class _ProfileState extends State<Profile> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SignIn(),
+                  builder: (context) => WithEmail(),
                 ),
               );
             },

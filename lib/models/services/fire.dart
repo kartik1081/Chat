@@ -206,7 +206,7 @@ class Fire {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SignIn(),
+          builder: (context) => WithEmail(),
         ),
       );
     });

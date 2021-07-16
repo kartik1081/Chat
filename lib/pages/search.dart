@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'chatdetail.dart';
 
@@ -244,10 +245,13 @@ class _ListItemState extends State<ListItem>
   bool added;
   // ignore: non_constant_identifier_names
   String add_remove;
+  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 50),
@@ -351,24 +355,29 @@ class _ListItemState extends State<ListItem>
                   ),
                   InkWell(
                     onTap: () async {
-                      added
-                          ? await _firestore
-                              .collection("Users")
-                              .doc(_auth.currentUser!.uid)
-                              .collection("Favorites")
-                              .doc(widget.id)
-                              .delete()
-                          : await _firestore
-                              .collection("Users")
-                              .doc(_auth.currentUser!.uid)
-                              .collection("Favorites")
-                              .doc(widget.id)
-                              .set({
-                              "name": widget.name,
-                              "profilePic": widget.profilePic,
-                              "time": DateTime.now(),
-                              "id": widget.id,
-                            });
+                      if (added) {
+                        await _firestore
+                            .collection("Users")
+                            .doc(_auth.currentUser!.uid)
+                            .collection("Favorites")
+                            .doc(widget.id)
+                            .delete();
+                        _showToast("Removed");
+                      } else if (!added) {
+                        await _firestore
+                            .collection("Users")
+                            .doc(_auth.currentUser!.uid)
+                            .collection("Favorites")
+                            .doc(widget.id)
+                            .set({
+                          "name": widget.name,
+                          "profilePic": widget.profilePic,
+                          "time": DateTime.now(),
+                          "id": widget.id,
+                        });
+                        _showToast("Added");
+                      }
+
                       setState(() {
                         added ? _controller.reverse() : _controller.forward();
                         added = !added;
@@ -402,5 +411,32 @@ class _ListItemState extends State<ListItem>
         ),
       ),
     );
+  }
+
+  _showToast(String msg) {
+    Widget toast = Container(
+      width: 110.0,
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.grey.withOpacity(0.5),
+      ),
+      child: Center(
+        child: Text(
+          msg,
+        ),
+      ),
+    );
+
+    fToast.showToast(
+        child: toast,
+        toastDuration: Duration(seconds: 2),
+        positionedToastBuilder: (context, child) {
+          return Positioned(
+            child: child,
+            top: MediaQuery.of(context).size.height * 0.8,
+            left: (MediaQuery.of(context).size.width - 100.0) * 0.5,
+          );
+        });
   }
 }

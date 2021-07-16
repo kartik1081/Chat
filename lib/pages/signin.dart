@@ -4,21 +4,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/services/fire.dart';
 
 import 'signup.dart';
 
-class SignIn extends StatefulWidget {
+class WithEmail extends StatefulWidget {
   @override
-  _SignInState createState() => _SignInState();
+  _WithEmailState createState() => _WithEmailState();
 }
 
-class _SignInState extends State<SignIn> {
+class _WithEmailState extends State<WithEmail> {
   late bool _loading;
   final _form = GlobalKey<FormState>();
   Fire _fire = Fire();
-  TextEditingController email = TextEditingController();
+  bool _withEmail = true;
+  Icon _with = Icon(
+    Icons.phone_android,
+    color: Colors.black,
+  );
+  bool _sent = false;
+  late FToast fToast;
+  // ignore: non_constant_identifier_names
+  TextEditingController email_phone = TextEditingController();
   TextEditingController password = TextEditingController();
 
   @override
@@ -27,6 +36,8 @@ class _SignInState extends State<SignIn> {
     // TODO: implement initState
     super.initState();
     _loading = false;
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
@@ -102,48 +113,52 @@ class _SignInState extends State<SignIn> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              TextFormField(
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                validator: (value) {
-                                                  if (value == null ||
-                                                      value.isEmpty) {
-                                                    return "Enter your email";
-                                                  }
-                                                },
-                                                controller: email,
-                                                autocorrect: true,
-                                                autofocus: true,
-                                                decoration: InputDecoration(
-                                                  hintText: "Enter your email",
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.grey),
-                                                  fillColor: Colors.white,
-                                                  filled: true,
-                                                  contentPadding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          13.0,
-                                                          -5.0,
-                                                          0.0,
-                                                          -5.0),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        width: 0.0000000001,
-                                                        color: Colors.black),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0.sp),
-                                                  ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      width: 0.0000000001,
-                                                      color: Colors.white,
+                                              Container(
+                                                child: TextFormField(
+                                                  keyboardType: TextInputType
+                                                      .emailAddress,
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      return _withEmail
+                                                          ? "Enter your email"
+                                                          : "Enter your number";
+                                                    }
+                                                  },
+                                                  controller: email_phone,
+                                                  autocorrect: true,
+                                                  autofocus: true,
+                                                  decoration: InputDecoration(
+                                                    hintText: _withEmail
+                                                        ? "Enter your email"
+                                                        : "Enter your number",
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.grey),
+                                                    fillColor: Colors.white,
+                                                    filled: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                                .fromLTRB(13.0,
+                                                            -5.0, 0.0, -5.0),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          width: 0.0000000001,
+                                                          color: Colors.black),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0.sp),
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      10.0.sp,
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        width: 0.0000000001,
+                                                        color: Colors.white,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        10.0.sp,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -158,14 +173,17 @@ class _SignInState extends State<SignIn> {
                                                 validator: (value) {
                                                   if (value == null ||
                                                       value.isEmpty) {
-                                                    return "Enter your password";
+                                                    return _withEmail
+                                                        ? "Enter your password"
+                                                        : "Enter your OTP";
                                                   }
                                                 },
                                                 controller: password,
                                                 autocorrect: true,
                                                 decoration: InputDecoration(
-                                                  hintText:
-                                                      "Enter your password",
+                                                  hintText: _withEmail
+                                                      ? "Enter your password"
+                                                      : "Enter your OTP",
                                                   hintStyle: TextStyle(
                                                       color: Colors.grey),
                                                   fillColor: Colors.white,
@@ -231,7 +249,7 @@ class _SignInState extends State<SignIn> {
                                         ),
                                       ),
                                       Container(
-                                        width: 110,
+                                        width: 115,
                                         child: ElevatedButton(
                                           style: ButtonStyle(
                                             elevation:
@@ -244,13 +262,32 @@ class _SignInState extends State<SignIn> {
                                                     Colors.lightGreen),
                                           ),
                                           onPressed: () {
-                                            setState(() {
-                                              _loading = true;
-                                            });
-                                            _fire.signIn(context, email.text,
-                                                password.text);
+                                            if (_withEmail) {
+                                              if (email_phone.text
+                                                  .endsWith("@gmail.com")) {
+                                                setState(() {
+                                                  _loading = true;
+                                                });
+                                                _fire.signIn(
+                                                    context,
+                                                    email_phone.text,
+                                                    password.text);
+                                              } else {
+                                                _showToast(
+                                                    "Pleas enter valid email");
+                                              }
+                                            } else if (!_withEmail) {
+                                              if (email_phone.text.length ==
+                                                  10) {
+                                              } else {
+                                                _showToast(
+                                                    "Pleas enter valid number");
+                                              }
+                                            }
                                           },
-                                          child: Text("Sign In"),
+                                          child: Text(!_withEmail && !_sent
+                                              ? "OTP Request"
+                                              : "Sign In"),
                                         ),
                                       ),
                                       SizedBox(
@@ -262,80 +299,76 @@ class _SignInState extends State<SignIn> {
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                style: ButtonStyle(
+                                            ElevatedButton(
+                                              style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
                                                           Colors.white),
                                                   elevation:
                                                       MaterialStateProperty.all(
-                                                          7.0.sp),
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _loading = true;
-                                                  });
-                                                  _fire.googleSignIn(context);
-                                                },
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Image.asset(
-                                                        "assets/google.jpg"),
-                                                    SizedBox(
-                                                      width: 7.0,
-                                                    ),
-                                                    Text(
-                                                      "Google",
-                                                      style: TextStyle(
+                                                          7.0)),
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (_withEmail) {
+                                                    setState(() {
+                                                      _withEmail = false;
+                                                      _with = Icon(
+                                                        Icons.email,
                                                         color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                                      );
+                                                    });
+                                                    _showToast(
+                                                        "Sign In with number");
+                                                  } else if (!_withEmail) {
+                                                    setState(() {
+                                                      _withEmail = true;
+                                                      _with = Icon(
+                                                        Icons.phone_android,
+                                                        color: Colors.black,
+                                                      );
+                                                    });
+                                                    _showToast(
+                                                        "Sign In with number");
+                                                  }
+                                                });
+                                              },
+                                              child: _with,
                                             ),
-                                            SizedBox(
-                                              width: 15.0,
-                                            ),
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                style: ButtonStyle(
+                                            SizedBox(width: 15.0),
+                                            ElevatedButton(
+                                              style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all(
-                                                          Colors.blue),
+                                                          Colors.white),
                                                   elevation:
                                                       MaterialStateProperty.all(
-                                                          7.0),
-                                                ),
-                                                onPressed: () {
-                                                  // _flutterFire.signInWithFacebook(context);
-                                                },
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Icon(Icons.facebook),
-                                                    SizedBox(
-                                                      width: 5.0,
-                                                    ),
-                                                    Text(
-                                                      "Facebook",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                          7.0)),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _loading = true;
+                                                });
+                                                _fire.googleSignIn(context);
+                                              },
+                                              child: Image.asset(
+                                                  "assets/google.jpg"),
+                                            ),
+                                            SizedBox(width: 15.0),
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.blue),
+                                                elevation:
+                                                    MaterialStateProperty.all(
+                                                        7.0),
                                               ),
+                                              onPressed: () {
+                                                // _flutterFire.signInWithFacebook(context);
+                                              },
+                                              child: Icon(Icons.facebook),
                                             ),
                                           ],
                                         ),
@@ -420,7 +453,7 @@ class _SignInState extends State<SignIn> {
                                                       return "Enter your email";
                                                     }
                                                   },
-                                                  controller: email,
+                                                  controller: email_phone,
                                                   decoration: InputDecoration(
                                                     hintText:
                                                         "Enter your email",
@@ -557,7 +590,9 @@ class _SignInState extends State<SignIn> {
                                               setState(() {
                                                 _loading = true;
                                               });
-                                              _fire.signIn(context, email.text,
+                                              _fire.signIn(
+                                                  context,
+                                                  email_phone.text,
                                                   password.text);
                                             },
                                             child: Text("Sign In"),
@@ -572,81 +607,73 @@ class _SignInState extends State<SignIn> {
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  style: ButtonStyle(
+                                              ElevatedButton(
+                                                style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStateProperty
                                                             .all(Colors.white),
                                                     elevation:
                                                         MaterialStateProperty
-                                                            .all(7.0.sp),
-                                                  ),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      _loading = true;
-                                                    });
-                                                    _fire.googleSignIn(context);
-                                                  },
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Image.asset(
-                                                          "assets/google.jpg"),
-                                                      SizedBox(
-                                                        width: 1.5.w,
-                                                      ),
-                                                      Text(
-                                                        "Google",
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                            .all(7.0)),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _withEmail
+                                                        ? setState(() {
+                                                            _withEmail = false;
+                                                            _with = Icon(
+                                                              Icons.email,
+                                                              color:
+                                                                  Colors.black,
+                                                            );
+                                                          })
+                                                        : setState(() {
+                                                            _withEmail = true;
+                                                            _with = Icon(
+                                                              Icons
+                                                                  .phone_android,
+                                                              color:
+                                                                  Colors.black,
+                                                            );
+                                                          });
+                                                  });
+                                                },
+                                                child: _with,
                                               ),
-                                              SizedBox(
-                                                width: 4.0.w,
-                                              ),
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  style: ButtonStyle(
+                                              SizedBox(width: 15.0),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStateProperty
-                                                            .all(Colors.blue),
+                                                            .all(Colors.white),
                                                     elevation:
                                                         MaterialStateProperty
-                                                            .all(7.0),
-                                                  ),
-                                                  onPressed: () {
-                                                    // _flutterFire.signInWithFacebook(context);
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Icon(Icons.facebook),
-                                                      SizedBox(
-                                                        width: 1.5.w,
-                                                      ),
-                                                      Text(
-                                                        "Facebook",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                            .all(7.0)),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _loading = true;
+                                                  });
+                                                  _fire.googleSignIn(context);
+                                                },
+                                                child: Image.asset(
+                                                    "assets/google.jpg"),
+                                              ),
+                                              SizedBox(width: 15.0),
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.blue),
+                                                  elevation:
+                                                      MaterialStateProperty.all(
+                                                          7.0),
                                                 ),
+                                                onPressed: () {
+                                                  // _flutterFire.signInWithFacebook(context);
+                                                },
+                                                child: Icon(Icons.facebook),
                                               ),
                                             ],
                                           ),
@@ -663,6 +690,22 @@ class _SignInState extends State<SignIn> {
                     ),
         ),
       ),
+    );
+  }
+
+  _showToast(String msg) {
+    Widget toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.white,
+        ),
+        child: Text(msg));
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
     );
   }
 }

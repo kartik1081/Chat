@@ -18,6 +18,12 @@ class _SignUpState extends State<SignUp> {
   // ignore: unused_field
   final _form = GlobalKey<FormState>();
   Fire _fire = Fire();
+  bool _withEmail = true;
+  Icon _with = Icon(
+    Icons.phone_android,
+    color: Colors.black,
+  );
+  bool _sent = false;
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -149,14 +155,18 @@ class _SignUpState extends State<SignUp> {
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.isEmpty) {
-                                                  return "Enter your email";
+                                                  return _withEmail
+                                                      ? "Enter your email"
+                                                      : "Enter your number";
                                                 }
                                               },
                                               controller: email,
                                               cursorHeight: 22.0,
                                               autocorrect: true,
                                               decoration: InputDecoration(
-                                                hintText: "Enter your email",
+                                                hintText: _withEmail
+                                                    ? "Enter your email"
+                                                    : "Enter your number",
                                                 hintStyle: TextStyle(
                                                     color: Colors.grey),
                                                 fillColor: Colors.white,
@@ -195,14 +205,18 @@ class _SignUpState extends State<SignUp> {
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.isEmpty) {
-                                                  return "Enter your password";
+                                                  return _withEmail
+                                                      ? "Enter your password"
+                                                      : "Enter your OTP";
                                                 }
                                               },
                                               controller: password,
                                               autocorrect: true,
                                               cursorHeight: 30.0,
                                               decoration: InputDecoration(
-                                                hintText: "Enter your password",
+                                                hintText: _withEmail
+                                                    ? "Enter your password"
+                                                    : "Enter your OTP",
                                                 hintStyle: TextStyle(
                                                     color: Colors.grey),
                                                 fillColor: Colors.white,
@@ -253,7 +267,7 @@ class _SignUpState extends State<SignUp> {
                                                 MaterialPageRoute(
                                                   // ignore: non_constant_identifier_names
                                                   builder: (BuildContext) =>
-                                                      SignIn(),
+                                                      WithEmail(),
                                                 ),
                                               );
                                             },
@@ -262,7 +276,7 @@ class _SignUpState extends State<SignUp> {
                                       ),
                                     ),
                                     Container(
-                                      width: 110,
+                                      width: 114,
                                       child: ElevatedButton(
                                         style: ButtonStyle(
                                           elevation:
@@ -281,7 +295,9 @@ class _SignUpState extends State<SignUp> {
                                           _fire.signUp(context, name.text,
                                               email.text, password.text);
                                         },
-                                        child: Text("Sign Up"),
+                                        child: Text(!_withEmail && !_sent
+                                            ? "OTP Request"
+                                            : "Sign Up"),
                                       ),
                                     ),
                                     SizedBox(
@@ -293,75 +309,70 @@ class _SignUpState extends State<SignUp> {
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Expanded(
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.white),
-                                                  elevation:
-                                                      MaterialStateProperty.all(
-                                                          7.0)),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                _fire.googleSignIn(context);
-                                              },
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Image.asset(
-                                                      "assets/google.jpg"),
-                                                  SizedBox(
-                                                    width: 7.0,
-                                                  ),
-                                                  Text(
-                                                    "Google",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 15.0),
-                                          Expanded(
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
+                                          ElevatedButton(
+                                            style: ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStateProperty.all(
-                                                        Colors.blue),
+                                                        Colors.white),
                                                 elevation:
                                                     MaterialStateProperty.all(
-                                                        7.0),
-                                              ),
-                                              onPressed: () {
-                                                // _flutterFire.signInWithFacebook(context);
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Icon(Icons.facebook),
-                                                  SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text(
-                                                    "Facebook",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                        7.0)),
+                                            onPressed: () {
+                                              setState(() {
+                                                _withEmail
+                                                    ? setState(() {
+                                                        _withEmail = false;
+                                                        _with = Icon(
+                                                          Icons.email,
+                                                          color: Colors.black,
+                                                        );
+                                                      })
+                                                    : setState(() {
+                                                        _withEmail = true;
+                                                        _with = Icon(
+                                                          Icons.phone_android,
+                                                          color: Colors.black,
+                                                        );
+                                                      });
+                                              });
+                                            },
+                                            child: _with,
+                                          ),
+                                          SizedBox(width: 15.0),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.white),
+                                                elevation:
+                                                    MaterialStateProperty.all(
+                                                        7.0)),
+                                            onPressed: () {
+                                              setState(() {
+                                                _loading = true;
+                                              });
+                                              _fire.googleSignIn(context);
+                                            },
+                                            child: Image.asset(
+                                                "assets/google.jpg"),
+                                          ),
+                                          SizedBox(width: 15.0),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.blue),
+                                              elevation:
+                                                  MaterialStateProperty.all(
+                                                      7.0),
                                             ),
+                                            onPressed: () {
+                                              // _flutterFire.signInWithFacebook(context);
+                                            },
+                                            child: Icon(Icons.facebook),
                                           ),
                                         ],
                                       ),
@@ -596,7 +607,7 @@ class _SignUpState extends State<SignUp> {
                                                   MaterialPageRoute(
                                                     // ignore: non_constant_identifier_names
                                                     builder: (BuildContext) =>
-                                                        SignIn(),
+                                                        WithEmail(),
                                                   ),
                                                 );
                                               },
