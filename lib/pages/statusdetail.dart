@@ -43,38 +43,43 @@ class _StatusDetailState extends State<StatusDetail> {
                     StoryItem.pageImage(
                         url: i["status"], controller: controller),
                   );
+                  print(i["status"]);
                 }
-                return snapshot.hasData
-                    ? StoryView(
-                        storyItems: storyList.length != 0
-                            ? storyList
-                            : [
-                                StoryItem.text(
-                                  title: "No Story",
-                                  backgroundColor: Color(0xFF2B2641),
-                                ),
-                              ],
-                        controller: controller,
-                        progressPosition: ProgressPosition.top,
-                        inline: false,
-                        repeat: false,
-                        onComplete: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ),
-                          );
-                        },
-                      )
-                    : SpinKitFadingCircle(
-                        color: Color(0xFF2EF7F7),
-                        size: 50,
-                      );
+                try {
+                  return snapshot.hasData
+                      ? StoryView(
+                          storyItems: storyList.length != 0
+                              ? storyList
+                              : [
+                                  StoryItem.text(
+                                    title: "No Story",
+                                    backgroundColor: Color(0xFF2B2641),
+                                  ),
+                                ],
+                          controller: controller,
+                          progressPosition: ProgressPosition.top,
+                          inline: false,
+                          repeat: false,
+                          onComplete: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          },
+                        )
+                      : SpinKitFadingCircle(
+                          color: Color(0xFF2EF7F7),
+                          size: 50,
+                        );
+                } catch (e) {
+                  return Center(child: Text("Some error occur"));
+                }
               },
             ),
             Positioned(
-              top: 40.0,
+              top: 80.0,
               left: 20.0,
               child: Container(
                 alignment: Alignment.centerLeft,

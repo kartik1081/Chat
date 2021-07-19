@@ -133,15 +133,15 @@ class _ChatDetailState extends State<ChatDetail> {
                                     child: Container(
                                       margin: const EdgeInsets.only(right: 7.0),
                                       padding: const EdgeInsets.only(
-                                          top: 5.0,
-                                          bottom: 5.0,
+                                          top: 2.0,
+                                          bottom: 2.0,
                                           left: 20.0,
                                           right: 20.0),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20.0),
-                                          topRight: Radius.circular(20.0),
-                                          bottomLeft: Radius.circular(20.0),
+                                          topLeft: Radius.circular(10.0),
+                                          topRight: Radius.circular(10.0),
+                                          bottomLeft: Radius.circular(10.0),
                                         ),
                                         color: Color(0xFF8ECECE),
                                       ),
@@ -152,6 +152,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                         children: [
                                           Text(
                                             snapshot.data.docs[index]["msg"],
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.w600,
@@ -260,7 +261,7 @@ class _ChatDetailState extends State<ChatDetail> {
                           fillColor: Colors.white,
                           filled: true,
                           contentPadding:
-                              const EdgeInsets.fromLTRB(13.0, 10.0, 0.0, 10.0),
+                              const EdgeInsets.fromLTRB(13.0, 10.0, 13.0, 10.0),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 0.0000000001, color: Colors.black),
