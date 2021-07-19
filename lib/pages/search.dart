@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'chatdetail.dart';
+import 'createroom.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -69,6 +70,16 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             },
             icon: Icon(Icons.search),
           ),
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateRoom(),
+                      fullscreenDialog: true),
+                );
+              },
+              child: Text("Room")),
         ],
       ),
       body: SafeArea(
@@ -362,7 +373,7 @@ class _ListItemState extends State<ListItem>
                             .collection("Favorites")
                             .doc(widget.id)
                             .delete();
-                        _showToast("Removed");
+                        _showToast(widget.name, "Removed");
                       } else if (!added) {
                         await _firestore
                             .collection("Users")
@@ -375,7 +386,7 @@ class _ListItemState extends State<ListItem>
                           "time": DateTime.now(),
                           "id": widget.id,
                         });
-                        _showToast("Added");
+                        _showToast(widget.name, "Added");
                       }
 
                       setState(() {
@@ -413,30 +424,33 @@ class _ListItemState extends State<ListItem>
     );
   }
 
-  _showToast(String msg) {
+  _showToast(String name, String msg) {
     Widget toast = Container(
-      width: 110.0,
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: Colors.grey.withOpacity(0.5),
-      ),
-      child: Center(
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.grey.withOpacity(0.5),
+        ),
         child: Text(
-          msg,
+          name + " " + msg,
+          style: TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
     );
 
     fToast.showToast(
-        child: toast,
-        toastDuration: Duration(seconds: 2),
-        positionedToastBuilder: (context, child) {
-          return Positioned(
-            child: child,
-            top: MediaQuery.of(context).size.height * 0.8,
-            left: (MediaQuery.of(context).size.width - 100.0) * 0.5,
-          );
-        });
+      child: toast,
+      toastDuration: Duration(seconds: 2),
+      positionedToastBuilder: (context, child) {
+        return Positioned(
+          child: child,
+          top: MediaQuery.of(context).size.height * 0.8,
+          left: 0.0,
+        );
+      },
+    );
   }
 }
