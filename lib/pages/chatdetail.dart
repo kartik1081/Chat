@@ -130,48 +130,53 @@ class _ChatDetailState extends State<ChatDetail> {
                                         _isTapped = !_isTapped;
                                       });
                                     },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(right: 7.0),
-                                      padding: const EdgeInsets.only(
-                                          top: 2.0,
-                                          bottom: 2.0,
-                                          left: 20.0,
-                                          right: 20.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          topRight: Radius.circular(10.0),
-                                          bottomLeft: Radius.circular(10.0),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          BoxConstraints(maxWidth: 300.0),
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 7.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 2.0,
+                                            bottom: 2.0,
+                                            left: 20.0,
+                                            right: 20.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10.0),
+                                            topRight: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0),
+                                          ),
+                                          color: Color(0xFF8ECECE),
                                         ),
-                                        color: Color(0xFF8ECECE),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            snapshot.data.docs[index]["msg"],
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w600,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              snapshot.data.docs[index]["msg"],
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          Text(
-                                            DateTimeFormat.format(
-                                                snapshot
-                                                    .data.docs[index]["time"]
-                                                    .toDate(),
-                                                format: 'H:i'),
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontSize: 13),
-                                          ),
-                                        ],
+                                            SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Text(
+                                              DateTimeFormat.format(
+                                                  snapshot
+                                                      .data.docs[index]["time"]
+                                                      .toDate(),
+                                                  format: 'H:i'),
+                                              style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 13),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )

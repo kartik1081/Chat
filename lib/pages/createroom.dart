@@ -4,8 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:textme/pages/chatpage.dart';
-import 'package:textme/pages/homepage.dart';
 
 import 'chatdetail.dart';
 
@@ -22,6 +20,7 @@ class _CreateRoomState extends State<CreateRoom> {
   TextEditingController _name = TextEditingController();
   bool named = false;
   late String roomName;
+  // late String profilePic;
   late FToast fToast;
 
   @override
@@ -46,7 +45,7 @@ class _CreateRoomState extends State<CreateRoom> {
                     height: 50.0,
                     child: Center(
                       child: Text(
-                        "Add your favorite persont to your room",
+                        "Add your favorite person to room",
                         style: TextStyle(color: Colors.white.withOpacity(0.5)),
                       ),
                     ),
@@ -87,7 +86,7 @@ class _CreateRoomState extends State<CreateRoom> {
                                                     profilePic: snapshot
                                                             .data.docs[index]
                                                         ["profilePic"],
-                                                  )
+                                                    roomName: roomName)
                                                 : ListItem(
                                                     name: snapshot.data
                                                         .docs[index]["name"],
@@ -96,6 +95,7 @@ class _CreateRoomState extends State<CreateRoom> {
                                                     profilePic: snapshot
                                                             .data.docs[index]
                                                         ["profilePic"],
+                                                    roomName: roomName,
                                                   );
                                           } else {
                                             return SpinKitFadingCircle(
@@ -119,7 +119,11 @@ class _CreateRoomState extends State<CreateRoom> {
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(
-                        //     builder: (context) => HomePage(),
+                        //     builder: (context) => ChatDetail(
+                        //         name: roomName,
+                        //         userId: roomName,
+                        //         profilePic:
+                        //             "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"),
                         //   ),
                         // );
                         _showToast("Friends are added to room");
@@ -243,15 +247,17 @@ class _CreateRoomState extends State<CreateRoom> {
   }
 }
 
+// ignore: must_be_immutable
 class ListItem extends StatefulWidget {
-  ListItem({
-    Key? key,
-    required this.name,
-    required this.id,
-    required this.profilePic,
-  }) : super(key: key);
+  ListItem(
+      {Key? key,
+      required this.name,
+      required this.id,
+      required this.profilePic,
+      required this.roomName})
+      : super(key: key);
   // ignore: non_constant_identifier_names
-  late String name, id, profilePic;
+  late String name, id, profilePic, roomName;
 
   @override
   _ListItemState createState() => _ListItemState();
@@ -345,20 +351,19 @@ class _ListItemState extends State<ListItem>
                       // added
                       //     ? await _firestore
                       //         .collection("Users")
-                      //         .doc(_auth.currentUser!.uid)
-                      //         .collection("Favorites")
                       //         .doc(widget.id)
+                      //         .collection("InRoom")
+                      //         .doc(widget.roomName)
                       //         .delete()
                       //     : await _firestore
                       //         .collection("Users")
-                      //         .doc(_auth.currentUser!.uid)
-                      //         .collection("Favorites")
                       //         .doc(widget.id)
+                      //         .collection("InRoom")
+                      //         .doc(widget.roomName)
                       //         .set({
-                      //         "name": widget.name,
-                      //         "profilePic": widget.profilePic,
+                      //         "roomName": widget.roomName,
+                      //         // "profilePic": widget.profilePic,
                       //         "time": DateTime.now(),
-                      //         "id": widget.id,
                       //       });
 
                       added
