@@ -271,6 +271,7 @@ class _ChatState extends State<Chat> {
                                                     ChatDetail(
                                                   name: snapshot1.data["name"],
                                                   userId: snapshot1.data["id"],
+                                                  group: false,
                                                   profilePic: snapshot1
                                                       .data["profilePic"],
                                                 ),

@@ -47,7 +47,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       style: TextStyle(fontSize: 20.0),
                     )
                   : Text(
-                      "Status",
+                      "Room",
                       style: TextStyle(fontSize: 20.0),
                     ),
               actions: [

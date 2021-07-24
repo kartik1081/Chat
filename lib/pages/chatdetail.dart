@@ -12,9 +12,11 @@ class ChatDetail extends StatefulWidget {
       {Key? key,
       required this.name,
       required this.userId,
+      required this.group,
       required this.profilePic})
       : super(key: key);
   late String name, userId, profilePic;
+  bool group;
 
   @override
   _ChatDetailState createState() => _ChatDetailState();
@@ -95,149 +97,316 @@ class _ChatDetailState extends State<ChatDetail> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 alignment: Alignment.bottomCenter,
-                child: StreamBuilder<dynamic>(
-                  stream: _firestore
-                      .collection("Chats")
-                      .doc(_auth.currentUser!.uid)
-                      .collection(_auth.currentUser!.uid + "_" + widget.userId)
-                      .where("msg")
-                      .orderBy("time", descending: true)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        reverse: true,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            alignment: snapshot.data.docs[index]["sendBy"] ==
-                                    _auth.currentUser!.uid
-                                ? Alignment.bottomRight
-                                : Alignment.bottomLeft,
-                            margin: const EdgeInsets.only(
-                              bottom: 8.0,
-                            ),
-                            width: MediaQuery.of(context).size.width,
-                            color: _isTapped
-                                ? Colors.white.withOpacity(0.2)
-                                : Color(0xFF2B2641),
-                            child: snapshot.data.docs[index]["sendBy"] ==
-                                    _auth.currentUser!.uid
-                                ? InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _isTapped = !_isTapped;
-                                      });
-                                    },
-                                    child: ConstrainedBox(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 300.0),
-                                      child: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 7.0),
-                                        padding: const EdgeInsets.only(
-                                            top: 2.0,
-                                            bottom: 2.0,
-                                            left: 20.0,
-                                            right: 20.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10.0),
-                                            topRight: Radius.circular(10.0),
-                                            bottomLeft: Radius.circular(10.0),
-                                          ),
-                                          color: Color(0xFF8ECECE),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              snapshot.data.docs[index]["msg"],
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w600,
+                child: widget.group
+                    ? StreamBuilder<dynamic>(
+                        stream: _firestore
+                            .collection("Chats")
+                            .doc("RoomChats")
+                            .collection(widget.userId)
+                            .where("msg")
+                            .orderBy("time", descending: true)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              reverse: true,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  alignment: snapshot.data.docs[index]
+                                              ["sendBy"] ==
+                                          _auth.currentUser!.uid
+                                      ? Alignment.bottomRight
+                                      : Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(
+                                    bottom: 8.0,
+                                  ),
+                                  width: MediaQuery.of(context).size.width,
+                                  color: _isTapped
+                                      ? Colors.white.withOpacity(0.2)
+                                      : Color(0xFF2B2641),
+                                  child: snapshot.data.docs[index]["sendBy"] ==
+                                          _auth.currentUser!.uid
+                                      ? InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              _isTapped = !_isTapped;
+                                            });
+                                          },
+                                          child: ConstrainedBox(
+                                            constraints:
+                                                BoxConstraints(maxWidth: 300.0),
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 7.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 2.0,
+                                                  bottom: 2.0,
+                                                  left: 20.0,
+                                                  right: 20.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                      Radius.circular(10.0),
+                                                  topRight:
+                                                      Radius.circular(10.0),
+                                                  bottomLeft:
+                                                      Radius.circular(10.0),
+                                                ),
+                                                color: Color(0xFF8ECECE),
+                                              ),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    snapshot.data.docs[index]
+                                                        ["msg"],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.0,
+                                                  ),
+                                                  Text(
+                                                    DateTimeFormat.format(
+                                                        snapshot.data
+                                                            .docs[index]["time"]
+                                                            .toDate(),
+                                                        format: 'H:i'),
+                                                    style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 13),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: 10.0,
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              _isTapped = !_isTapped;
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 7.0),
+                                            padding: const EdgeInsets.only(
+                                                top: 5.0,
+                                                bottom: 5.0,
+                                                left: 20.0,
+                                                right: 20.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20.0),
+                                                topRight: Radius.circular(20.0),
+                                                bottomRight:
+                                                    Radius.circular(20.0),
+                                              ),
+                                              color: Colors.white60,
                                             ),
-                                            Text(
-                                              DateTimeFormat.format(
-                                                  snapshot
-                                                      .data.docs[index]["time"]
-                                                      .toDate(),
-                                                  format: 'H:i'),
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 13),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  snapshot.data.docs[index]
+                                                      ["msg"],
+                                                  style: TextStyle(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10.0,
+                                                ),
+                                                Text(
+                                                  DateTimeFormat.format(
+                                                      snapshot.data
+                                                          .docs[index]["time"]
+                                                          .toDate(),
+                                                      format: 'H:i'),
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 13),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  )
-                                : InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _isTapped = !_isTapped;
-                                      });
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(left: 7.0),
-                                      padding: const EdgeInsets.only(
-                                          top: 5.0,
-                                          bottom: 5.0,
-                                          left: 20.0,
-                                          right: 20.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20.0),
-                                          topRight: Radius.circular(20.0),
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                        color: Colors.white60,
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            snapshot.data.docs[index]["msg"],
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          Text(
-                                            DateTimeFormat.format(
-                                                snapshot
-                                                    .data.docs[index]["time"]
-                                                    .toDate(),
-                                                format: 'H:i'),
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontSize: 13),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                          );
+                                );
+                              },
+                            );
+                          } else {
+                            return SpinKitFadingCircle(
+                                color: Color(0xFF2EF7F7));
+                          }
                         },
-                      );
-                    } else {
-                      return SpinKitFadingCircle(color: Color(0xFF2EF7F7));
-                    }
-                  },
-                ),
+                      )
+                    : StreamBuilder<dynamic>(
+                        stream: _firestore
+                            .collection("Chats")
+                            .doc(_auth.currentUser!.uid)
+                            .collection(
+                                _auth.currentUser!.uid + "_" + widget.userId)
+                            .where("msg")
+                            .orderBy("time", descending: true)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              reverse: true,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  alignment: snapshot.data.docs[index]
+                                              ["sendBy"] ==
+                                          _auth.currentUser!.uid
+                                      ? Alignment.bottomRight
+                                      : Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(
+                                    bottom: 8.0,
+                                  ),
+                                  width: MediaQuery.of(context).size.width,
+                                  color: _isTapped
+                                      ? Colors.white.withOpacity(0.2)
+                                      : Color(0xFF2B2641),
+                                  child: snapshot.data.docs[index]["sendBy"] ==
+                                          _auth.currentUser!.uid
+                                      ? InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              _isTapped = !_isTapped;
+                                            });
+                                          },
+                                          child: ConstrainedBox(
+                                            constraints:
+                                                BoxConstraints(maxWidth: 300.0),
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 7.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 2.0,
+                                                  bottom: 2.0,
+                                                  left: 20.0,
+                                                  right: 20.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                      Radius.circular(10.0),
+                                                  topRight:
+                                                      Radius.circular(10.0),
+                                                  bottomLeft:
+                                                      Radius.circular(10.0),
+                                                ),
+                                                color: Color(0xFF8ECECE),
+                                              ),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    snapshot.data.docs[index]
+                                                        ["msg"],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.0,
+                                                  ),
+                                                  Text(
+                                                    DateTimeFormat.format(
+                                                        snapshot.data
+                                                            .docs[index]["time"]
+                                                            .toDate(),
+                                                        format: 'H:i'),
+                                                    style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 13),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              _isTapped = !_isTapped;
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 7.0),
+                                            padding: const EdgeInsets.only(
+                                                top: 5.0,
+                                                bottom: 5.0,
+                                                left: 20.0,
+                                                right: 20.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20.0),
+                                                topRight: Radius.circular(20.0),
+                                                bottomRight:
+                                                    Radius.circular(20.0),
+                                              ),
+                                              color: Colors.white60,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  snapshot.data.docs[index]
+                                                      ["msg"],
+                                                  style: TextStyle(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10.0,
+                                                ),
+                                                Text(
+                                                  DateTimeFormat.format(
+                                                      snapshot.data
+                                                          .docs[index]["time"]
+                                                          .toDate(),
+                                                      format: 'H:i'),
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 13),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                );
+                              },
+                            );
+                          } else {
+                            return SpinKitFadingCircle(
+                                color: Color(0xFF2EF7F7));
+                          }
+                        },
+                      ),
               ),
             ),
             Row(
@@ -290,44 +459,57 @@ class _ChatDetailState extends State<ChatDetail> {
                     child: GestureDetector(
                       onTap: () async {
                         try {
-                          await _firestore
-                              .collection("Chats")
-                              .doc(_auth.currentUser!.uid)
-                              .collection(
-                                  _auth.currentUser!.uid + "_" + widget.userId)
-                              .add({
-                            "msg": msg.text,
-                            "sendBy": _auth.currentUser!.uid,
-                            "time": DateTime.now(),
-                          }).whenComplete(() async {
-                            await _firestore
-                                .collection("Chats")
-                                .doc(widget.userId)
-                                .collection(widget.userId +
-                                    "_" +
-                                    _auth.currentUser!.uid)
-                                .add({
-                              "msg": msg.text,
-                              "sendBy": _auth.currentUser!.uid,
-                              "time": DateTime.now(),
-                            });
-                          }).whenComplete(() {
-                            setState(() {
-                              msg.clear();
-                            });
-                          }).whenComplete(() async {
-                            await _firestore
-                                .collection("Users")
-                                .doc(_auth.currentUser!.uid)
-                                .collection("Favorites")
-                                .doc(widget.userId)
-                                .set({
-                              "name": widget.name,
-                              "profilePic": widget.profilePic,
-                              "time": DateTime.now(),
-                              "id": widget.userId,
-                            });
-                          });
+                          widget.group
+                              ? _firestore.collection("RoomChats").add({
+                                  "msg": msg.text,
+                                  "name": _auth.currentUser!.displayName,
+                                  "roomName": widget.name,
+                                  "sendBy": _auth.currentUser!.uid,
+                                  "time": DateTime.now()
+                                }).whenComplete(() {
+                                  setState(() {
+                                    msg.clear();
+                                  });
+                                })
+                              : await _firestore
+                                  .collection("Chats")
+                                  .doc(_auth.currentUser!.uid)
+                                  .collection(_auth.currentUser!.uid +
+                                      "_" +
+                                      widget.userId)
+                                  .add({
+                                  "msg": msg.text,
+                                  "sendBy": _auth.currentUser!.uid,
+                                  "time": DateTime.now(),
+                                }).whenComplete(() async {
+                                  await _firestore
+                                      .collection("Chats")
+                                      .doc(widget.userId)
+                                      .collection(widget.userId +
+                                          "_" +
+                                          _auth.currentUser!.uid)
+                                      .add({
+                                    "msg": msg.text,
+                                    "sendBy": _auth.currentUser!.uid,
+                                    "time": DateTime.now(),
+                                  });
+                                }).whenComplete(() {
+                                  setState(() {
+                                    msg.clear();
+                                  });
+                                }).whenComplete(() async {
+                                  await _firestore
+                                      .collection("Users")
+                                      .doc(_auth.currentUser!.uid)
+                                      .collection("Favorites")
+                                      .doc(widget.userId)
+                                      .set({
+                                    "name": widget.name,
+                                    "profilePic": widget.profilePic,
+                                    "time": DateTime.now(),
+                                    "id": widget.userId,
+                                  });
+                                });
                         } catch (e) {
                           print(e.toString());
                         }

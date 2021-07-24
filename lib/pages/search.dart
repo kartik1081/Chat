@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uuid/uuid.dart';
 
 import 'chatdetail.dart';
 import 'createroom.dart';
@@ -20,6 +21,16 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isSearching = false;
+  late var uuid;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      uuid = Uuid().v1();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +86,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateRoom(),
+                      builder: (context) => CreateRoom(uuid: uuid.toString()),
                       fullscreenDialog: true),
                 );
               },
@@ -314,6 +325,7 @@ class _ListItemState extends State<ListItem>
             builder: (context) => ChatDetail(
               name: widget.name,
               userId: widget.id,
+              group: false,
               profilePic: widget.profilePic,
             ),
           ),
