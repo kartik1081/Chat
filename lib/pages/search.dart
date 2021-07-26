@@ -25,7 +25,6 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       uuid = Uuid().v1();
@@ -83,6 +82,9 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
           ),
           TextButton(
               onPressed: () {
+                setState(() {
+                  uuid = Uuid().v4();
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(

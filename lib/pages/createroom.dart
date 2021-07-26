@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'chatdetail.dart';
 
+// ignore: must_be_immutable
 class CreateRoom extends StatefulWidget {
   CreateRoom({Key? key, required this.uuid}) : super(key: key);
   String uuid;
@@ -62,22 +63,25 @@ class _CreateRoomState extends State<CreateRoom> {
                           //       fullscreenDialog: true),
                           // );
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          // ignore: unnecessary_null_comparison
-                          child: roomPic == ''
-                              ? Image(
-                                  image: NetworkImage(
-                                      "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"),
-                                  height: 40,
-                                  width: 40,
-                                )
-                              : Image(
-                                  image: FileImage(_image),
-                                  height: 40,
-                                  width: 40,
-                                  fit: BoxFit.cover,
-                                ),
+                        child: Hero(
+                          tag: widget.uuid,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            // ignore: unnecessary_null_comparison
+                            child: roomPic == ''
+                                ? Image(
+                                    image: NetworkImage(
+                                        "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"),
+                                    height: 40,
+                                    width: 40,
+                                  )
+                                : Image(
+                                    image: FileImage(_image),
+                                    height: 40,
+                                    width: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -139,12 +143,12 @@ class _CreateRoomState extends State<CreateRoom> {
                                                             ["name"],
                                                         id: snapshot.data
                                                             .docs[index]["id"],
-                                                        uuid: widget.uuid,
                                                         profilePic: snapshot
                                                                 .data
                                                                 .docs[index]
                                                             ["profilePic"],
                                                         roomPic: roomPic,
+                                                        uuid: widget.uuid,
                                                         roomName: roomName)
                                                     : ListItem(
                                                         name: snapshot.data
@@ -281,6 +285,10 @@ class _CreateRoomState extends State<CreateRoom> {
                     InkWell(
                       onTap: () async {
                         if (picked) {
+                          setState(() {
+                            imaged = true;
+                            named = true;
+                          });
                           print("Start");
                           await _storage
                               .ref()
@@ -294,9 +302,6 @@ class _CreateRoomState extends State<CreateRoom> {
                                 _showToast("Image Picked successfully.!");
                                 setState(() {
                                   roomPic = value;
-
-                                  imaged = true;
-                                  named = true;
                                 });
                               });
                             }

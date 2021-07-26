@@ -23,7 +23,6 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       uuid = Uuid().v4();
@@ -74,35 +73,38 @@ class _ChatRoomState extends State<ChatRoom> {
                                 children: [
                                   Row(
                                     children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: snapshot
-                                                .data
-                                                .docs[index]["roomPic"]
-                                                .isNotEmpty
-                                            ? CachedNetworkImage(
-                                                height: 49,
-                                                width: 49,
-                                                fit: BoxFit.cover,
-                                                imageUrl: snapshot.data
-                                                    .docs[index]["roomPic"],
-                                                placeholder: (context, url) {
-                                                  return Container(
-                                                    height: 100,
-                                                    child: Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            : Image(
-                                                image: AssetImage(
-                                                    "assets/avatar.png"),
-                                                height: 49,
-                                                width: 49,
-                                              ),
+                                      Hero(
+                                        tag: snapshot.data.docs[index]["id"],
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: snapshot
+                                                  .data
+                                                  .docs[index]["roomPic"]
+                                                  .isNotEmpty
+                                              ? CachedNetworkImage(
+                                                  height: 49,
+                                                  width: 49,
+                                                  fit: BoxFit.cover,
+                                                  imageUrl: snapshot.data
+                                                      .docs[index]["roomPic"],
+                                                  placeholder: (context, url) {
+                                                    return Container(
+                                                      height: 100,
+                                                      child: Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              : Image(
+                                                  image: AssetImage(
+                                                      "assets/avatar.png"),
+                                                  height: 49,
+                                                  width: 49,
+                                                ),
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 10.0,

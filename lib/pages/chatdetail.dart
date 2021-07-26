@@ -460,17 +460,16 @@ class _ChatDetailState extends State<ChatDetail> {
                       onTap: () async {
                         try {
                           widget.group
-                              ? _firestore.collection("RoomChats").add({
+                              ? _firestore
+                                  .collection("Chats")
+                                  .doc("RoomChats")
+                                  .collection(widget.userId)
+                                  .add({
                                   "msg": msg.text,
-                                  "name": _auth.currentUser!.displayName,
-                                  "roomName": widget.name,
+                                  "time": DateTime.now(),
                                   "sendBy": _auth.currentUser!.uid,
-                                  "time": DateTime.now()
-                                }).whenComplete(() {
-                                  setState(() {
-                                    msg.clear();
-                                  });
-                                })
+                                  "name": _auth.currentUser!.displayName
+                                }).whenComplete(() => msg.clear)
                               : await _firestore
                                   .collection("Chats")
                                   .doc(_auth.currentUser!.uid)

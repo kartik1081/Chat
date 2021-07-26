@@ -97,6 +97,7 @@ class _SearchChatState extends State<SearchChat> {
                                                             ["name"],
                                                         userId: snapshot.data
                                                             .docs[index]["id"],
+                                                            group: false,
                                                         profilePic: snapshots
                                                                 .data
                                                                 .docs[index]
@@ -264,6 +265,7 @@ class _SearchChatState extends State<SearchChat> {
                                                             ["name"],
                                                         userId: snapshot.data
                                                             .docs[index]["id"],
+                                                            group: false,
                                                         profilePic: snapshots
                                                                 .data
                                                                 .docs[index]
