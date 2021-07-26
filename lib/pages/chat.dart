@@ -263,6 +263,42 @@ class _ChatState extends State<Chat> {
                                 builder: (context, snapshot1) {
                                   return snapshot1.hasData
                                       ? InkWell(
+                                          onLongPress: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                      title: Text("Alert"),
+                                                      content: Text(
+                                                          "Want to remove from chatlist?"),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text("cancle"),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            _firestore
+                                                                .collection(
+                                                                    "Users")
+                                                                .doc(_auth
+                                                                    .currentUser!
+                                                                    .uid)
+                                                                .collection(
+                                                                    "Favorites")
+                                                                .doc(snapshot1
+                                                                    .data["id"])
+                                                                .delete();
+                                                          },
+                                                          child: Text("ok"),
+                                                        ),
+                                                      ],
+                                                    ));
+                                          },
                                           onTap: () {
                                             Navigator.push(
                                               context,

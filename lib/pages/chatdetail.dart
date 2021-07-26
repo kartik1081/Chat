@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/pages/usersprofile.dart';
+import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
 class ChatDetail extends StatefulWidget {
@@ -26,6 +27,7 @@ class _ChatDetailState extends State<ChatDetail> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isTapped = false;
+  late var uuid;
   @override
   Widget build(BuildContext context) {
     TextEditingController msg = TextEditingController();
@@ -128,121 +130,22 @@ class _ChatDetailState extends State<ChatDetail> {
                                       : Color(0xFF2B2641),
                                   child: snapshot.data.docs[index]["sendBy"] ==
                                           _auth.currentUser!.uid
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              _isTapped = !_isTapped;
-                                            });
-                                          },
-                                          child: ConstrainedBox(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 300.0),
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 7.0),
-                                              padding: const EdgeInsets.only(
-                                                  top: 2.0,
-                                                  bottom: 2.0,
-                                                  left: 20.0,
-                                                  right: 20.0),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(10.0),
-                                                  topRight:
-                                                      Radius.circular(10.0),
-                                                  bottomLeft:
-                                                      Radius.circular(10.0),
-                                                ),
-                                                color: Color(0xFF8ECECE),
-                                              ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    snapshot.data.docs[index]
-                                                        ["msg"],
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10.0,
-                                                  ),
-                                                  Text(
-                                                    DateTimeFormat.format(
-                                                        snapshot.data
-                                                            .docs[index]["time"]
-                                                            .toDate(),
-                                                        format: 'H:i'),
-                                                    style: TextStyle(
-                                                        color: Colors.black54,
-                                                        fontSize: 13),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              _isTapped = !_isTapped;
-                                            });
-                                          },
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 7.0),
-                                            padding: const EdgeInsets.only(
-                                                top: 5.0,
-                                                bottom: 5.0,
-                                                left: 20.0,
-                                                right: 20.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
-                                                bottomRight:
-                                                    Radius.circular(20.0),
-                                              ),
-                                              color: Colors.white60,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  snapshot.data.docs[index]
-                                                      ["msg"],
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                Text(
-                                                  DateTimeFormat.format(
-                                                      snapshot.data
-                                                          .docs[index]["time"]
-                                                          .toDate(),
-                                                      format: 'H:i'),
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontSize: 13),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                      ? msgContainer(
+                                          Color(0xFF8ECECE),
+                                          snapshot.data.docs[index]["msg"],
+                                          snapshot.data.docs[index]["time"],
+                                          snapshot.data.docs[index]["sendBy"],
+                                          snapshot.data.docs[index]["msgID"],
+                                          true,
+                                          true)
+                                      : msgContainer(
+                                          Color(0xFF8ECECE),
+                                          snapshot.data.docs[index]["msg"],
+                                          snapshot.data.docs[index]["time"],
+                                          snapshot.data.docs[index]["sendBy"],
+                                          snapshot.data.docs[index]["msgID"],
+                                          false,
+                                          true),
                                 );
                               },
                             );
@@ -263,143 +166,47 @@ class _ChatDetailState extends State<ChatDetail> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return ListView.builder(
-                              reverse: true,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  alignment: snapshot.data.docs[index]
-                                              ["sendBy"] ==
-                                          _auth.currentUser!.uid
-                                      ? Alignment.bottomRight
-                                      : Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(
-                                    bottom: 8.0,
-                                  ),
-                                  width: MediaQuery.of(context).size.width,
-                                  color: _isTapped
-                                      ? Colors.white.withOpacity(0.2)
-                                      : Color(0xFF2B2641),
-                                  child: snapshot.data.docs[index]["sendBy"] ==
-                                          _auth.currentUser!.uid
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              _isTapped = !_isTapped;
-                                            });
-                                          },
-                                          child: ConstrainedBox(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 300.0),
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 7.0),
-                                              padding: const EdgeInsets.only(
-                                                  top: 2.0,
-                                                  bottom: 2.0,
-                                                  left: 20.0,
-                                                  right: 20.0),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(10.0),
-                                                  topRight:
-                                                      Radius.circular(10.0),
-                                                  bottomLeft:
-                                                      Radius.circular(10.0),
-                                                ),
-                                                color: Color(0xFF8ECECE),
-                                              ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    snapshot.data.docs[index]
-                                                        ["msg"],
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10.0,
-                                                  ),
-                                                  Text(
-                                                    DateTimeFormat.format(
-                                                        snapshot.data
-                                                            .docs[index]["time"]
-                                                            .toDate(),
-                                                        format: 'H:i'),
-                                                    style: TextStyle(
-                                                        color: Colors.black54,
-                                                        fontSize: 13),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              _isTapped = !_isTapped;
-                                            });
-                                          },
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 7.0),
-                                            padding: const EdgeInsets.only(
-                                                top: 5.0,
-                                                bottom: 5.0,
-                                                left: 20.0,
-                                                right: 20.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
-                                                bottomRight:
-                                                    Radius.circular(20.0),
-                                              ),
-                                              color: Colors.white60,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  snapshot.data.docs[index]
-                                                      ["msg"],
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10.0,
-                                                ),
-                                                Text(
-                                                  DateTimeFormat.format(
-                                                      snapshot.data
-                                                          .docs[index]["time"]
-                                                          .toDate(),
-                                                      format: 'H:i'),
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontSize: 13),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                );
-                              },
+                            return Expanded(
+                              child: ListView.builder(
+                                reverse: true,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data.docs.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    alignment: snapshot.data.docs[index]
+                                                ["sendBy"] ==
+                                            _auth.currentUser!.uid
+                                        ? Alignment.bottomRight
+                                        : Alignment.bottomLeft,
+                                    margin: const EdgeInsets.only(
+                                      bottom: 8.0,
+                                    ),
+                                    width: MediaQuery.of(context).size.width,
+                                    color: _isTapped
+                                        ? Colors.white.withOpacity(0.2)
+                                        : Color(0xFF2B2641),
+                                    child: snapshot.data.docs[index]
+                                                ["sendBy"] ==
+                                            _auth.currentUser!.uid
+                                        ? msgContainer(
+                                            Color(0xFF8ECECE),
+                                            snapshot.data.docs[index]["msg"],
+                                            snapshot.data.docs[index]["time"],
+                                            snapshot.data.docs[index]["sendBy"],
+                                            snapshot.data.docs[index]["msgID"],
+                                            true,
+                                            false)
+                                        : msgContainer(
+                                            Colors.white60,
+                                            snapshot.data.docs[index]["msg"],
+                                            snapshot.data.docs[index]["time"],
+                                            snapshot.data.docs[index]["sendBy"],
+                                            snapshot.data.docs[index]["msgID"],
+                                            false,
+                                            false),
+                                  );
+                                },
+                              ),
                             );
                           } else {
                             return SpinKitFadingCircle(
@@ -458,26 +265,35 @@ class _ChatDetailState extends State<ChatDetail> {
                     ),
                     child: GestureDetector(
                       onTap: () async {
+                        uuid = Uuid().v4();
                         try {
                           widget.group
                               ? _firestore
                                   .collection("Chats")
                                   .doc("RoomChats")
                                   .collection(widget.userId)
-                                  .add({
+                                  .doc(uuid.toString())
+                                  .set({
                                   "msg": msg.text,
+                                  "msgID": uuid.toString(),
                                   "time": DateTime.now(),
                                   "sendBy": _auth.currentUser!.uid,
                                   "name": _auth.currentUser!.displayName
-                                }).whenComplete(() => msg.clear)
+                                }).whenComplete(() {
+                                  setState(() {
+                                    msg.clear();
+                                  });
+                                })
                               : await _firestore
                                   .collection("Chats")
                                   .doc(_auth.currentUser!.uid)
                                   .collection(_auth.currentUser!.uid +
                                       "_" +
                                       widget.userId)
-                                  .add({
+                                  .doc(uuid.toString())
+                                  .set({
                                   "msg": msg.text,
+                                  "msgID": uuid.toString(),
                                   "sendBy": _auth.currentUser!.uid,
                                   "time": DateTime.now(),
                                 }).whenComplete(() async {
@@ -487,8 +303,10 @@ class _ChatDetailState extends State<ChatDetail> {
                                       .collection(widget.userId +
                                           "_" +
                                           _auth.currentUser!.uid)
-                                      .add({
+                                      .doc(uuid.toString())
+                                      .set({
                                     "msg": msg.text,
+                                    "msgID": uuid.toString(),
                                     "sendBy": _auth.currentUser!.uid,
                                     "time": DateTime.now(),
                                   });
@@ -529,6 +347,127 @@ class _ChatDetailState extends State<ChatDetail> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget msgContainer(Color c, String msg, Timestamp time, String sendBy,
+      String msgID, bool right, bool group) {
+    return InkWell(
+      onLongPress: () {
+        groupDialog(msgID, group, msg);
+      },
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 300.0),
+        child: Container(
+          margin: right
+              ? const EdgeInsets.only(right: 7.0)
+              : const EdgeInsets.only(left: 7.0),
+          padding: const EdgeInsets.only(
+              top: 5.0, bottom: 5.0, left: 15.0, right: 10.0),
+          decoration: BoxDecoration(
+            borderRadius: right
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                  )
+                : BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  ),
+            color: c,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StreamBuilder<dynamic>(
+                    stream:
+                        _firestore.collection("Users").doc(sendBy).snapshots(),
+                    builder: (context, snapshot0) {
+                      return snapshot0.hasData
+                          ? right
+                              ? Text(
+                                  "You",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                )
+                              : Text(
+                                  snapshot0.data["name"],
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                )
+                          : Text(
+                              "Name",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            );
+                    },
+                  ),
+                  Text(
+                    msg,
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: 13.0,
+              ),
+              Text(
+                DateTimeFormat.format(time.toDate(), format: 'H:i'),
+                style: TextStyle(color: Colors.black54, fontSize: 10.5),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  groupDialog(String msgID, bool group, String msg) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Remove message"),
+        content: Text("\" " + msg + " \""),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("cancle"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              group
+                  ? _firestore
+                      .collection("Chats")
+                      .doc("RoomChats")
+                      .collection(widget.userId)
+                      .doc(msgID)
+                      .delete()
+                  : _firestore
+                      .collection("Chats")
+                      .doc(_auth.currentUser!.uid)
+                      .collection(_auth.currentUser!.uid + "_" + widget.userId)
+                      .doc(msgID)
+                      .delete();
+            },
+            child: Text("ok"),
+          ),
+        ],
       ),
     );
   }

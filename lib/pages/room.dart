@@ -48,13 +48,42 @@ class _ChatRoomState extends State<ChatRoom> {
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
                         return InkWell(
+                          onLongPress: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text("Alert"),
+                                      content:
+                                          Text("Want to exit from this group?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text("cancle"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            _firestore
+                                                .collection("Users")
+                                                .doc(_auth.currentUser!.uid)
+                                                .collection("InRoom")
+                                                .doc(snapshot.data.docs[index]
+                                                    ["id"])
+                                                .delete();
+                                          },
+                                          child: Text("ok"),
+                                        ),
+                                      ],
+                                    ));
+                          },
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatDetail(
                                   name: snapshot.data.docs[index]["roomName"],
-                                  userId: uuid,
+                                  userId: snapshot.data.docs[index]["id"],
                                   group: true,
                                   profilePic: snapshot.data.docs[index]
                                       ["roomPic"],
