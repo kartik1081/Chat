@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textme/pages/homepage.dart';
 
 import 'chatdetail.dart';
 
@@ -38,7 +39,6 @@ class _CreateRoomState extends State<CreateRoom> {
   void initState() {
     super.initState();
     fToast = FToast();
-
     fToast.init(context);
   }
 
@@ -46,6 +46,17 @@ class _CreateRoomState extends State<CreateRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+              _firestore.collection("Rooms").doc(widget.uuid).delete();
+            },
+            icon: Icon(Icons.keyboard_arrow_left)),
         title: named
             ? imaged
                 ? Row(
@@ -189,11 +200,13 @@ class _CreateRoomState extends State<CreateRoom> {
                                 .collection("InRoom")
                                 .doc(widget.uuid)
                                 .set({
-                              "roomName": roomName,
                               "id": widget.uuid,
                               "time": DateTime.now(),
-                              "roomPic": roomPic
                             });
+                            _firestore
+                                .collection("Rooms")
+                                .doc(widget.uuid)
+                                .update({"time": DateTime.now()});
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -303,6 +316,10 @@ class _CreateRoomState extends State<CreateRoom> {
                                 setState(() {
                                   roomPic = value;
                                 });
+                                _firestore
+                                    .collection("Rooms")
+                                    .doc(widget.uuid)
+                                    .update({"roomPic": value});
                               });
                             }
                           });
@@ -336,6 +353,7 @@ class _CreateRoomState extends State<CreateRoom> {
                 children: [
                   TextFormField(
                     keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
                     autofocus: true,
                     controller: _name,
                     decoration: InputDecoration(
@@ -370,6 +388,10 @@ class _CreateRoomState extends State<CreateRoom> {
                           named = true;
                         });
                         _showToast("Named Successfully");
+                        _firestore
+                            .collection("Rooms")
+                            .doc(widget.uuid)
+                            .set({"roomName": roomName, "roomID": widget.uuid});
                       }
                     },
                     child: Container(
@@ -551,10 +573,8 @@ class _ListItemState extends State<ListItem>
                               .collection("InRoom")
                               .doc(widget.uuid)
                               .set({
-                              "roomName": widget.roomName,
                               "id": widget.uuid,
                               "time": DateTime.now(),
-                              "roomPic": widget.roomPic
                             })
                           : await _firestore
                               .collection("Users")

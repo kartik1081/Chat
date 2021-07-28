@@ -29,6 +29,9 @@ class _WithEmailState extends State<WithEmail> {
   // ignore: non_constant_identifier_names
   TextEditingController email_phone = TextEditingController();
   TextEditingController password = TextEditingController();
+  late FocusNode emailNode = FocusNode();
+  late FocusNode passwordNode = FocusNode();
+  late FocusNode signInNode = FocusNode();
 
   @override
   void initState() {
@@ -126,6 +129,13 @@ class _WithEmailState extends State<WithEmail> {
                                                     }
                                                   },
                                                   controller: email_phone,
+                                                  focusNode: emailNode,
+                                                  onFieldSubmitted: (value) {
+                                                    emailNode.unfocus();
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            passwordNode);
+                                                  },
                                                   autocorrect: true,
                                                   autofocus: true,
                                                   decoration: InputDecoration(
@@ -179,6 +189,12 @@ class _WithEmailState extends State<WithEmail> {
                                                   }
                                                 },
                                                 controller: password,
+                                                focusNode: passwordNode,
+                                                onFieldSubmitted: (value) {
+                                                  passwordNode.unfocus();
+                                                  FocusScope.of(context)
+                                                      .requestFocus(signInNode);
+                                                },
                                                 autocorrect: true,
                                                 decoration: InputDecoration(
                                                   hintText: _withEmail
@@ -251,6 +267,7 @@ class _WithEmailState extends State<WithEmail> {
                                       Container(
                                         width: 115,
                                         child: ElevatedButton(
+                                          focusNode: signInNode,
                                           style: ButtonStyle(
                                             elevation:
                                                 MaterialStateProperty.all(7),
@@ -454,6 +471,13 @@ class _WithEmailState extends State<WithEmail> {
                                                     }
                                                   },
                                                   controller: email_phone,
+                                                  focusNode: emailNode,
+                                                  onFieldSubmitted: (value) {
+                                                    emailNode.unfocus();
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            passwordNode);
+                                                  },
                                                   decoration: InputDecoration(
                                                     hintText:
                                                         "Enter your email",
@@ -503,6 +527,13 @@ class _WithEmailState extends State<WithEmail> {
                                                     }
                                                   },
                                                   controller: password,
+                                                  focusNode: passwordNode,
+                                                  onFieldSubmitted: (value) {
+                                                    signInNode.unfocus();
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            emailNode);
+                                                  },
                                                   autocorrect: true,
                                                   decoration: InputDecoration(
                                                     hintText:
@@ -576,6 +607,7 @@ class _WithEmailState extends State<WithEmail> {
                                         Container(
                                           width: 110,
                                           child: ElevatedButton(
+                                            focusNode: signInNode,
                                             style: ButtonStyle(
                                               elevation:
                                                   MaterialStateProperty.all(7),

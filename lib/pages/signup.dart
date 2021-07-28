@@ -24,9 +24,13 @@ class _SignUpState extends State<SignUp> {
     color: Colors.black,
   );
   bool _sent = false;
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  late TextEditingController name = TextEditingController();
+  late TextEditingController email = TextEditingController();
+  late TextEditingController password = TextEditingController();
+  late FocusNode nameNode = FocusNode();
+  late FocusNode emailNode = FocusNode();
+  late FocusNode passwordNode = FocusNode();
+  late FocusNode signUpNode = FocusNode();
 
   @override
   void initState() {
@@ -112,9 +116,14 @@ class _SignUpState extends State<SignUp> {
                                                 }
                                               },
                                               controller: name,
+                                              focusNode: nameNode,
                                               autofocus: true,
                                               autocorrect: true,
-                                              cursorHeight: 22.0,
+                                              onFieldSubmitted: (value) {
+                                                nameNode.unfocus();
+                                                FocusScope.of(context)
+                                                    .requestFocus(emailNode);
+                                              },
                                               decoration: InputDecoration(
                                                 hintText: "Enter your name",
                                                 hintStyle: TextStyle(
@@ -161,8 +170,14 @@ class _SignUpState extends State<SignUp> {
                                                 }
                                               },
                                               controller: email,
+                                              focusNode: emailNode,
                                               cursorHeight: 22.0,
                                               autocorrect: true,
+                                              onFieldSubmitted: (value) {
+                                                emailNode.unfocus();
+                                                FocusScope.of(context)
+                                                    .requestFocus(passwordNode);
+                                              },
                                               decoration: InputDecoration(
                                                 hintText: _withEmail
                                                     ? "Enter your email"
@@ -211,8 +226,13 @@ class _SignUpState extends State<SignUp> {
                                                 }
                                               },
                                               controller: password,
+                                              focusNode: passwordNode,
                                               autocorrect: true,
-                                              cursorHeight: 30.0,
+                                              onFieldSubmitted: (value) {
+                                                passwordNode.unfocus();
+                                                FocusScope.of(context)
+                                                    .requestFocus(signUpNode);
+                                              },
                                               decoration: InputDecoration(
                                                 hintText: _withEmail
                                                     ? "Enter your password"
@@ -454,6 +474,12 @@ class _SignUpState extends State<SignUp> {
                                                   }
                                                 },
                                                 controller: name,
+                                                focusNode: nameNode,
+                                                onFieldSubmitted: (value) {
+                                                  nameNode.unfocus();
+                                                  FocusScope.of(context)
+                                                      .requestFocus(emailNode);
+                                                },
                                                 decoration: InputDecoration(
                                                   hintText: "Enter your name",
                                                   hintStyle: TextStyle(
@@ -504,6 +530,13 @@ class _SignUpState extends State<SignUp> {
                                                   }
                                                 },
                                                 controller: email,
+                                                focusNode: emailNode,
+                                                onFieldSubmitted: (value) {
+                                                  emailNode.unfocus();
+                                                  FocusScope.of(context)
+                                                      .requestFocus(
+                                                          passwordNode);
+                                                },
                                                 autocorrect: true,
                                                 decoration: InputDecoration(
                                                   hintText: "Enter your email",
@@ -550,6 +583,12 @@ class _SignUpState extends State<SignUp> {
                                                   }
                                                 },
                                                 controller: password,
+                                                focusNode: passwordNode,
+                                                onFieldSubmitted: (value) {
+                                                  passwordNode.unfocus();
+                                                  FocusScope.of(context)
+                                                      .requestFocus(signUpNode);
+                                                },
                                                 autocorrect: true,
                                                 decoration: InputDecoration(
                                                   hintText:

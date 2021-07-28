@@ -133,7 +133,12 @@ class Fire {
         );
       });
     } catch (e) {
-      print(e.toString());
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WithEmail(),
+        ),
+      );
     }
   }
 

@@ -4,8 +4,11 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:textme/pages/usersprofile.dart';
 import 'package:uuid/uuid.dart';
+
+import 'homepage.dart';
 
 // ignore: must_be_immutable
 class ChatDetail extends StatefulWidget {
@@ -28,6 +31,16 @@ class _ChatDetailState extends State<ChatDetail> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isTapped = false;
   late var uuid;
+  late FToast fToast;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController msg = TextEditingController();
@@ -35,6 +48,16 @@ class _ChatDetailState extends State<ChatDetail> {
       onWillPop: () async => true,
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.keyboard_arrow_left)),
           titleSpacing: 0,
           title: Row(
             children: [
@@ -115,38 +138,54 @@ class _ChatDetailState extends State<ChatDetail> {
                               shrinkWrap: true,
                               itemCount: snapshot.data.docs.length,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  alignment: snapshot.data.docs[index]
-                                              ["sendBy"] ==
-                                          _auth.currentUser!.uid
-                                      ? Alignment.bottomRight
-                                      : Alignment.bottomLeft,
-                                  margin: const EdgeInsets.only(
-                                    bottom: 8.0,
-                                  ),
-                                  width: MediaQuery.of(context).size.width,
-                                  color: _isTapped
-                                      ? Colors.white.withOpacity(0.2)
-                                      : Color(0xFF2B2641),
-                                  child: snapshot.data.docs[index]["sendBy"] ==
-                                          _auth.currentUser!.uid
-                                      ? msgContainer(
-                                          Color(0xFF8ECECE),
-                                          snapshot.data.docs[index]["msg"],
-                                          snapshot.data.docs[index]["time"],
-                                          snapshot.data.docs[index]["sendBy"],
-                                          snapshot.data.docs[index]["msgID"],
-                                          true,
-                                          true)
-                                      : msgContainer(
-                                          Color(0xFF8ECECE),
-                                          snapshot.data.docs[index]["msg"],
-                                          snapshot.data.docs[index]["time"],
-                                          snapshot.data.docs[index]["sendBy"],
-                                          snapshot.data.docs[index]["msgID"],
-                                          false,
-                                          true),
-                                );
+                                return snapshot.data.docs[index]["deleted"]
+                                    ? Container()
+                                    : Container(
+                                        alignment: snapshot.data.docs[index]
+                                                    ["sendBy"] ==
+                                                _auth.currentUser!.uid
+                                            ? Alignment.bottomRight
+                                            : Alignment.bottomLeft,
+                                        margin: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        color: _isTapped
+                                            ? Colors.white.withOpacity(0.2)
+                                            : Color(0xFF2B2641),
+                                        child: snapshot.data.docs[index]
+                                                    ["sendBy"] ==
+                                                _auth.currentUser!.uid
+                                            ? msgContainer(
+                                                Color(0xFF8ECECE),
+                                                snapshot.data.docs[index]
+                                                    ["msg"],
+                                                snapshot.data.docs[index]
+                                                    ["time"],
+                                                snapshot.data.docs[index]
+                                                    ["sendBy"],
+                                                snapshot.data.docs[index]
+                                                    ["msgID"],
+                                                snapshot.data.docs[index]
+                                                    ["stared"],
+                                                true,
+                                                true)
+                                            : msgContainer(
+                                                Colors.white60,
+                                                snapshot.data.docs[index]
+                                                    ["msg"],
+                                                snapshot.data.docs[index]
+                                                    ["time"],
+                                                snapshot.data.docs[index]
+                                                    ["sendBy"],
+                                                snapshot.data.docs[index]
+                                                    ["msgID"],
+                                                snapshot.data.docs[index]
+                                                    ["stared"],
+                                                false,
+                                                true),
+                                      );
                               },
                             );
                           } else {
@@ -167,44 +206,60 @@ class _ChatDetailState extends State<ChatDetail> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Expanded(
+                              flex: 1,
                               child: ListView.builder(
                                 reverse: true,
                                 shrinkWrap: true,
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    alignment: snapshot.data.docs[index]
-                                                ["sendBy"] ==
-                                            _auth.currentUser!.uid
-                                        ? Alignment.bottomRight
-                                        : Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(
-                                      bottom: 8.0,
-                                    ),
-                                    width: MediaQuery.of(context).size.width,
-                                    color: _isTapped
-                                        ? Colors.white.withOpacity(0.2)
-                                        : Color(0xFF2B2641),
-                                    child: snapshot.data.docs[index]
-                                                ["sendBy"] ==
-                                            _auth.currentUser!.uid
-                                        ? msgContainer(
-                                            Color(0xFF8ECECE),
-                                            snapshot.data.docs[index]["msg"],
-                                            snapshot.data.docs[index]["time"],
-                                            snapshot.data.docs[index]["sendBy"],
-                                            snapshot.data.docs[index]["msgID"],
-                                            true,
-                                            false)
-                                        : msgContainer(
-                                            Colors.white60,
-                                            snapshot.data.docs[index]["msg"],
-                                            snapshot.data.docs[index]["time"],
-                                            snapshot.data.docs[index]["sendBy"],
-                                            snapshot.data.docs[index]["msgID"],
-                                            false,
-                                            false),
-                                  );
+                                  return snapshot.data.docs[index]["deleted"]
+                                      ? Container()
+                                      : Container(
+                                          alignment: snapshot.data.docs[index]
+                                                      ["sendBy"] ==
+                                                  _auth.currentUser!.uid
+                                              ? Alignment.bottomRight
+                                              : Alignment.bottomLeft,
+                                          margin: const EdgeInsets.only(
+                                            bottom: 8.0,
+                                          ),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          color: _isTapped
+                                              ? Colors.white.withOpacity(0.2)
+                                              : Color(0xFF2B2641),
+                                          child: snapshot.data.docs[index]
+                                                      ["sendBy"] ==
+                                                  _auth.currentUser!.uid
+                                              ? msgContainer(
+                                                  Color(0xFF8ECECE),
+                                                  snapshot.data.docs[index]
+                                                      ["msg"],
+                                                  snapshot.data.docs[index]
+                                                      ["time"],
+                                                  snapshot.data.docs[index]
+                                                      ["sendBy"],
+                                                  snapshot.data.docs[index]
+                                                      ["msgID"],
+                                                  snapshot.data.docs[index]
+                                                      ["stared"],
+                                                  true,
+                                                  false)
+                                              : msgContainer(
+                                                  Colors.white60,
+                                                  snapshot.data.docs[index]
+                                                      ["msg"],
+                                                  snapshot.data.docs[index]
+                                                      ["time"],
+                                                  snapshot.data.docs[index]
+                                                      ["sendBy"],
+                                                  snapshot.data.docs[index]
+                                                      ["msgID"],
+                                                  snapshot.data.docs[index]
+                                                      ["stared"],
+                                                  false,
+                                                  false),
+                                        );
                                 },
                               ),
                             );
@@ -230,7 +285,7 @@ class _ChatDetailState extends State<ChatDetail> {
                         keyboardType: TextInputType.multiline,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Type your messege!";
+                            return "Please enter message";
                           }
                         },
                         controller: msg,
@@ -278,7 +333,8 @@ class _ChatDetailState extends State<ChatDetail> {
                                   "msgID": uuid.toString(),
                                   "time": DateTime.now(),
                                   "sendBy": _auth.currentUser!.uid,
-                                  "name": _auth.currentUser!.displayName
+                                  "stared": false,
+                                  "deleted": false,
                                 }).whenComplete(() {
                                   setState(() {
                                     msg.clear();
@@ -294,6 +350,8 @@ class _ChatDetailState extends State<ChatDetail> {
                                   .set({
                                   "msg": msg.text,
                                   "msgID": uuid.toString(),
+                                  "stared": false,
+                                  "deleted": false,
                                   "sendBy": _auth.currentUser!.uid,
                                   "time": DateTime.now(),
                                 }).whenComplete(() async {
@@ -307,6 +365,8 @@ class _ChatDetailState extends State<ChatDetail> {
                                       .set({
                                     "msg": msg.text,
                                     "msgID": uuid.toString(),
+                                    "stared": false,
+                                    "deleted": false,
                                     "sendBy": _auth.currentUser!.uid,
                                     "time": DateTime.now(),
                                   });
@@ -352,90 +412,109 @@ class _ChatDetailState extends State<ChatDetail> {
   }
 
   Widget msgContainer(Color c, String msg, Timestamp time, String sendBy,
-      String msgID, bool right, bool group) {
+      String msgID, bool stared, bool right, bool group) {
     return InkWell(
-      onLongPress: () {
-        groupDialog(msgID, group, msg);
+      onDoubleTap: () {
+        starDialog(msgID, msg, group, stared);
       },
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 300.0),
-        child: Container(
+      onLongPress: () {
+        removeDialog(msgID, msg, group);
+      },
+      child: Container(
+        child: Card(
           margin: right
-              ? const EdgeInsets.only(right: 7.0)
-              : const EdgeInsets.only(left: 7.0),
-          padding: const EdgeInsets.only(
-              top: 5.0, bottom: 5.0, left: 15.0, right: 10.0),
-          decoration: BoxDecoration(
-            borderRadius: right
-                ? BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
-                    bottomLeft: Radius.circular(10.0),
-                  )
-                : BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0),
-                  ),
-            color: c,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StreamBuilder<dynamic>(
-                    stream:
-                        _firestore.collection("Users").doc(sendBy).snapshots(),
-                    builder: (context, snapshot0) {
-                      return snapshot0.hasData
-                          ? right
-                              ? Text(
-                                  "You",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                )
-                              : Text(
-                                  snapshot0.data["name"],
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                )
-                          : Text(
-                              "Name",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            );
-                    },
-                  ),
-                  Text(
-                    msg,
-                    style: TextStyle(fontWeight: FontWeight.w800),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 13.0,
-              ),
-              Text(
-                DateTimeFormat.format(time.toDate(), format: 'H:i'),
-                style: TextStyle(color: Colors.black54, fontSize: 10.5),
-              ),
-            ],
+              ? const EdgeInsets.only(right: 10.0)
+              : const EdgeInsets.only(left: 10.0),
+          color: c,
+          elevation: 2.0,
+          shadowColor: Colors.white.withOpacity(0.8),
+          child: Padding(
+            padding: right
+                ? const EdgeInsets.only(
+                    left: 15.0, right: 10.0, top: 5.0, bottom: 5.0)
+                : const EdgeInsets.only(
+                    left: 15.0, right: 10.0, top: 5.0, bottom: 5.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StreamBuilder<dynamic>(
+                      stream: _firestore
+                          .collection("Users")
+                          .doc(sendBy)
+                          .snapshots(),
+                      builder: (context, snapshot0) {
+                        return snapshot0.hasData
+                            ? right
+                                ? Text(
+                                    "You",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  )
+                                : Text(
+                                    snapshot0.data["name"],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  )
+                            : Text(
+                                "Name",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              );
+                      },
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 200.0),
+                      child: Container(
+                        child: Text(
+                          msg,
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                          maxLines: 100,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 13.0,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    stared
+                        ? Icon(
+                            Icons.star,
+                            color: Color(0xFF433B63).withOpacity(0.8),
+                            size: 15.0,
+                          )
+                        : Container(),
+                    SizedBox(
+                      height: 3.0,
+                    ),
+                    Text(
+                      DateTimeFormat.format(time.toDate(), format: 'H:i'),
+                      style: TextStyle(color: Colors.black54, fontSize: 10.5),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  groupDialog(String msgID, bool group, String msg) {
+  removeDialog(String msgID, String msg, bool group) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -457,18 +536,85 @@ class _ChatDetailState extends State<ChatDetail> {
                       .doc("RoomChats")
                       .collection(widget.userId)
                       .doc(msgID)
-                      .delete()
+                      .update({"deleted": true})
                   : _firestore
                       .collection("Chats")
                       .doc(_auth.currentUser!.uid)
                       .collection(_auth.currentUser!.uid + "_" + widget.userId)
                       .doc(msgID)
-                      .delete();
+                      .update({"deleted": true});
             },
-            child: Text("ok"),
+            child: Text("delete"),
           ),
         ],
       ),
+    );
+  }
+
+  starDialog(String msgID, String msg, bool group, bool stared) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: stared ? Text("Unstar message") : Text("Star message"),
+        content: Text("\" " + msg + " \""),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("cancle"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              group
+                  ? _firestore
+                      .collection("Chats")
+                      .doc("RoomChats")
+                      .collection(widget.userId)
+                      .doc(msgID)
+                      .update(stared ? {"stared": false} : {"stared": true})
+                  : _firestore
+                      .collection("Chats")
+                      .doc(_auth.currentUser!.uid)
+                      .collection(_auth.currentUser!.uid + "_" + widget.userId)
+                      .doc(msgID)
+                      .update(stared ? {"stared": false} : {"stared": true});
+            },
+            child: stared ? Text("Unstar") : Text("Star"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _showToast(String msg) {
+    Widget toast = Container(
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.grey.withOpacity(0.5),
+        ),
+        child: Text(
+          msg,
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      toastDuration: Duration(seconds: 2),
+      positionedToastBuilder: (context, child) {
+        return Positioned(
+          child: child,
+          top: MediaQuery.of(context).size.height * 0.8,
+          left: 0.0,
+        );
+      },
     );
   }
 }
