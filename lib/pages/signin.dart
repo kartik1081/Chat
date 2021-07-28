@@ -10,12 +10,12 @@ import 'package:textme/models/services/fire.dart';
 
 import 'signup.dart';
 
-class WithEmail extends StatefulWidget {
+class SignIn extends StatefulWidget {
   @override
-  _WithEmailState createState() => _WithEmailState();
+  _SignInState createState() => _SignInState();
 }
 
-class _WithEmailState extends State<WithEmail> {
+class _SignInState extends State<SignIn> {
   late bool _loading;
   final _form = GlobalKey<FormState>();
   Fire _fire = Fire();
@@ -26,21 +26,31 @@ class _WithEmailState extends State<WithEmail> {
   );
   bool _sent = false;
   late FToast fToast;
-  // ignore: non_constant_identifier_names
+  String sEmailPhone = '', sPassword = '', sOtp = '';
   TextEditingController email_phone = TextEditingController();
   TextEditingController password = TextEditingController();
-  late FocusNode emailNode = FocusNode();
-  late FocusNode passwordNode = FocusNode();
-  late FocusNode signInNode = FocusNode();
+  TextEditingController otp = TextEditingController();
+  FocusNode emailPhoneNode = FocusNode();
+  FocusNode passwordNode = FocusNode();
+  FocusNode otpNode = FocusNode();
 
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
     super.initState();
     _loading = false;
     fToast = FToast();
     fToast.init(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    email_phone.dispose();
+    password.dispose();
+    otpNode.dispose();
+    otp.dispose();
+    emailPhoneNode.dispose();
+    password.dispose();
   }
 
   @override
@@ -94,146 +104,93 @@ class _WithEmailState extends State<WithEmail> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        height: 20,
+                                        height: 40,
                                       ),
                                       Text(
-                                        "Sign In",
+                                        _withEmail
+                                            ? "SignIn with Email"
+                                            : !_withEmail
+                                                ? _sent
+                                                    ? "OTP"
+                                                    : "SignIn with Phone"
+                                                : "",
                                         style: TextStyle(
-                                          fontSize: 30.sp,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.grey[850],
-                                        ),
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey[850]),
                                       ),
                                       SizedBox(
-                                        height: 50,
+                                        height: 20,
                                       ),
                                       Form(
                                         key: _form,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 20),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                child: TextFormField(
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  validator: (value) {
-                                                    if (value == null ||
-                                                        value.isEmpty) {
-                                                      return _withEmail
-                                                          ? "Enter your email"
-                                                          : "Enter your number";
-                                                    }
-                                                  },
-                                                  controller: email_phone,
-                                                  focusNode: emailNode,
-                                                  onFieldSubmitted: (value) {
-                                                    emailNode.unfocus();
-                                                    FocusScope.of(context)
-                                                        .requestFocus(
-                                                            passwordNode);
-                                                  },
-                                                  autocorrect: true,
-                                                  autofocus: true,
-                                                  decoration: InputDecoration(
-                                                    hintText: _withEmail
-                                                        ? "Enter your email"
-                                                        : "Enter your number",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey),
-                                                    fillColor: Colors.white,
-                                                    filled: true,
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .fromLTRB(13.0,
-                                                            -5.0, 0.0, -5.0),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          width: 0.0000000001,
-                                                          color: Colors.black),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0.sp),
+                                          child: _withEmail
+                                              ? Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    textField(
+                                                        false,
+                                                        TextInputType
+                                                            .emailAddress,
+                                                        email_phone,
+                                                        emailPhoneNode,
+                                                        false,
+                                                        sEmailPhone,
+                                                        "Enter your email"),
+                                                    SizedBox(
+                                                      height: 10.0,
                                                     ),
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        width: 0.0000000001,
-                                                        color: Colors.white,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        10.0.sp,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10.0,
-                                              ),
-                                              TextFormField(
-                                                obscureText: true,
-                                                keyboardType: TextInputType
-                                                    .visiblePassword,
-                                                validator: (value) {
-                                                  if (value == null ||
-                                                      value.isEmpty) {
-                                                    return _withEmail
-                                                        ? "Enter your password"
-                                                        : "Enter your OTP";
-                                                  }
-                                                },
-                                                controller: password,
-                                                focusNode: passwordNode,
-                                                onFieldSubmitted: (value) {
-                                                  passwordNode.unfocus();
-                                                  FocusScope.of(context)
-                                                      .requestFocus(signInNode);
-                                                },
-                                                autocorrect: true,
-                                                decoration: InputDecoration(
-                                                  hintText: _withEmail
-                                                      ? "Enter your password"
-                                                      : "Enter your OTP",
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.grey),
-                                                  fillColor: Colors.white,
-                                                  filled: true,
-                                                  contentPadding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          13.0,
-                                                          -5.0,
-                                                          0.0,
-                                                          -5.0),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              width:
-                                                                  0.0000000001,
-                                                              color: Colors
-                                                                  .black),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0.sp)),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        width: 0.0000000001,
-                                                        color: Colors.white),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0.sp),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                                    textField(
+                                                        true,
+                                                        TextInputType
+                                                            .visiblePassword,
+                                                        password,
+                                                        passwordNode,
+                                                        false,
+                                                        sPassword,
+                                                        "Enter your password"),
+                                                  ],
+                                                )
+                                              : !_withEmail
+                                                  ? _sent
+                                                      ? textField(
+                                                          false,
+                                                          TextInputType.number,
+                                                          otp,
+                                                          otpNode,
+                                                          true,
+                                                          sOtp,
+                                                          "Enter OTP")
+                                                      : Column(
+                                                          children: [
+                                                            textField(
+                                                                false,
+                                                                TextInputType
+                                                                    .number,
+                                                                email_phone,
+                                                                emailPhoneNode,
+                                                                false,
+                                                                sEmailPhone,
+                                                                "Enter your number"),
+                                                            SizedBox(
+                                                              height: 10.0,
+                                                            ),
+                                                            textField(
+                                                                true,
+                                                                TextInputType
+                                                                    .visiblePassword,
+                                                                password,
+                                                                passwordNode,
+                                                                false,
+                                                                sPassword,
+                                                                "Enter your password"),
+                                                          ],
+                                                        )
+                                                  : Container(),
                                         ),
                                       ),
                                       Padding(
@@ -245,20 +202,25 @@ class _WithEmailState extends State<WithEmail> {
                                             padding: const EdgeInsets.all(0.0),
                                             child: TextButton(
                                               child: Text(
-                                                "Create account",
+                                                _sent
+                                                    ? "Resend OTP"
+                                                    : "Create account",
                                                 style: TextStyle(
                                                     fontSize: 11.0.sp,
                                                     color: Colors.black),
                                               ),
                                               onPressed: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        // ignore: non_constant_identifier_names
-                                                        (BuildContext) =>
-                                                            SignUp(),
-                                                  ),
-                                                );
+                                                _sent
+                                                    ? null
+                                                    : Navigator.of(context)
+                                                        .push(
+                                                        MaterialPageRoute(
+                                                          builder:
+                                                              // ignore: non_constant_identifier_names
+                                                              (BuildContext) =>
+                                                                  SignUp(),
+                                                        ),
+                                                      );
                                               },
                                             ),
                                           ),
@@ -267,7 +229,6 @@ class _WithEmailState extends State<WithEmail> {
                                       Container(
                                         width: 115,
                                         child: ElevatedButton(
-                                          focusNode: signInNode,
                                           style: ButtonStyle(
                                             elevation:
                                                 MaterialStateProperty.all(7),
@@ -280,25 +241,23 @@ class _WithEmailState extends State<WithEmail> {
                                           ),
                                           onPressed: () {
                                             if (_withEmail) {
-                                              if (email_phone.text
-                                                  .endsWith("@gmail.com")) {
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                _fire.signIn(
-                                                    context,
-                                                    email_phone.text,
-                                                    password.text);
-                                              } else {
-                                                _showToast(
-                                                    "Pleas enter valid email");
-                                              }
+                                              setState(() {
+                                                _loading = true;
+                                              });
+                                              _fire.signIn(context, sEmailPhone,
+                                                  sPassword);
                                             } else if (!_withEmail) {
-                                              if (email_phone.text.length ==
-                                                  10) {
-                                              } else {
-                                                _showToast(
-                                                    "Pleas enter valid number");
+                                              if (!_sent) {
+                                                setState(() {
+                                                  _sent = true;
+                                                  passwordNode.unfocus();
+                                                  FocusScope.of(context)
+                                                      .requestFocus(otpNode);
+                                                });
+                                              } else if (_sent) {
+                                                setState(() {
+                                                  _sent = false;
+                                                });
                                               }
                                             }
                                           },
@@ -308,88 +267,106 @@ class _WithEmailState extends State<WithEmail> {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 25,
+                                        height: 15,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.white),
-                                                  elevation:
-                                                      MaterialStateProperty.all(
-                                                          7.0)),
-                                              onPressed: () {
-                                                setState(() {
-                                                  if (_withEmail) {
-                                                    setState(() {
-                                                      _withEmail = false;
-                                                      _with = Icon(
-                                                        Icons.email,
-                                                        color: Colors.black,
-                                                      );
-                                                    });
-                                                    _showToast(
-                                                        "Sign In with number");
-                                                  } else if (!_withEmail) {
-                                                    setState(() {
-                                                      _withEmail = true;
-                                                      _with = Icon(
-                                                        Icons.phone_android,
-                                                        color: Colors.black,
-                                                      );
-                                                    });
-                                                    _showToast(
-                                                        "Sign In with number");
-                                                  }
-                                                });
-                                              },
-                                              child: _with,
+                                      _sent
+                                          ? Container()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 35.0),
+                                              child:
+                                                  Divider(color: Colors.black),
                                             ),
-                                            SizedBox(width: 15.0),
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.white),
-                                                  elevation:
-                                                      MaterialStateProperty.all(
-                                                          7.0)),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                _fire.googleSignIn(context);
-                                              },
-                                              child: Image.asset(
-                                                  "assets/google.jpg"),
-                                            ),
-                                            SizedBox(width: 15.0),
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.blue),
-                                                elevation:
-                                                    MaterialStateProperty.all(
-                                                        7.0),
+                                      _sent
+                                          ? Container()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(Colors
+                                                                    .white),
+                                                        elevation:
+                                                            MaterialStateProperty
+                                                                .all(7.0)),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        if (_withEmail) {
+                                                          setState(() {
+                                                            _withEmail = false;
+                                                            _with = Icon(
+                                                              Icons.email,
+                                                              color:
+                                                                  Colors.black,
+                                                            );
+                                                          });
+                                                          _showToast(
+                                                              "Sign In with number");
+                                                        } else if (!_withEmail) {
+                                                          setState(() {
+                                                            _withEmail = true;
+                                                            _with = Icon(
+                                                              Icons
+                                                                  .phone_android,
+                                                              color:
+                                                                  Colors.black,
+                                                            );
+                                                          });
+                                                          _showToast(
+                                                              "Sign In with number");
+                                                        }
+                                                      });
+                                                    },
+                                                    child: _with,
+                                                  ),
+                                                  SizedBox(width: 15.0),
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(Colors
+                                                                    .white),
+                                                        elevation:
+                                                            MaterialStateProperty
+                                                                .all(7.0)),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _loading = true;
+                                                      });
+                                                      _fire.googleSignIn(
+                                                          context);
+                                                    },
+                                                    child: Image.asset(
+                                                        "assets/google.jpg"),
+                                                  ),
+                                                  SizedBox(width: 15.0),
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(Colors.blue),
+                                                      elevation:
+                                                          MaterialStateProperty
+                                                              .all(7.0),
+                                                    ),
+                                                    onPressed: () {
+                                                      // _flutterFire.signInWithFacebook(context);
+                                                    },
+                                                    child: Icon(Icons.facebook),
+                                                  ),
+                                                ],
                                               ),
-                                              onPressed: () {
-                                                // _flutterFire.signInWithFacebook(context);
-                                              },
-                                              child: Icon(Icons.facebook),
-                                            ),
-                                          ],
-                                        ),
-                                      )
+                                            )
                                     ],
                                   ),
                                 ),
@@ -471,9 +448,9 @@ class _WithEmailState extends State<WithEmail> {
                                                     }
                                                   },
                                                   controller: email_phone,
-                                                  focusNode: emailNode,
+                                                  focusNode: emailPhoneNode,
                                                   onFieldSubmitted: (value) {
-                                                    emailNode.unfocus();
+                                                    emailPhoneNode.unfocus();
                                                     FocusScope.of(context)
                                                         .requestFocus(
                                                             passwordNode);
@@ -528,12 +505,6 @@ class _WithEmailState extends State<WithEmail> {
                                                   },
                                                   controller: password,
                                                   focusNode: passwordNode,
-                                                  onFieldSubmitted: (value) {
-                                                    signInNode.unfocus();
-                                                    FocusScope.of(context)
-                                                        .requestFocus(
-                                                            emailNode);
-                                                  },
                                                   autocorrect: true,
                                                   decoration: InputDecoration(
                                                     hintText:
@@ -607,7 +578,6 @@ class _WithEmailState extends State<WithEmail> {
                                         Container(
                                           width: 110,
                                           child: ElevatedButton(
-                                            focusNode: signInNode,
                                             style: ButtonStyle(
                                               elevation:
                                                   MaterialStateProperty.all(7),
@@ -622,10 +592,8 @@ class _WithEmailState extends State<WithEmail> {
                                               setState(() {
                                                 _loading = true;
                                               });
-                                              _fire.signIn(
-                                                  context,
-                                                  email_phone.text,
-                                                  password.text);
+                                              _fire.signIn(context, sEmailPhone,
+                                                  sPassword);
                                             },
                                             child: Text("Sign In"),
                                           ),
@@ -738,6 +706,43 @@ class _WithEmailState extends State<WithEmail> {
       child: toast,
       gravity: ToastGravity.BOTTOM,
       toastDuration: Duration(seconds: 3),
+    );
+  }
+
+  Widget textField(
+      bool obscureText,
+      TextInputType textInputType,
+      TextEditingController controller,
+      FocusNode focusNode,
+      bool autofocus,
+      String onSave,
+      String hint) {
+    return TextFormField(
+      obscureText: obscureText,
+      keyboardType: textInputType,
+      controller: controller,
+      focusNode: focusNode,
+      autocorrect: true,
+      autofocus: autofocus,
+      onSaved: (_) {
+        setState(() {
+          onSave = controller.text;
+        });
+      },
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: Colors.grey),
+        fillColor: Colors.white,
+        filled: true,
+        contentPadding: const EdgeInsets.fromLTRB(13.0, -5.0, 0.0, -5.0),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 0.0000000001, color: Colors.black),
+            borderRadius: BorderRadius.circular(10.0)),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 0.0000000001, color: Colors.white),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
     );
   }
 }

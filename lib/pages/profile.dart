@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:textme/models/helper.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/pages/signin.dart';
 
@@ -21,6 +24,38 @@ class _ProfileState extends State<Profile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Fire _fire = Fire();
+  late FToast fToast;
+  Helper _helper = Helper();
+  late var subscription;
+  bool net = true;
+
+  @override
+  void initState() {
+    super.initState();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.wifi ||
+          result == ConnectivityResult.mobile) {
+        setState(() {
+          net = true;
+          print(net);
+        });
+      }
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          net = false;
+          print(net);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +66,17 @@ class _ProfileState extends State<Profile> {
         actions: [
           IconButton(
             onPressed: () {
-              _fire.signOut(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => WithEmail(),
-                ),
-              );
+              if (net) {
+                _fire.signOut(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SignIn(),
+                  ),
+                );
+              } else if (!net) {
+                _showToast("Network Error!");
+              }
             },
             icon: Icon(Icons.logout),
           ),
@@ -161,6 +200,22 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       ),
+    );
+  }
+
+  _showToast(String msg) {
+    Widget toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.white,
+        ),
+        child: Text(msg));
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
     );
   }
 }

@@ -11,7 +11,7 @@ class Fire {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future signIn(
+  signIn(
     BuildContext context,
     String email,
     String password,
@@ -136,7 +136,7 @@ class Fire {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => WithEmail(),
+          builder: (context) => SignIn(),
         ),
       );
     }
@@ -211,7 +211,7 @@ class Fire {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => WithEmail(),
+          builder: (context) => SignIn(),
         ),
       );
     });
