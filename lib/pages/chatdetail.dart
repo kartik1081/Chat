@@ -29,13 +29,11 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  bool _isTapped = false;
   late var uuid;
   late FToast fToast;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fToast = FToast();
     fToast.init(context);
@@ -111,9 +109,35 @@ class _ChatDetailState extends State<ChatDetail> {
             ],
           ),
           actions: [
-            _isTapped
-                ? IconButton(onPressed: () {}, icon: Icon(Icons.star))
-                : Text("")
+            !widget.group
+                ? StreamBuilder<dynamic>(
+                    stream: _firestore
+                        .collection("Users")
+                        .doc(_auth.currentUser!.uid)
+                        .collection("ChatWith")
+                        .doc(widget.userId)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      return IconButton(
+                          onPressed: () {
+                            _firestore
+                                .collection("Users")
+                                .doc(_auth.currentUser!.uid)
+                                .collection("ChatWith")
+                                .doc(widget.userId)
+                                .update({
+                              "favorite":
+                                  snapshot.data["favorite"] ? false : true
+                            });
+                          },
+                          icon: Icon(
+                            Icons.favorite,
+                            color: snapshot.data["favorite"]
+                                ? Colors.red
+                                : Colors.grey,
+                          ));
+                    })
+                : Container()
           ],
         ),
         body: Column(
@@ -151,9 +175,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                         ),
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        color: _isTapped
-                                            ? Colors.white.withOpacity(0.2)
-                                            : Color(0xFF2B2641),
+                                        color: Color(0xFF2B2641),
                                         child: snapshot.data.docs[index]
                                                     ["sendBy"] ==
                                                 _auth.currentUser!.uid
@@ -225,9 +247,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                           ),
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          color: _isTapped
-                                              ? Colors.white.withOpacity(0.2)
-                                              : Color(0xFF2B2641),
+                                          color: Color(0xFF2B2641),
                                           child: snapshot.data.docs[index]
                                                       ["sendBy"] ==
                                                   _auth.currentUser!.uid
@@ -378,7 +398,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                   await _firestore
                                       .collection("Users")
                                       .doc(_auth.currentUser!.uid)
-                                      .collection("Favorites")
+                                      .collection("ChatWith")
                                       .doc(widget.userId)
                                       .set({
                                     "name": widget.name,
@@ -438,51 +458,15 @@ class _ChatDetailState extends State<ChatDetail> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    StreamBuilder<dynamic>(
-                      stream: _firestore
-                          .collection("Users")
-                          .doc(sendBy)
-                          .snapshots(),
-                      builder: (context, snapshot0) {
-                        return snapshot0.hasData
-                            ? right
-                                ? Text(
-                                    "You",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                                : Text(
-                                    snapshot0.data["name"],
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  )
-                            : Text(
-                                "Name",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              );
-                      },
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 200.0),
+                  child: Container(
+                    child: Text(
+                      msg,
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                      maxLines: 100,
                     ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 200.0),
-                      child: Container(
-                        child: Text(
-                          msg,
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                          maxLines: 100,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   width: 13.0,
@@ -585,36 +569,6 @@ class _ChatDetailState extends State<ChatDetail> {
           ),
         ],
       ),
-    );
-  }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.grey.withOpacity(0.5),
-        ),
-        child: Text(
-          msg,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-
-    fToast.showToast(
-      child: toast,
-      toastDuration: Duration(seconds: 2),
-      positionedToastBuilder: (context, child) {
-        return Positioned(
-          child: child,
-          top: MediaQuery.of(context).size.height * 0.8,
-          left: 0.0,
-        );
-      },
     );
   }
 }

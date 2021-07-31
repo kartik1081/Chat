@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/signin.dart';
 import 'package:textme/pages/signup.dart';
@@ -10,6 +11,8 @@ import 'package:textme/pages/signup.dart';
 class Fire {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Helper _helper = Helper();
+  late String verificationId, number;
 
   signIn(
     BuildContext context,
@@ -53,8 +56,9 @@ class Fire {
           _firestore.collection("Users").doc(value.user!.uid).set({
             "id": value.user!.uid,
             "name": name,
-            "email": email,
+            "email_phone": email,
             "password": password,
+            "signUpTime": DateTime.now(),
             "lastSignIn": DateTime.now(),
             "profilePic":
                 "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
@@ -114,24 +118,39 @@ class Fire {
       );
       return await FirebaseAuth.instance.signInWithCredential(credential).then(
         (value) {
-          _firestore.collection("Users").doc("${value.user!.uid}").set(
-            {
-              "id": value.user!.uid,
-              "name": googleUser.displayName,
-              "email": googleUser.email,
-              "profilePic": googleUser.photoUrl,
-              "lastSignIn": DateTime.now()
-            },
-          );
+          if (value.user != null) {
+            if (value.additionalUserInfo!.isNewUser) {
+              _firestore.collection("Users").doc("${value.user!.uid}").set(
+                {
+                  "id": value.user!.uid,
+                  "name": googleUser.displayName,
+                  "email_phone": googleUser.email,
+                  "profilePic": googleUser.photoUrl,
+                  "signUpTime": DateTime.now(),
+                  "lastSignIn": DateTime.now()
+                },
+              ).whenComplete(() => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  ));
+            } else {
+              _firestore
+                  .collection("Users")
+                  .doc("${value.user!.uid}")
+                  .update({"lastSignIn": DateTime.now()}).whenComplete(
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                ),
+              );
+            }
+          }
         },
-      ).whenComplete(() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
-      });
+      );
     } catch (e) {
       Navigator.push(
         context,
@@ -142,67 +161,121 @@ class Fire {
     }
   }
 
-  Future phoneSignIn(BuildContext context, String number) async {
+  Future phoneSignIn(
+      BuildContext context, String? name, String code, String number) async {
+    TextEditingController _otp = TextEditingController();
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: number,
+      phoneNumber: code + number,
       timeout: const Duration(seconds: 60),
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await _auth
-            .signInWithCredential(credential)
-            .then(
-              (value) =>
-                  _firestore.collection("Users").doc(value.user!.uid).set(
+        try {
+          Navigator.pop(context);
+          await _auth.signInWithCredential(credential).then((value) {
+            if (value.user != null) {
+              _firestore.collection("Users").doc(value.user!.uid).set(
                 {
                   "id": value.user!.uid,
-                  "phoneNumber": number,
+                  "name": name,
+                  "email_phone": number,
                   "lastSignIn": DateTime.now(),
-                  "profilePic": ""
+                  "profilePic":
+                      "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
                 },
-              ),
-            )
-            .whenComplete(
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
+              ).whenComplete(
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
                 ),
-              ),
-            );
+              );
+            }
+          });
+        } catch (e) {
+          print("varificationCompleted");
+          print(e.toString());
+        }
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
         }
+        print("VarificationFailed");
+        print(e.toString());
       },
       codeSent: (String verificationId, int? resendToken) async {
-        String smsCode = 'xxxx';
-
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
-        _auth
-            .signInWithCredential(credential)
-            .then(
-              (value) =>
-                  _firestore.collection("Users").doc(value.user!.uid).set(
-                {
-                  "id": value.user!.uid,
-                  "phoneNumber": number,
-                  "lastSignIn": DateTime.now(),
-                  "profilePic":
-                      "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
-                },
-              ),
-            )
-            .whenComplete(
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-              ),
-            );
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  content: _helper.textField(false, TextInputType.number, _otp,
+                      null, true, "Enter your OTP", null),
+                  title: Text("OTP"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("cancle")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          try {
+                            AuthCredential credential =
+                                PhoneAuthProvider.credential(
+                                    verificationId: verificationId,
+                                    smsCode: _otp.text.trim());
+                            _auth
+                                .signInWithCredential(credential)
+                                .then((value) {
+                              if (value.user != null) {
+                                if (value.additionalUserInfo!.isNewUser) {
+                                  _firestore
+                                      .collection("Users")
+                                      .doc(value.user!.uid)
+                                      .set(
+                                    {
+                                      "id": value.user!.uid,
+                                      "name": name,
+                                      "email_phone": number,
+                                      "signUpTime": DateTime.now(),
+                                      "lastSignIn": DateTime.now(),
+                                      "profilePic":
+                                          "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
+                                    },
+                                  ).whenComplete(
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  _firestore
+                                      .collection("Users")
+                                      .doc(value.user!.uid)
+                                      .update({
+                                    "lastSignIn": DateTime.now()
+                                  }).whenComplete(() => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => HomePage(),
+                                            ),
+                                          ));
+                                }
+                              }
+                            });
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                        child: Text("Sign In"))
+                  ],
+                ));
       },
-      codeAutoRetrievalTimeout: (String verificationId) {},
+      codeAutoRetrievalTimeout: (String verificationId) {
+        verificationId = verificationId;
+      },
     );
   }
 

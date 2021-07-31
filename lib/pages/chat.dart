@@ -135,7 +135,7 @@ class _ChatState extends State<Chat> {
                       stream: _firestore
                           .collection("Users")
                           .doc(_auth.currentUser!.uid)
-                          .collection("Favorites")
+                          .collection("ChatWith")
                           .snapshots(),
                       builder: (context, snapshot0) {
                         return snapshot0.hasData
@@ -244,7 +244,7 @@ class _ChatState extends State<Chat> {
                 stream: _firestore
                     .collection("Users")
                     .doc(_auth.currentUser!.uid)
-                    .collection("Favorites")
+                    .collection("ChatWith")
                     .orderBy("time", descending: true)
                     .snapshots(),
                 builder: (context, snapshot0) {
@@ -289,7 +289,7 @@ class _ChatState extends State<Chat> {
                                                                     .currentUser!
                                                                     .uid)
                                                                 .collection(
-                                                                    "Favorites")
+                                                                    "ChatWith")
                                                                 .doc(snapshot1
                                                                     .data["id"])
                                                                 .delete();

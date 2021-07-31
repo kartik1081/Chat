@@ -48,13 +48,23 @@ class _CreateRoomState extends State<CreateRoom> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-              );
-              _firestore.collection("Rooms").doc(widget.uuid).delete();
+              if (!named && !imaged) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+                _firestore.collection("Rooms").doc(widget.uuid).delete();
+              } else if (named && !imaged) {
+                setState(() {
+                  named = false;
+                });
+              } else if (named && imaged) {
+                setState(() {
+                  imaged = false;
+                });
+              }
             },
             icon: Icon(Icons.keyboard_arrow_left)),
         title: named
@@ -127,7 +137,7 @@ class _CreateRoomState extends State<CreateRoom> {
                             stream: _firestore
                                 .collection("Users")
                                 .doc(_auth.currentUser!.uid)
-                                .collection("Favorites")
+                                .collection("ChatWith")
                                 .orderBy("time", descending: true)
                                 .snapshots(),
                             builder: (context, snapshot) {
@@ -306,7 +316,7 @@ class _CreateRoomState extends State<CreateRoom> {
                           await _storage
                               .ref()
                               .child("RoomPic")
-                              .child(roomName)
+                              .child(widget.uuid + " " + roomName)
                               .putFile(_image)
                               .then((value) {
                             if (value.state == TaskState.running) {}
