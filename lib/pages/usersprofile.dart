@@ -55,7 +55,7 @@ class _UsersProfileState extends State<UsersProfile> {
               stream: _firestore
                   .collection("Users")
                   .doc(_auth.currentUser!.uid)
-                  .collection("Favorites")
+                  .collection("ChatWith")
                   .where("id", isEqualTo: widget.userId)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -66,7 +66,7 @@ class _UsersProfileState extends State<UsersProfile> {
                             await _firestore
                                 .collection("Users")
                                 .doc(_auth.currentUser!.uid)
-                                .collection("Favorites")
+                                .collection("ChatWith")
                                 .doc(widget.userId)
                                 .delete();
                             _showToast("Removed");
@@ -96,7 +96,7 @@ class _UsersProfileState extends State<UsersProfile> {
                             await _firestore
                                 .collection("Users")
                                 .doc(_auth.currentUser!.uid)
-                                .collection("Favorites")
+                                .collection("ChatWith")
                                 .doc(widget.userId)
                                 .set({
                               "name": widget.name,
