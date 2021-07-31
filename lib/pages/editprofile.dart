@@ -179,7 +179,11 @@ class _EditProfileState extends State<EditProfile> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Email",
+                                              data["email_phone"]
+                                                      .toString()
+                                                      .endsWith("@gmail.com")
+                                                  ? "Email"
+                                                  : "Phone number",
                                               style: TextStyle(
                                                   color: Colors.white70,
                                                   fontSize: 15.0),
@@ -188,7 +192,7 @@ class _EditProfileState extends State<EditProfile> {
                                               height: 5.0,
                                             ),
                                             Text(
-                                              data["email"],
+                                              data["email_phone"],
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15.0,

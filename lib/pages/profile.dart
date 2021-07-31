@@ -7,7 +7,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:textme/models/helper.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/pages/signin.dart';
 
@@ -25,7 +24,6 @@ class _ProfileState extends State<Profile> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Fire _fire = Fire();
   late FToast fToast;
-  Helper _helper = Helper();
   late var subscription;
   bool net = true;
 
@@ -152,7 +150,7 @@ class _ProfileState extends State<Profile> {
                                           fontWeight: FontWeight.w800),
                                     ),
                                     Text(
-                                      data["email"],
+                                      data["email_phone"],
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,

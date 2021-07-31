@@ -116,7 +116,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                                   stream: _firestore
                                       .collection("Users")
                                       .doc(_auth.currentUser!.uid)
-                                      .collection("Favorites")
+                                      .collection("ChatWith")
                                       .doc(snapshot.data.docs[index]["id"])
                                       .snapshots(),
                                   builder: (context, snapshots) {
@@ -172,7 +172,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                                   stream: _firestore
                                       .collection("Users")
                                       .doc(_auth.currentUser!.uid)
-                                      .collection("Favorites")
+                                      .collection("ChatWith")
                                       .doc(snapshot.data.docs[index]["id"])
                                       .snapshots(),
                                   builder: (context, snapshots) {
@@ -384,7 +384,7 @@ class _ListItemState extends State<ListItem>
                         await _firestore
                             .collection("Users")
                             .doc(_auth.currentUser!.uid)
-                            .collection("Favorites")
+                            .collection("ChatWith")
                             .doc(widget.id)
                             .delete();
                         _showToast(widget.name, "Removed");
@@ -392,13 +392,14 @@ class _ListItemState extends State<ListItem>
                         await _firestore
                             .collection("Users")
                             .doc(_auth.currentUser!.uid)
-                            .collection("Favorites")
+                            .collection("ChatWith")
                             .doc(widget.id)
                             .set({
                           "name": widget.name,
                           "profilePic": widget.profilePic,
                           "time": DateTime.now(),
                           "id": widget.id,
+                          "favorite": false
                         });
                         _showToast(widget.name, "Added");
                       }
