@@ -41,7 +41,6 @@ class _UsersProfileState extends State<UsersProfile> {
       body: Column(
         children: [
           Container(
-            // height: 200,
             width: MediaQuery.of(context).size.width,
             child: CachedNetworkImage(
               imageUrl: widget.profilePic,
