@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:ui';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/models/services/fire.dart';
+import 'package:textme/pages/neterror.dart';
 
 import 'signup.dart';
 
@@ -27,6 +30,7 @@ class _SignInState extends State<SignIn> {
     color: Colors.black,
   );
   late FToast fToast;
+  bool net = false;
   Helper _helper = Helper();
   String sEmailPhone = '', sPassword = '', sOtp = '';
   String cCode = "+91";
@@ -41,6 +45,31 @@ class _SignInState extends State<SignIn> {
   @override
   void initState() {
     super.initState();
+    Connectivity().onConnectivityChanged.listen((event) {
+      switch (event) {
+        case ConnectivityResult.mobile:
+          setState(() {
+            net = true;
+          });
+          _showToast("Connection successfully");
+          print(net);
+          break;
+        case ConnectivityResult.wifi:
+          setState(() {
+            net = true;
+          });
+          _showToast("Connection successfully");
+          print(net);
+          break;
+        default:
+          setState(() {
+            net = false;
+          });
+          _showToast("Check connection");
+          print(net);
+          break;
+      }
+    });
     _loading = false;
     fToast = FToast();
     fToast.init(context);
@@ -253,29 +282,50 @@ class _SignInState extends State<SignIn> {
                                                     Colors.lightGreen),
                                           ),
                                           onPressed: () async {
-                                            bool isNet =
-                                                await _helper.isAvailable();
                                             if (_withEmail) {
-                                              if (isNet) {
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                _fire.signIn(
-                                                    context,
-                                                    email_phone.text.trim(),
-                                                    password.text.trim());
-                                                email_phone.clear();
-                                                password.clear();
+                                              if (net) {
+                                                if (email_phone
+                                                        .text.isNotEmpty ||
+                                                    email_phone.text.endsWith(
+                                                        "@gmail.com")) {
+                                                  _fire.signIn(
+                                                      context,
+                                                      email_phone.text.trim(),
+                                                      password.text.trim());
+                                                  email_phone.clear();
+                                                  password.clear();
+                                                  setState(() {
+                                                    _loading = true;
+                                                  });
+                                                  Timer(Duration(seconds: 5),
+                                                      () {
+                                                    setState(() {
+                                                      _loading = false;
+                                                    });
+                                                  });
+                                                } else {
+                                                  _showToast("Check details");
+                                                }
                                               } else {
-                                                // ignore: unnecessary_statements
-                                                null;
+                                                _showToast("Check connection");
                                               }
                                             } else if (!_withEmail) {
-                                              _fire.phoneSignIn(
-                                                  context,
-                                                  null,
-                                                  cCode.trim(),
-                                                  email_phone.text.trim());
+                                              if (net) {
+                                                if (cCode.isNotEmpty &&
+                                                    email_phone
+                                                        .text.isNotEmpty) {
+                                                  _fire.phoneSignIn(
+                                                      context,
+                                                      null,
+                                                      cCode.trim(),
+                                                      email_phone.text.trim());
+                                                } else {
+                                                  _showToast(
+                                                      "Please enter number");
+                                                }
+                                              } else {
+                                                _showToast("Check connection");
+                                              }
                                             }
                                           },
                                           child: Text(_withEmail
@@ -329,7 +379,7 @@ class _SignInState extends State<SignIn> {
                                                       );
                                                     });
                                                     _showToast(
-                                                        "Sign In with number");
+                                                        "Sign In with email");
                                                   }
                                                 });
                                               },
@@ -345,10 +395,21 @@ class _SignInState extends State<SignIn> {
                                                       MaterialStateProperty.all(
                                                           7.0)),
                                               onPressed: () {
-                                                setState(() {
-                                                  _loading = true;
-                                                });
-                                                _fire.googleSignIn(context);
+                                                if (net) {
+                                                  _fire.googleSignIn(context);
+                                                  setState(() {
+                                                    _loading = true;
+                                                  });
+                                                  Timer(Duration(seconds: 5),
+                                                      () {
+                                                    setState(() {
+                                                      _loading = false;
+                                                    });
+                                                  });
+                                                } else {
+                                                  _showToast(
+                                                      "Check connection");
+                                                }
                                               },
                                               child: Image.asset(
                                                   "assets/google.jpg"),
@@ -378,8 +439,9 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                         ],
-                      ),
-                    )
+                      )
+                      // : Center(child: Text("Network Error"))
+                      )
                   : SafeArea(
                       child: Container(
                         height: height,

@@ -24,35 +24,17 @@ class _ProfileState extends State<Profile> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Fire _fire = Fire();
   late FToast fToast;
-  late var subscription;
-  bool net = true;
 
   @override
   void initState() {
     super.initState();
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.wifi ||
-          result == ConnectivityResult.mobile) {
-        setState(() {
-          net = true;
-          print(net);
-        });
-      }
-      if (result == ConnectivityResult.none) {
-        setState(() {
-          net = false;
-          print(net);
-        });
-      }
-    });
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
   void dispose() {
     super.dispose();
-    subscription.dispose();
   }
 
   @override
@@ -64,17 +46,12 @@ class _ProfileState extends State<Profile> {
         actions: [
           IconButton(
             onPressed: () {
-              if (net) {
-                _fire.signOut(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SignIn(),
-                  ),
-                );
-              } else if (!net) {
-                _showToast("Network Error!");
-              }
+              _fire.signOut(context).whenComplete(() => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignIn(),
+                    ),
+                  ));
             },
             icon: Icon(Icons.logout),
           ),

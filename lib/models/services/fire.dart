@@ -22,19 +22,21 @@ class Fire {
     try {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        _firestore
-            .collection("Users")
-            .doc(value.user!.uid)
-            .update({"lastSignIn": DateTime.now()});
-      }).whenComplete(
-        () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
+          .then(
+        (value) {
+          if (value.user != null) {
+            _firestore
+                .collection("Users")
+                .doc(value.user!.uid)
+                .update({"lastSignIn": DateTime.now()}).whenComplete(
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              ),
+            );
+          }
         },
       );
     } on FirebaseAuthException catch (e) {

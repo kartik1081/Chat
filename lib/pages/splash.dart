@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/pages/homepage.dart';
+import 'package:textme/pages/neterror.dart';
 import 'package:textme/pages/signin.dart';
 
 class Splash extends StatefulWidget {
@@ -19,28 +22,25 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(
-      Duration(seconds: 4),
-      () {
-        _auth.authStateChanges().listen(
-          (event) {
-            event != null
+    Timer(Duration(seconds: 4), () async {
+      _auth.authStateChanges().listen((event) {
+        event != null
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              )
+            : event == null
                 ? Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  )
-                : Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => SignIn(),
                     ),
-                  );
-          },
-        );
-      },
-    );
+                  )
+                : Navigator.pop(context);
+      });
+    });
   }
 
   @override

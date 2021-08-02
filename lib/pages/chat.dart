@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'addstatus.dart';
@@ -26,7 +28,42 @@ class _ChatState extends State<Chat> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   late int item;
   late File _image;
+  late FToast fToast;
   late String url;
+  bool net = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Connectivity().onConnectivityChanged.listen((event) {
+      switch (event) {
+        case ConnectivityResult.mobile:
+          setState(() {
+            net = true;
+          });
+          _showToast("Connection successfully");
+          print(net);
+          break;
+        case ConnectivityResult.wifi:
+          setState(() {
+            net = true;
+          });
+          _showToast("Connection successfully");
+          print(net);
+          break;
+        default:
+          setState(() {
+            net = false;
+          });
+          _showToast("Check connection");
+          print(net);
+          break;
+      }
+    });
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,18 +242,13 @@ class _ChatState extends State<Chat> {
                                               ),
                                             ),
                                           );
-                                        } else if (!snapshot1.hasData) {
-                                          return Container(
-                                            color: Color(0xFF2B2641),
-                                          );
                                         } else {
                                           return Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 4.0, horizontal: 8.0),
                                             height: 60,
+                                            width: 50,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(10.0),
+                                                  BorderRadius.circular(100.0),
                                               color: Color(0xFF3C355A),
                                             ),
                                           );
@@ -486,5 +518,21 @@ class _ChatState extends State<Chat> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  _showToast(String msg) {
+    Widget toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.white,
+        ),
+        child: Text(msg));
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
+    );
   }
 }
