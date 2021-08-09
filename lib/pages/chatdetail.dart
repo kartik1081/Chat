@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_format/date_time_format.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:textme/pages/usersprofile.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:bubble/bubble.dart';
 import 'homepage.dart';
 
 // ignore: must_be_immutable
@@ -118,24 +120,26 @@ class _ChatDetailState extends State<ChatDetail> {
                         .doc(widget.userId)
                         .snapshots(),
                     builder: (context, snapshot) {
-                      return IconButton(
-                          onPressed: () {
-                            _firestore
-                                .collection("Users")
-                                .doc(_auth.currentUser!.uid)
-                                .collection("ChatWith")
-                                .doc(widget.userId)
-                                .update({
-                              "favorite":
-                                  snapshot.data["favorite"] ? false : true
-                            });
-                          },
-                          icon: Icon(
-                            Icons.favorite,
-                            color: snapshot.data["favorite"]
-                                ? Colors.red
-                                : Colors.grey,
-                          ));
+                      return snapshot.hasData
+                          ? IconButton(
+                              onPressed: () {
+                                _firestore
+                                    .collection("Users")
+                                    .doc(_auth.currentUser!.uid)
+                                    .collection("ChatWith")
+                                    .doc(widget.userId)
+                                    .update({
+                                  "favorite":
+                                      snapshot.data["favorite"] ? false : true
+                                });
+                              },
+                              icon: Icon(
+                                Icons.favorite,
+                                color: snapshot.data["favorite"]
+                                    ? Colors.red
+                                    : Colors.grey,
+                              ))
+                          : Container();
                     })
                 : Container()
           ],
@@ -170,12 +174,9 @@ class _ChatDetailState extends State<ChatDetail> {
                                                 _auth.currentUser!.uid
                                             ? Alignment.bottomRight
                                             : Alignment.bottomLeft,
-                                        margin: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                        ),
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        color: Color(0xFF2B2641),
+                                        color: Color(0xFF07232c),
                                         child: snapshot.data.docs[index]
                                                     ["sendBy"] ==
                                                 _auth.currentUser!.uid
@@ -247,7 +248,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                           ),
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          color: Color(0xFF2B2641),
+                                          color: Color(0xFF07232c),
                                           child: snapshot.data.docs[index]
                                                       ["sendBy"] ==
                                                   _auth.currentUser!.uid
@@ -441,57 +442,72 @@ class _ChatDetailState extends State<ChatDetail> {
         removeDialog(msgID, msg, group);
       },
       child: Container(
-        child: Card(
-          margin: right
-              ? const EdgeInsets.only(right: 10.0)
-              : const EdgeInsets.only(left: 10.0),
+        child: Bubble(
+          margin: BubbleEdges.only(top: 10),
+          alignment: right ? Alignment.topRight : null,
+          nipWidth: 9,
+          nipHeight: 8,
+          nip: right ? BubbleNip.rightBottom : BubbleNip.leftBottom,
           color: c,
-          elevation: 2.0,
-          shadowColor: Colors.white.withOpacity(0.8),
-          child: Padding(
-            padding: right
-                ? const EdgeInsets.only(
-                    left: 15.0, right: 10.0, top: 5.0, bottom: 5.0)
-                : const EdgeInsets.only(
-                    left: 15.0, right: 10.0, top: 5.0, bottom: 5.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 200.0),
-                  child: Container(
-                    child: Text(
-                      msg,
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                      maxLines: 100,
-                    ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 200.0),
+                child: Container(
+                  child: group
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            StreamBuilder<dynamic>(
+                                stream: _firestore
+                                    .collection("Users")
+                                    .doc(sendBy)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    snapshot.hasData
+                                        ? snapshot.data["name"]
+                                        : "Name",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w800),
+                                  );
+                                }),
+                            Text(
+                              msg,
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                              maxLines: 100,
+                            ),
+                          ],
+                        )
+                      : Text(
+                          msg,
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                          maxLines: 100,
+                        ),
+                ),
+              ),
+              SizedBox(
+                width: 13.0,
+              ),
+              Row(
+                children: [
+                  Text(
+                    DateTimeFormat.format(time.toDate(), format: 'H:i'),
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.8), fontSize: 10.5),
                   ),
-                ),
-                SizedBox(
-                  width: 13.0,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    stared
-                        ? Icon(
-                            Icons.star,
-                            color: Color(0xFF433B63).withOpacity(0.8),
-                            size: 15.0,
-                          )
-                        : Container(),
-                    SizedBox(
-                      height: 3.0,
-                    ),
-                    Text(
-                      DateTimeFormat.format(time.toDate(), format: 'H:i'),
-                      style: TextStyle(color: Colors.black54, fontSize: 10.5),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  stared
+                      ? Icon(
+                          Icons.star,
+                          color: Color(0xFF07232c).withOpacity(0.8),
+                          size: 15.0,
+                        )
+                      : Container(),
+                ],
+              ),
+            ],
           ),
         ),
       ),

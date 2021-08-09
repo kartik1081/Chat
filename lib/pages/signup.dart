@@ -94,7 +94,7 @@ class _SignUpState extends State<SignUp> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Color(0xFF6E00F3),
+        // backgroundColor: Color(0xFF6E00F3),
         body: _loading
             ? SpinKitFadingCircle(
                 color: Color(0xFF2EF7F7),
@@ -119,7 +119,7 @@ class _SignUpState extends State<SignUp> {
                               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[200]!.withOpacity(0.8),
+                                  color: Colors.grey[200]!.withOpacity(0.6),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey[900]!.withOpacity(0.5),

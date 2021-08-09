@@ -141,8 +141,8 @@ class _ChatState extends State<Chat> {
                                       vertical: 4.0, horizontal: 8.0),
                                   height: 60,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: Color(0xFF3C355A),
+                                    borderRadius: BorderRadius.circular(100.0),
+                                    color: Color(0xFF31444B),
                                   ),
                                 );
                         },
@@ -249,7 +249,7 @@ class _ChatState extends State<Chat> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(100.0),
-                                              color: Color(0xFF3C355A),
+                                              color: Color(0xFF31444B),
                                             ),
                                           );
                                         }
@@ -459,7 +459,7 @@ class _ChatState extends State<Chat> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
-                                            color: Color(0xFF3C355A),
+                                            color: Color(0xFF31444B),
                                           ),
                                         );
                                 },

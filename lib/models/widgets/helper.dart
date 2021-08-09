@@ -36,12 +36,28 @@ class Helper {
             : const EdgeInsets.fromLTRB(13.0, 10.0, 0.0, 10.0),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(width: 0.0000000001, color: Colors.black),
-            borderRadius: BorderRadius.circular(10.0)),
+            borderRadius: BorderRadius.circular(10.0),),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(width: 0.0000000001, color: Colors.white),
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
+    );
+  }
+
+  _showToast(String msg) {
+    Widget toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.white.withOpacity(0.65),
+        ),
+        child: Text(msg));
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
     );
   }
 }

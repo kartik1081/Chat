@@ -208,7 +208,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10.0),
-                                          color: Color(0xFF3C355A),
+                                          color: Color(0xFF31444B),
                                         ),
                                       );
                                     }

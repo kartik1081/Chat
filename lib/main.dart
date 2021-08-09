@@ -96,14 +96,14 @@ class MyApp extends StatelessWidget {
           ],
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: Color(0xFF2B2641),
+            scaffoldBackgroundColor: Color(0xFF07232c),
             appBarTheme: AppBarTheme(
               titleTextStyle: TextStyle(color: Colors.white70),
               textTheme: TextTheme(
                 caption: TextStyle(color: Colors.white70),
               ),
               titleSpacing: 4.0.w,
-              color: Color(0xFF2B2641),
+              color: Color(0xFF07232c),
               elevation: 1,
               iconTheme: IconThemeData(
                 color: Colors.white,

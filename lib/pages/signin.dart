@@ -95,7 +95,7 @@ class _SignInState extends State<SignIn> {
       onWillPop: () async => false,
       child: Sizer(
         builder: (context, orientation, deviceType) => Scaffold(
-          backgroundColor: Color(0xFF6E00F3),
+          // backgroundColor: Color(0xFF6E00F3),
           body: _loading
               ? SpinKitFadingCircle(
                   color: Color(0xFF2EF7F7),
@@ -120,7 +120,7 @@ class _SignInState extends State<SignIn> {
                                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[200]!.withOpacity(0.8),
+                                    color: Colors.grey[200]!.withOpacity(0.6),
                                     boxShadow: [
                                       BoxShadow(
                                         color:
@@ -167,7 +167,7 @@ class _SignInState extends State<SignIn> {
                                                             .emailAddress,
                                                         email_phone,
                                                         emailPhoneNode,
-                                                        false,
+                                                        true,
                                                         "Enter your email",
                                                         Icon(Icons.email)),
                                                     SizedBox(
@@ -191,7 +191,7 @@ class _SignInState extends State<SignIn> {
                                                       TextInputType.phone,
                                                       email_phone,
                                                       emailPhoneNode,
-                                                      false,
+                                                      true,
                                                       "Enter your number",
                                                       Padding(
                                                         padding:
@@ -360,6 +360,7 @@ class _SignInState extends State<SignIn> {
                                                           7.0)),
                                               onPressed: () {
                                                 setState(() {
+                                                  email_phone.clear();
                                                   if (_withEmail) {
                                                     setState(() {
                                                       _withEmail = false;
