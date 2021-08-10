@@ -41,21 +41,21 @@ class _ChatState extends State<Chat> {
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
+          showToast("Connection successfully");
           print(net);
           break;
         case ConnectivityResult.wifi:
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
+          showToast("Connection successfully");
           print(net);
           break;
         default:
           setState(() {
             net = false;
           });
-          _showToast("Check connection");
+          showToast("Check connection");
           print(net);
           break;
       }
@@ -520,7 +520,7 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  _showToast(String msg) {
+  showToast(String msg) {
     Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(

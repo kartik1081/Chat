@@ -25,7 +25,14 @@ class Helper {
       autofocus: autofocus,
       decoration: InputDecoration(
         prefixIcon: preFix,
-        suffixIcon: obscureText ? Icon(Icons.visibility_off) : null,
+        suffixIcon: obscureText
+            ? IconButton(
+                onPressed: () {
+                  obscureText = !obscureText;
+                },
+                icon:
+                    Icon(obscureText ? Icons.visibility : Icons.visibility_off))
+            : null,
         hintText: hint,
         hintStyle: TextStyle(color: Colors.grey),
         fillColor: Colors.white,
@@ -35,8 +42,9 @@ class Helper {
             ? const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0)
             : const EdgeInsets.fromLTRB(13.0, 10.0, 0.0, 10.0),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 0.0000000001, color: Colors.black),
-            borderRadius: BorderRadius.circular(10.0),),
+          borderSide: BorderSide(width: 0.0000000001, color: Colors.black),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(width: 0.0000000001, color: Colors.white),
           borderRadius: BorderRadius.circular(10.0),

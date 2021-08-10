@@ -201,7 +201,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.favorite, color: Colors.red.withOpacity(0.6)),
+              leading: Icon(Icons.favorite, color: Colors.redAccent),
               title: Text(
                 "Favorites",
                 style: TextStyle(color: Colors.white),

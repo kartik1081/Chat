@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:textme/models/services/fire.dart';
 import 'package:textme/pages/room.dart';
 import 'package:textme/pages/setting.dart';
 import 'package:textme/pages/chat.dart';
@@ -34,6 +35,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Fire _fire = Fire();
+    final select = [];
     return WillPopScope(
       onWillPop: () async => false,
       child: DefaultTabController(
@@ -52,16 +55,38 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     ),
               actions: [
                 _index == 0
-                    ? IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Setting(),
-                            ),
-                          );
+                    ? PopupMenuButton(
+                        elevation: 3.2,
+                        onSelected: (int value) {
+                          setState(() {
+                            value == 0
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (conter) => Setting()))
+                                : value == 1
+                                    ? null
+                                    : _fire.signOut(context);
+                          });
                         },
-                        icon: Icon(Icons.more_vert),
+                        onCanceled: () {
+                          print('You have not chossed anything');
+                        },
+                        tooltip: 'This is tooltip',
+                        itemBuilder: (BuildContext context) => [
+                          PopupMenuItem(
+                            child: Text("Setting"),
+                            value: 0,
+                          ),
+                          PopupMenuItem(
+                            child: Text("Name"),
+                            value: 1,
+                          ),
+                          PopupMenuItem(
+                            child: Text("Log Out"),
+                            value: 2,
+                          ),
+                        ],
                       )
                     : Container()
               ],
