@@ -67,10 +67,13 @@ class _AddStatusState extends State<AddStatus> {
                   (value) {
                     value.ref.getDownloadURL().then(
                       (value) async {
-                        await _firestore.collection("Status").doc().set({
+                        await _firestore
+                            .collection("Status")
+                            .doc(_auth.currentUser!.uid)
+                            .collection(_auth.currentUser!.uid)
+                            .add({
                           "status": value,
                           "time": DateTime.now(),
-                          "id": _auth.currentUser!.uid
                         });
                         print("End");
                       },

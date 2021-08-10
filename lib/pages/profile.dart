@@ -8,10 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:textme/models/services/fire.dart';
+import 'package:textme/pages/favorites.dart';
 import 'package:textme/pages/signin.dart';
 
 import 'editprofile.dart';
-import 'favorites.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
