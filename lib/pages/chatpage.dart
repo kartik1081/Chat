@@ -64,9 +64,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                                     context,
                                     MaterialPageRoute(
                                         builder: (conter) => Setting()))
-                                : value == 1
-                                    ? null
-                                    : _fire.signOut(context);
+                                : _fire.signOut(context);
                           });
                         },
                         onCanceled: () {
@@ -79,12 +77,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                             value: 0,
                           ),
                           PopupMenuItem(
-                            child: Text("Name"),
-                            value: 1,
-                          ),
-                          PopupMenuItem(
                             child: Text("Log Out"),
-                            value: 2,
+                            value: 1,
                           ),
                         ],
                       )

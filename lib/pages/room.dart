@@ -117,42 +117,37 @@ class _ChatRoomState extends State<ChatRoom> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Hero(
-                                                    tag: snapshot1
-                                                        .data["roomID"],
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      child: snapshot1
-                                                              .data["roomPic"]
-                                                              .isNotEmpty
-                                                          ? CachedNetworkImage(
-                                                              height: 49,
-                                                              width: 49,
-                                                              fit: BoxFit.cover,
-                                                              imageUrl: snapshot1
-                                                                      .data[
-                                                                  "roomPic"],
-                                                              placeholder:
-                                                                  (context,
-                                                                      url) {
-                                                                return Container(
-                                                                  height: 100,
-                                                                  child: Center(
-                                                                    child:
-                                                                        CircularProgressIndicator(),
-                                                                  ),
-                                                                );
-                                                              },
-                                                            )
-                                                          : Image(
-                                                              image: AssetImage(
-                                                                  "assets/avatar.png"),
-                                                              height: 49,
-                                                              width: 49,
-                                                            ),
-                                                    ),
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    child: snapshot1
+                                                            .data["roomPic"]
+                                                            .isNotEmpty
+                                                        ? CachedNetworkImage(
+                                                            height: 49,
+                                                            width: 49,
+                                                            fit: BoxFit.cover,
+                                                            imageUrl:
+                                                                snapshot1.data[
+                                                                    "roomPic"],
+                                                            placeholder:
+                                                                (context, url) {
+                                                              return Container(
+                                                                height: 100,
+                                                                child: Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(),
+                                                                ),
+                                                              );
+                                                            },
+                                                          )
+                                                        : Image(
+                                                            image: AssetImage(
+                                                                "assets/avatar.png"),
+                                                            height: 49,
+                                                            width: 49,
+                                                          ),
                                                   ),
                                                   SizedBox(
                                                     width: 10.0,

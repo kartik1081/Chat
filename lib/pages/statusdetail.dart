@@ -33,11 +33,14 @@ class _StatusDetailState extends State<StatusDetail> {
               .orderBy("time", descending: false)
               .snapshots(),
           builder: (context, snapshot) {
-            for (var i in snapshot.data.docs) {
-              storyList.add(
-                StoryItem.pageImage(url: i["status"], controller: controller),
-              );
-              print(i["status"]);
+            if (snapshot.hasData) {
+              for (var i in snapshot.data.docs) {
+                storyList.add(
+                  StoryItem.pageImage(url: i["status"], controller: controller),
+                );
+
+                print(i["status"]);
+              }
             }
             return snapshot.hasData
                 ? Stack(
@@ -73,24 +76,21 @@ class _StatusDetailState extends State<StatusDetail> {
                           width: MediaQuery.of(context).size.width,
                           child: Row(
                             children: [
-                              Hero(
-                                tag: widget.userID,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: CachedNetworkImage(
-                                    height: 55,
-                                    width: 55,
-                                    fit: BoxFit.cover,
-                                    imageUrl: widget.profilePic,
-                                    placeholder: (context, url) {
-                                      return Container(
-                                        height: 100,
-                                        child: Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100.0),
+                                child: CachedNetworkImage(
+                                  height: 55,
+                                  width: 55,
+                                  fit: BoxFit.cover,
+                                  imageUrl: widget.profilePic,
+                                  placeholder: (context, url) {
+                                    return Container(
+                                      height: 100,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                               SizedBox(

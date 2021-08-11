@@ -11,7 +11,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/models/services/fire.dart';
-import 'package:textme/pages/neterror.dart';
 
 import 'signup.dart';
 

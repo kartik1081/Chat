@@ -1,12 +1,9 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/pages/homepage.dart';
-import 'package:textme/pages/neterror.dart';
 import 'package:textme/pages/signin.dart';
 
 class Splash extends StatefulWidget {

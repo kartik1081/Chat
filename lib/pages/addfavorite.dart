@@ -136,47 +136,43 @@ class _AddFavoriteState extends State<AddFavorite> {
                                                   children: [
                                                     Row(
                                                       children: [
-                                                        Hero(
-                                                          tag: snapshot1
-                                                              .data["id"],
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        100),
-                                                            child: snapshot1
-                                                                    .data[
-                                                                        "profilePic"]
-                                                                    .isNotEmpty
-                                                                ? CachedNetworkImage(
-                                                                    height: 49,
-                                                                    width: 49,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                    imageUrl: snapshot1
-                                                                            .data[
-                                                                        "profilePic"],
-                                                                    placeholder:
-                                                                        (context,
-                                                                            url) {
-                                                                      return Container(
-                                                                        height:
-                                                                            100,
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      100),
+                                                          child: snapshot1
+                                                                  .data[
+                                                                      "profilePic"]
+                                                                  .isNotEmpty
+                                                              ? CachedNetworkImage(
+                                                                  height: 49,
+                                                                  width: 49,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  imageUrl: snapshot1
+                                                                          .data[
+                                                                      "profilePic"],
+                                                                  placeholder:
+                                                                      (context,
+                                                                          url) {
+                                                                    return Container(
+                                                                      height:
+                                                                          100,
+                                                                      child:
+                                                                          Center(
                                                                         child:
-                                                                            Center(
-                                                                          child:
-                                                                              CircularProgressIndicator(),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                  )
-                                                                : Image(
-                                                                    image: AssetImage(
-                                                                        "assets/avatar.png"),
-                                                                    height: 49,
-                                                                    width: 49,
-                                                                  ),
-                                                          ),
+                                                                            CircularProgressIndicator(),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                )
+                                                              : Image(
+                                                                  image: AssetImage(
+                                                                      "assets/avatar.png"),
+                                                                  height: 49,
+                                                                  width: 49,
+                                                                ),
                                                         ),
                                                         SizedBox(
                                                           width: 10.0,

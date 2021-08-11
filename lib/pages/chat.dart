@@ -190,58 +190,66 @@ class _ChatState extends State<Chat> {
                                     child: StreamBuilder<dynamic>(
                                       stream: _firestore
                                           .collection("Status")
-                                          .where("id", isEqualTo: data["id"])
+                                          .doc(data["id"])
+                                          .collection(data["id"])
                                           .snapshots(),
                                       builder: (context, snapshot1) {
                                         if (snapshot1.hasData) {
-                                          return InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      StatusDetail(
-                                                    userID: data["id"],
-                                                    profilePic:
-                                                        data["profilePic"],
+                                          if (snapshot1.data.docs.length != 0) {
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        StatusDetail(
+                                                      userID: data["id"],
+                                                      profilePic:
+                                                          data["profilePic"],
+                                                    ),
                                                   ),
+                                                );
+                                              },
+                                              child: Hero(
+                                                tag: data["id"],
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100.0),
+                                                  child: data["profilePic"]
+                                                          .isNotEmpty
+                                                      ? CachedNetworkImage(
+                                                          height: 49,
+                                                          width: 49,
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: data[
+                                                              "profilePic"],
+                                                          placeholder:
+                                                              (context, url) {
+                                                            return Container(
+                                                              height: 100,
+                                                              child: Center(
+                                                                child:
+                                                                    CircularProgressIndicator(),
+                                                              ),
+                                                            );
+                                                          },
+                                                        )
+                                                      : Image(
+                                                          image: AssetImage(
+                                                              "assets/avatar.png"),
+                                                          height: 49,
+                                                          width: 49,
+                                                        ),
                                                 ),
-                                              );
-                                            },
-                                            child: Hero(
-                                              tag: data["id"],
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        100.0),
-                                                child: data["profilePic"]
-                                                        .isNotEmpty
-                                                    ? CachedNetworkImage(
-                                                        height: 49,
-                                                        width: 49,
-                                                        fit: BoxFit.cover,
-                                                        imageUrl:
-                                                            data["profilePic"],
-                                                        placeholder:
-                                                            (context, url) {
-                                                          return Container(
-                                                            height: 100,
-                                                            child: Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
-                                                            ),
-                                                          );
-                                                        },
-                                                      )
-                                                    : Image(
-                                                        image: AssetImage(
-                                                            "assets/avatar.png"),
-                                                        height: 49,
-                                                        width: 49,
-                                                      ),
                                               ),
-                                            ),
-                                          );
+                                            );
+                                          } else {
+                                            return Container(
+                                              height: 0.0,
+                                              width: 0.0,
+                                            );
+                                          }
                                         } else {
                                           return Container(
                                             height: 60,
@@ -364,47 +372,41 @@ class _ChatState extends State<Chat> {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      Hero(
-                                                        tag: snapshot1
-                                                            .data["id"],
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100),
-                                                          child: snapshot1
-                                                                  .data[
-                                                                      "profilePic"]
-                                                                  .isNotEmpty
-                                                              ? CachedNetworkImage(
-                                                                  height: 49,
-                                                                  width: 49,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  imageUrl: snapshot1
-                                                                          .data[
-                                                                      "profilePic"],
-                                                                  placeholder:
-                                                                      (context,
-                                                                          url) {
-                                                                    return Container(
-                                                                      height:
-                                                                          100,
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        child: snapshot1
+                                                                .data[
+                                                                    "profilePic"]
+                                                                .isNotEmpty
+                                                            ? CachedNetworkImage(
+                                                                height: 49,
+                                                                width: 49,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                imageUrl: snapshot1
+                                                                        .data[
+                                                                    "profilePic"],
+                                                                placeholder:
+                                                                    (context,
+                                                                        url) {
+                                                                  return Container(
+                                                                    height: 100,
+                                                                    child:
+                                                                        Center(
                                                                       child:
-                                                                          Center(
-                                                                        child:
-                                                                            CircularProgressIndicator(),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                )
-                                                              : Image(
-                                                                  image: AssetImage(
-                                                                      "assets/avatar.png"),
-                                                                  height: 49,
-                                                                  width: 49,
-                                                                ),
-                                                        ),
+                                                                          CircularProgressIndicator(),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              )
+                                                            : Image(
+                                                                image: AssetImage(
+                                                                    "assets/avatar.png"),
+                                                                height: 49,
+                                                                width: 49,
+                                                              ),
                                                       ),
                                                       SizedBox(
                                                         width: 10.0,
