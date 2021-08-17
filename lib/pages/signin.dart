@@ -96,9 +96,8 @@ class _SignInState extends State<SignIn> {
         builder: (context, orientation, deviceType) => Scaffold(
           // backgroundColor: Color(0xFF6E00F3),
           body: _loading
-              ? SpinKitFadingCircle(
-                  color: Color(0xFF2EF7F7),
-                  size: 50,
+              ? Center(
+                  child: _helper.loadingShimmer(),
                 )
               : SizerUtil.orientation == Orientation.portrait
                   ? Container(
@@ -166,7 +165,6 @@ class _SignInState extends State<SignIn> {
                                                             .emailAddress,
                                                         email_phone,
                                                         emailPhoneNode,
-                                                        true,
                                                         "Enter your email",
                                                         Icon(Icons.email)),
                                                     SizedBox(
@@ -178,7 +176,6 @@ class _SignInState extends State<SignIn> {
                                                             .visiblePassword,
                                                         password,
                                                         passwordNode,
-                                                        false,
                                                         "Enter your password",
                                                         Icon(Icons.lock)),
                                                   ],
@@ -190,7 +187,6 @@ class _SignInState extends State<SignIn> {
                                                       TextInputType.phone,
                                                       email_phone,
                                                       emailPhoneNode,
-                                                      true,
                                                       "Enter your number",
                                                       Padding(
                                                         padding:
@@ -509,7 +505,6 @@ class _SignInState extends State<SignIn> {
                                                     TextInputType.emailAddress,
                                                     email_phone,
                                                     emailPhoneNode,
-                                                    true,
                                                     "Enter your email",
                                                     Icon(Icons.email)),
                                                 SizedBox(
@@ -521,7 +516,6 @@ class _SignInState extends State<SignIn> {
                                                         .visiblePassword,
                                                     password,
                                                     passwordNode,
-                                                    false,
                                                     "Enter your password",
                                                     Icon(Icons.lock)),
                                               ],

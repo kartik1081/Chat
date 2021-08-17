@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/signin.dart';
@@ -68,7 +69,66 @@ class _SplashState extends State<Splash> {
                 ],
               ),
             ),
-            SpinKitFadingCircle(color: Color(0xFF2EF7F7)),
+            SizedBox(
+              width: 200.0,
+              height: 50.0,
+              child: Shimmer.fromColors(
+                baseColor: Color(0xFF31444B),
+                highlightColor: Color(0xFF618A99),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(100.0)),
+                      height: 10.0,
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(100.0)),
+                      height: 10.0,
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(100.0)),
+                      height: 10.0,
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(100.0)),
+                      height: 10.0,
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      width: 4.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(100.0)),
+                      height: 10.0,
+                      width: 10.0,
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(
               height: 10,
             ),

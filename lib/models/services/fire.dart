@@ -210,7 +210,7 @@ class Fire {
             context: context,
             builder: (context) => AlertDialog(
                   content: _helper.textField(false, TextInputType.number, _otp,
-                      null, true, "Enter your OTP", null),
+                      null, "Enter your OTP", null),
                   title: Text("OTP"),
                   actions: [
                     TextButton(

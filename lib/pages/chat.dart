@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'addstatus.dart';
 import 'chatdetail.dart';
@@ -23,7 +24,7 @@ class Chat extends StatefulWidget {
   _ChatState createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatState extends State<Chat> with TickerProviderStateMixin {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   late int item;
@@ -104,36 +105,32 @@ class _ChatState extends State<Chat> {
                                       ),
                                     );
                                   },
-                                  child: Hero(
-                                    tag: snapshot.data["id"],
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(100.0),
-                                      child: snapshot
-                                              .data["profilePic"].isNotEmpty
-                                          ? CachedNetworkImage(
-                                              height: 49,
-                                              width: 49,
-                                              fit: BoxFit.cover,
-                                              imageUrl:
-                                                  snapshot.data["profilePic"],
-                                              placeholder: (context, url) {
-                                                return Container(
-                                                  height: 100,
-                                                  child: Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                          : Image(
-                                              image: AssetImage(
-                                                  "assets/avatar.png"),
-                                              height: 49,
-                                              width: 49,
-                                            ),
-                                    ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                    child: snapshot
+                                            .data["profilePic"].isNotEmpty
+                                        ? CachedNetworkImage(
+                                            height: 49,
+                                            width: 49,
+                                            fit: BoxFit.cover,
+                                            imageUrl:
+                                                snapshot.data["profilePic"],
+                                            placeholder: (context, url) {
+                                              return Container(
+                                                height: 100,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : Image(
+                                            image:
+                                                AssetImage("assets/avatar.png"),
+                                            height: 49,
+                                            width: 49,
+                                          ),
                                   ),
                                 )
                               : Container(
@@ -183,20 +180,22 @@ class _ChatState extends State<Chat> {
                                 itemBuilder: (context, index) {
                                   Map<String, dynamic> data =
                                       snapshot0.data.docs[index].data();
-                                  return Container(
-                                    width: 80.0,
-                                    padding: const EdgeInsets.only(
-                                        top: 10.0, left: 5.0, right: 5.0),
-                                    child: StreamBuilder<dynamic>(
-                                      stream: _firestore
-                                          .collection("Status")
-                                          .doc(data["id"])
-                                          .collection(data["id"])
-                                          .snapshots(),
-                                      builder: (context, snapshot1) {
-                                        if (snapshot1.hasData) {
-                                          if (snapshot1.data.docs.length != 0) {
-                                            return InkWell(
+                                  return StreamBuilder<dynamic>(
+                                    stream: _firestore
+                                        .collection("Status")
+                                        .doc(data["id"])
+                                        .collection(data["id"])
+                                        .snapshots(),
+                                    builder: (context, snapshot1) {
+                                      if (snapshot1.hasData) {
+                                        if (snapshot1.data.docs.length != 0) {
+                                          return Container(
+                                            width: 80.0,
+                                            padding: const EdgeInsets.only(
+                                                top: 10.0,
+                                                left: 5.0,
+                                                right: 5.0),
+                                            child: InkWell(
                                               onTap: () {
                                                 Navigator.push(
                                                   context,
@@ -210,59 +209,57 @@ class _ChatState extends State<Chat> {
                                                   ),
                                                 );
                                               },
-                                              child: Hero(
-                                                tag: data["id"],
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100.0),
-                                                  child: data["profilePic"]
-                                                          .isNotEmpty
-                                                      ? CachedNetworkImage(
-                                                          height: 49,
-                                                          width: 49,
-                                                          fit: BoxFit.cover,
-                                                          imageUrl: data[
-                                                              "profilePic"],
-                                                          placeholder:
-                                                              (context, url) {
-                                                            return Container(
-                                                              height: 100,
-                                                              child: Center(
-                                                                child:
-                                                                    CircularProgressIndicator(),
-                                                              ),
-                                                            );
-                                                          },
-                                                        )
-                                                      : Image(
-                                                          image: AssetImage(
-                                                              "assets/avatar.png"),
-                                                          height: 49,
-                                                          width: 49,
-                                                        ),
-                                                ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        100.0),
+                                                child: data["profilePic"]
+                                                        .isNotEmpty
+                                                    ? CachedNetworkImage(
+                                                        height: 49,
+                                                        width: 49,
+                                                        fit: BoxFit.cover,
+                                                        imageUrl:
+                                                            data["profilePic"],
+                                                        placeholder:
+                                                            (context, url) {
+                                                          return Container(
+                                                            height: 100,
+                                                            child: Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : Image(
+                                                        image: AssetImage(
+                                                            "assets/avatar.png"),
+                                                        height: 49,
+                                                        width: 49,
+                                                      ),
                                               ),
-                                            );
-                                          } else {
-                                            return Container(
-                                              height: 0.0,
-                                              width: 0.0,
-                                            );
-                                          }
+                                            ),
+                                          );
                                         } else {
-                                          return Container(
-                                            height: 60,
-                                            width: 50,
+                                          return Container();
+                                        }
+                                      } else {
+                                        return Shimmer.fromColors(
+                                          baseColor: Color(0xFF31444B),
+                                          highlightColor: Color(0xFF4C6872),
+                                          child: Container(
+                                            height: 20,
+                                            width: 80,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(100.0),
                                               color: Color(0xFF31444B),
                                             ),
-                                          );
-                                        }
-                                      },
-                                    ),
+                                          ),
+                                        );
+                                      }
+                                    },
                                   );
                                 },
                               )

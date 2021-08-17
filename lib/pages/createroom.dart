@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/pages/homepage.dart';
 
 import 'chatdetail.dart';
@@ -30,6 +31,7 @@ class _CreateRoomState extends State<CreateRoom> {
   bool imaged = false;
   bool picked = false;
   late String roomName;
+
   String roomPic = '';
   late File _image;
   // late String profilePic;
@@ -84,25 +86,22 @@ class _CreateRoomState extends State<CreateRoom> {
                           //       fullscreenDialog: true),
                           // );
                         },
-                        child: Hero(
-                          tag: widget.uuid,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            // ignore: unnecessary_null_comparison
-                            child: roomPic == ''
-                                ? Image(
-                                    image: NetworkImage(
-                                        "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"),
-                                    height: 40,
-                                    width: 40,
-                                  )
-                                : Image(
-                                    image: FileImage(_image),
-                                    height: 40,
-                                    width: 40,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          // ignore: unnecessary_null_comparison
+                          child: roomPic == ''
+                              ? Image(
+                                  image: NetworkImage(
+                                      "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"),
+                                  height: 40,
+                                  width: 40,
+                                )
+                              : Image(
+                                  image: FileImage(_image),
+                                  height: 40,
+                                  width: 40,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       SizedBox(
@@ -364,7 +363,6 @@ class _CreateRoomState extends State<CreateRoom> {
                   TextFormField(
                     keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
-                    autofocus: true,
                     controller: _name,
                     decoration: InputDecoration(
                       isDense: true,

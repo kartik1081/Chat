@@ -162,7 +162,6 @@ class _SignUpState extends State<SignUp> {
                                                       TextInputType.name,
                                                       name,
                                                       nameNode,
-                                                      true,
                                                       "Enter your name",
                                                       Icon(Icons.person)),
                                                   SizedBox(
@@ -174,7 +173,6 @@ class _SignUpState extends State<SignUp> {
                                                           .emailAddress,
                                                       email_phone,
                                                       emailPhoneNode,
-                                                      false,
                                                       "Enter your email",
                                                       Icon(Icons.email)),
                                                   SizedBox(
@@ -186,7 +184,6 @@ class _SignUpState extends State<SignUp> {
                                                           .visiblePassword,
                                                       password,
                                                       passwordNode,
-                                                      false,
                                                       "Enter your password",
                                                       Icon(Icons.lock)),
                                                 ],
@@ -198,7 +195,6 @@ class _SignUpState extends State<SignUp> {
                                                       TextInputType.name,
                                                       name,
                                                       nameNode,
-                                                      true,
                                                       "Enter your name",
                                                       Icon(Icons.person)),
                                                   SizedBox(
@@ -209,7 +205,6 @@ class _SignUpState extends State<SignUp> {
                                                       TextInputType.phone,
                                                       email_phone,
                                                       emailPhoneNode,
-                                                      false,
                                                       "Enter your number",
                                                       Padding(
                                                         padding:
@@ -508,7 +503,6 @@ class _SignUpState extends State<SignUp> {
                                                   TextInputType.name,
                                                   name,
                                                   nameNode,
-                                                  true,
                                                   "Enter your name",
                                                   Icon(Icons.person)),
                                               SizedBox(
@@ -519,7 +513,6 @@ class _SignUpState extends State<SignUp> {
                                                   TextInputType.emailAddress,
                                                   email_phone,
                                                   emailPhoneNode,
-                                                  false,
                                                   "Enter your email",
                                                   Icon(Icons.email)),
                                               SizedBox(
@@ -530,7 +523,6 @@ class _SignUpState extends State<SignUp> {
                                                   TextInputType.visiblePassword,
                                                   password,
                                                   passwordNode,
-                                                  false,
                                                   "Enter your password",
                                                   Icon(Icons.lock)),
                                             ],

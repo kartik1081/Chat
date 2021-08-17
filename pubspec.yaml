@@ -47,6 +47,7 @@ dependencies:
   provider: ^5.0.0
   share: ^2.0.4
   sizer: ^2.0.13
+  shimmer: ^2.0.0
   story_view: ^0.13.1
   uuid: ^3.0.4
   video_player: ^2.1.10

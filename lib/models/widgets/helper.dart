@@ -3,6 +3,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Helper {
   FToast fToast = FToast();
@@ -12,7 +13,6 @@ class Helper {
     TextInputType textInputType,
     TextEditingController controller,
     FocusNode? focusNode,
-    bool autofocus,
     String hint,
     Widget? preFix,
   ) {
@@ -22,7 +22,6 @@ class Helper {
       controller: controller,
       focusNode: focusNode,
       autocorrect: true,
-      autofocus: autofocus,
       decoration: InputDecoration(
         prefixIcon: preFix,
         suffixIcon: obscureText
@@ -49,6 +48,65 @@ class Helper {
           borderSide: BorderSide(width: 0.0000000001, color: Colors.white),
           borderRadius: BorderRadius.circular(10.0),
         ),
+      ),
+    );
+  }
+
+  Widget loadingShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Color(0xFF31444B),
+      highlightColor: Color(0xFF618A99),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.circular(100.0)),
+            height: 10.0,
+            width: 10.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.circular(100.0)),
+            height: 10.0,
+            width: 10.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.circular(100.0)),
+            height: 10.0,
+            width: 10.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.circular(100.0)),
+            height: 10.0,
+            width: 10.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.circular(100.0)),
+            height: 10.0,
+            width: 10.0,
+          ),
+        ],
       ),
     );
   }
