@@ -369,41 +369,49 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(100),
-                                                        child: snapshot1
-                                                                .data[
-                                                                    "profilePic"]
-                                                                .isNotEmpty
-                                                            ? CachedNetworkImage(
-                                                                height: 49,
-                                                                width: 49,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                imageUrl: snapshot1
-                                                                        .data[
-                                                                    "profilePic"],
-                                                                placeholder:
-                                                                    (context,
-                                                                        url) {
-                                                                  return Container(
-                                                                    height: 100,
-                                                                    child:
-                                                                        Center(
+                                                      Hero(
+                                                        tag: snapshot1
+                                                                .data["id"] +
+                                                            snapshot1.data[
+                                                                "profilePic"],
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      100),
+                                                          child: snapshot1
+                                                                  .data[
+                                                                      "profilePic"]
+                                                                  .isNotEmpty
+                                                              ? CachedNetworkImage(
+                                                                  height: 49,
+                                                                  width: 49,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  imageUrl: snapshot1
+                                                                          .data[
+                                                                      "profilePic"],
+                                                                  placeholder:
+                                                                      (context,
+                                                                          url) {
+                                                                    return Container(
+                                                                      height:
+                                                                          100,
                                                                       child:
-                                                                          CircularProgressIndicator(),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              )
-                                                            : Image(
-                                                                image: AssetImage(
-                                                                    "assets/avatar.png"),
-                                                                height: 49,
-                                                                width: 49,
-                                                              ),
+                                                                          Center(
+                                                                        child:
+                                                                            CircularProgressIndicator(),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                )
+                                                              : Image(
+                                                                  image: AssetImage(
+                                                                      "assets/avatar.png"),
+                                                                  height: 49,
+                                                                  width: 49,
+                                                                ),
+                                                        ),
                                                       ),
                                                       SizedBox(
                                                         width: 10.0,

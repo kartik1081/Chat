@@ -74,28 +74,31 @@ class _ChatDetailState extends State<ChatDetail> {
                         fullscreenDialog: true),
                   );
                 },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  // ignore: unnecessary_null_comparison
-                  child: widget.profilePic.isNotEmpty
-                      ? CachedNetworkImage(
-                          height: 40,
-                          width: 40,
-                          fit: BoxFit.cover,
-                          imageUrl: widget.profilePic,
-                          placeholder: (context, url) {
-                            return Container(
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          },
-                        )
-                      : Image(
-                          image: AssetImage("assets/avatar.png"),
-                          height: 40,
-                          width: 40,
-                        ),
+                child: Hero(
+                  tag: widget.userId + widget.profilePic,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    // ignore: unnecessary_null_comparison
+                    child: widget.profilePic.isNotEmpty
+                        ? CachedNetworkImage(
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                            imageUrl: widget.profilePic,
+                            placeholder: (context, url) {
+                              return Container(
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            },
+                          )
+                        : Image(
+                            image: AssetImage("assets/avatar.png"),
+                            height: 40,
+                            width: 40,
+                          ),
+                  ),
                 ),
               ),
               SizedBox(
