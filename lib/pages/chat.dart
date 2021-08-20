@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +28,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> with TickerProviderStateMixin {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseMessaging _messaging = FirebaseMessaging.instance;
   late int item;
   late File _image;
   late FToast fToast;
@@ -36,6 +38,10 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    _messaging
+        .getToken()
+        .then((value) => print("FCM token is:" + value.toString()));
     Connectivity().onConnectivityChanged.listen((event) {
       switch (event) {
         case ConnectivityResult.mobile:
