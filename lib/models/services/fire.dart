@@ -3,15 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/models/widgets/helper.dart';
 import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/signin.dart';
 import 'package:textme/pages/signup.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Fire {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseMessaging _messaging = FirebaseMessaging.instance;
   Helper _helper = Helper();
+  late String? token;
   late String verificationId, number;
 
   signIn(
@@ -19,22 +23,21 @@ class Fire {
     String email,
     String password,
   ) async {
+    _messaging.getToken().then((value) {
+      token = value;
+    });
     try {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then(
         (value) {
           if (value.user != null) {
-            _firestore
-                .collection("Users")
-                .doc(value.user!.uid)
-                .update({"lastSignIn": DateTime.now()}).whenComplete(
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-              ),
+            _firestore.collection("Users").doc(value.user!.uid).update({
+              "lastSignIn": DateTime.now(),
+              "msgToken": token,
+            }).whenComplete(
+              () => Navigator.push(context,
+                  SlidePageRoute(widget: HomePage(), direction: "right")),
             );
           }
         },
@@ -51,6 +54,9 @@ class Fire {
   Future signUp(
       BuildContext context, String name, String email, String password) async {
     try {
+      _messaging.getToken().then((value) {
+        token = value;
+      });
       if (email.endsWith("@gmail.com")) {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
@@ -62,16 +68,13 @@ class Fire {
             "password": password,
             "signUpTime": DateTime.now(),
             "lastSignIn": DateTime.now(),
+            "msgToken": token,
             "profilePic":
                 "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
           });
         }).whenComplete(() {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
+              context, SlidePageRoute(widget: HomePage(), direction: "right"));
         });
       } else {
         name = '';
@@ -82,19 +85,11 @@ class Fire {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignUp(),
-          ),
-        );
+            context, SlidePageRoute(widget: HomePage(), direction: "left"));
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignUp(),
-          ),
-        );
+            context, SlidePageRoute(widget: HomePage(), direction: "left"));
       }
     } catch (e) {
       print(e.toString());
@@ -111,6 +106,9 @@ class Fire {
 
   Future googleSignIn(BuildContext context) async {
     try {
+      _messaging.getToken().then((value) {
+        token = value;
+      });
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
@@ -129,25 +127,18 @@ class Fire {
                   "email_phone": googleUser.email,
                   "profilePic": googleUser.photoUrl,
                   "signUpTime": DateTime.now(),
+                  "msgToken": token,
                   "lastSignIn": DateTime.now()
                 },
-              ).whenComplete(() => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  ));
+              ).whenComplete(() => Navigator.push(context,
+                  SlidePageRoute(widget: HomePage(), direction: "right")));
             } else {
-              _firestore
-                  .collection("Users")
-                  .doc("${value.user!.uid}")
-                  .update({"lastSignIn": DateTime.now()}).whenComplete(
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                ),
+              _firestore.collection("Users").doc("${value.user!.uid}").update({
+                "lastSignIn": DateTime.now(),
+                "msgToken": token,
+              }).whenComplete(
+                () => Navigator.push(context,
+                    SlidePageRoute(widget: HomePage(), direction: "right")),
               );
             }
           }
@@ -155,140 +146,136 @@ class Fire {
       );
     } catch (e) {
       Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SignIn(),
-        ),
-      );
+          context, SlidePageRoute(widget: SignIn(), direction: "right"));
     }
   }
 
   Future phoneSignIn(
       BuildContext context, String? name, String code, String number) async {
-    TextEditingController _otp = TextEditingController();
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: code + number,
-      timeout: const Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        try {
-          Navigator.pop(context);
-          await _auth.signInWithCredential(credential).then((value) {
-            if (value.user != null) {
-              _firestore.collection("Users").doc(value.user!.uid).set(
-                {
-                  "id": value.user!.uid,
-                  "name": name,
-                  "email_phone": number,
-                  "lastSignIn": DateTime.now(),
-                  "profilePic":
-                      "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
-                },
-              ).whenComplete(
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                ),
-              );
-            }
-          });
-        } catch (e) {
-          print("varificationCompleted");
+    try {
+      _messaging.getToken().then((value) {
+        token = value;
+      });
+      TextEditingController _otp = TextEditingController();
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: code + number,
+        timeout: const Duration(seconds: 60),
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          try {
+            Navigator.pop(context);
+            await _auth.signInWithCredential(credential).then((value) {
+              if (value.user != null) {
+                _firestore.collection("Users").doc(value.user!.uid).set(
+                  {
+                    "id": value.user!.uid,
+                    "name": name,
+                    "email_phone": number,
+                    "lastSignIn": DateTime.now(),
+                    "msgToken": token,
+                    "profilePic":
+                        "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
+                  },
+                ).whenComplete(
+                  () => Navigator.push(context,
+                      SlidePageRoute(widget: HomePage(), direction: "right")),
+                );
+              }
+            });
+          } catch (e) {
+            print("varificationCompleted");
+            print(e.toString());
+          }
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (e.code == 'invalid-phone-number') {
+            print('The provided phone number is not valid.');
+          }
+          print("VarificationFailed");
           print(e.toString());
-        }
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          print('The provided phone number is not valid.');
-        }
-        print("VarificationFailed");
-        print(e.toString());
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  content: _helper.textField(false, TextInputType.number, _otp,
-                      null, "Enter your OTP", null),
-                  title: Text("OTP"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("cancle")),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          try {
-                            AuthCredential credential =
-                                PhoneAuthProvider.credential(
-                                    verificationId: verificationId,
-                                    smsCode: _otp.text.trim());
-                            _auth
-                                .signInWithCredential(credential)
-                                .then((value) {
-                              if (value.user != null) {
-                                if (value.additionalUserInfo!.isNewUser) {
-                                  _firestore
-                                      .collection("Users")
-                                      .doc(value.user!.uid)
-                                      .set(
-                                    {
-                                      "id": value.user!.uid,
-                                      "name": name,
-                                      "email_phone": number,
-                                      "signUpTime": DateTime.now(),
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    content: _helper.textField(false, TextInputType.number,
+                        _otp, null, "Enter your OTP", null),
+                    title: Text("OTP"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("cancle")),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            try {
+                              AuthCredential credential =
+                                  PhoneAuthProvider.credential(
+                                      verificationId: verificationId,
+                                      smsCode: _otp.text.trim());
+                              _auth
+                                  .signInWithCredential(credential)
+                                  .then((value) {
+                                if (value.user != null) {
+                                  if (value.additionalUserInfo!.isNewUser) {
+                                    _firestore
+                                        .collection("Users")
+                                        .doc(value.user!.uid)
+                                        .set(
+                                      {
+                                        "id": value.user!.uid,
+                                        "name": name,
+                                        "email_phone": number,
+                                        "signUpTime": DateTime.now(),
+                                        "lastSignIn": DateTime.now(),
+                                        "msgToken": token,
+                                        "profilePic":
+                                            "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
+                                      },
+                                    ).whenComplete(
+                                      () => Navigator.push(
+                                          context,
+                                          SlidePageRoute(
+                                              widget: HomePage(),
+                                              direction: "right")),
+                                    );
+                                  } else {
+                                    _firestore
+                                        .collection("Users")
+                                        .doc(value.user!.uid)
+                                        .update({
                                       "lastSignIn": DateTime.now(),
-                                      "profilePic":
-                                          "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
-                                    },
-                                  ).whenComplete(
-                                    () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => HomePage(),
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  _firestore
-                                      .collection("Users")
-                                      .doc(value.user!.uid)
-                                      .update({
-                                    "lastSignIn": DateTime.now()
-                                  }).whenComplete(() => Navigator.push(
+                                      "msgToken": token,
+                                    }).whenComplete(() => Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                              builder: (context) => HomePage(),
-                                            ),
-                                          ));
+                                            SlidePageRoute(
+                                                widget: HomePage(),
+                                                direction: "right")));
+                                  }
                                 }
-                              }
-                            });
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                        child: Text("Sign In"))
-                  ],
-                ));
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        verificationId = verificationId;
-      },
-    );
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
+                          },
+                          child: Text("Sign In"))
+                    ],
+                  ));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          verificationId = verificationId;
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future signOut(BuildContext context) async {
     await _auth.signOut().whenComplete(() {
       Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SignIn(),
-        ),
-      );
+          context, SlidePageRoute(widget: SignIn(), direction: "left"));
     });
   }
 }

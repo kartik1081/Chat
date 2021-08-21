@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:textme/models/services/fire.dart';
+import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/pages/room.dart';
 import 'package:textme/pages/setting.dart';
 import 'package:textme/pages/chat.dart';
@@ -62,8 +63,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                             value == 0
                                 ? Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (conter) => Setting()))
+                                    ScalePageRoute(
+                                        widget: Setting(), out: false),
+                                  )
                                 : _fire.signOut(context);
                           });
                         },

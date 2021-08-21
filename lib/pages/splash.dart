@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/signin.dart';
 
@@ -24,18 +25,10 @@ class _SplashState extends State<Splash> {
       _auth.authStateChanges().listen((event) {
         event != null
             ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-              )
+                context, SlidePageRoute(widget: HomePage(), direction: "right"))
             : event == null
-                ? Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SignIn(),
-                    ),
-                  )
+                ? Navigator.push(context,
+                    SlidePageRoute(widget: SignIn(), direction: "left"))
                 : Navigator.pop(context);
       });
     });

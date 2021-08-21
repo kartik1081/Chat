@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/pages/usersprofile.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bubble/bubble.dart';
@@ -51,11 +52,7 @@ class _ChatDetailState extends State<ChatDetail> {
           leading: IconButton(
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
+                    context, ScalePageRoute(widget: HomePage(), out: true));
               },
               icon: Icon(Icons.keyboard_arrow_left)),
           titleSpacing: 0,

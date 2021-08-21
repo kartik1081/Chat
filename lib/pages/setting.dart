@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:textme/models/services/pageroute.dart';
+import 'package:textme/pages/homepage.dart';
 
 class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);
@@ -8,6 +10,12 @@ class Setting extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Setting"),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context, ScalePageRoute(widget: HomePage(), out: true));
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

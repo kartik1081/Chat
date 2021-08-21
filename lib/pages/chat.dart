@@ -11,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:textme/models/services/pageroute.dart';
 
 import 'addstatus.dart';
 import 'chatdetail.dart';
@@ -345,16 +346,17 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                           onTap: () {
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ChatDetail(
-                                                  name: snapshot1.data["name"],
-                                                  userId: snapshot1.data["id"],
-                                                  group: false,
-                                                  profilePic: snapshot1
-                                                      .data["profilePic"],
-                                                ),
-                                              ),
+                                              ScalePageRoute(
+                                                  widget: ChatDetail(
+                                                    name:
+                                                        snapshot1.data["name"],
+                                                    userId:
+                                                        snapshot1.data["id"],
+                                                    group: false,
+                                                    profilePic: snapshot1
+                                                        .data["profilePic"],
+                                                  ),
+                                                  out: false),
                                             );
                                           },
                                           child: Container(
