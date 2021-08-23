@@ -6,9 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:textme/models/widgets/helper.dart';
+import 'package:textme/models/services/pageroute.dart';
+import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/pages/homepage.dart';
 
 import 'chatdetail.dart';
@@ -35,13 +35,10 @@ class _CreateRoomState extends State<CreateRoom> {
   String roomPic = '';
   late File _image;
   // late String profilePic;
-  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -226,7 +223,6 @@ class _CreateRoomState extends State<CreateRoom> {
                                     profilePic: roomPic),
                               ),
                             );
-                            _showToast("Friends are added to room");
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 20.0),
@@ -321,7 +317,6 @@ class _CreateRoomState extends State<CreateRoom> {
                             if (value.state == TaskState.running) {}
                             if (value.state == TaskState.success) {
                               value.ref.getDownloadURL().then((value) async {
-                                _showToast("Image Picked successfully.!");
                                 setState(() {
                                   roomPic = value;
                                 });
@@ -333,9 +328,7 @@ class _CreateRoomState extends State<CreateRoom> {
                             }
                           });
                           print("End");
-                        } else {
-                          _showToast("Please pick a picture for room");
-                        }
+                        } else {}
                       },
                       child: Container(
                         height: 40.0,
@@ -389,13 +382,11 @@ class _CreateRoomState extends State<CreateRoom> {
                   InkWell(
                     onTap: () {
                       if (_name.text == '') {
-                        _showToast("Please enter name");
                       } else {
                         setState(() {
                           roomName = _name.text;
                           named = true;
                         });
-                        _showToast("Named Successfully");
                         _firestore
                             .collection("Rooms")
                             .doc(widget.uuid)
@@ -437,36 +428,6 @@ class _CreateRoomState extends State<CreateRoom> {
       print(e.toString());
     }
   }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.grey.withOpacity(0.5),
-        ),
-        child: Text(
-          msg,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-
-    fToast.showToast(
-      child: toast,
-      toastDuration: Duration(seconds: 2),
-      positionedToastBuilder: (context, child) {
-        return Positioned(
-          child: child,
-          top: MediaQuery.of(context).size.height * 0.8,
-          left: 0.0,
-        );
-      },
-    );
-  }
 }
 
 // ignore: must_be_immutable
@@ -493,13 +454,10 @@ class _ListItemState extends State<ListItem>
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool added = false;
-  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -512,16 +470,15 @@ class _ListItemState extends State<ListItem>
     return InkWell(
       onTap: () {
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatDetail(
-              name: widget.name,
-              userId: widget.id,
-              group: false,
-              profilePic: widget.roomPic,
-            ),
-          ),
-        );
+            context,
+            ScalePageRoute(
+                widget: ChatDetail(
+                  name: widget.name,
+                  userId: widget.id,
+                  group: false,
+                  profilePic: widget.roomPic,
+                ),
+                out: false));
       },
       child: Container(
         height: widget.id != _auth.currentUser!.uid ? 75.0 : 0.0,
@@ -587,10 +544,6 @@ class _ListItemState extends State<ListItem>
                               .collection("InRoom")
                               .doc(widget.uuid)
                               .delete();
-
-                      added
-                          ? _showToast(widget.name, "Added")
-                          : _showToast(widget.name, "Removed");
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
@@ -619,36 +572,6 @@ class _ListItemState extends State<ListItem>
           ),
         ),
       ),
-    );
-  }
-
-  _showToast(String name, String msg) {
-    Widget toast = Container(
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.grey.withOpacity(0.5),
-        ),
-        child: Text(
-          name + " " + msg,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-
-    fToast.showToast(
-      child: toast,
-      toastDuration: Duration(seconds: 2),
-      positionedToastBuilder: (context, child) {
-        return Positioned(
-          child: child,
-          top: MediaQuery.of(context).size.height * 0.8,
-          left: 0.0,
-        );
-      },
     );
   }
 }

@@ -6,9 +6,8 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
-import 'package:textme/models/widgets/helper.dart';
+import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/models/services/fire.dart';
 
 import 'signin.dart';
@@ -22,7 +21,6 @@ class _SignUpState extends State<SignUp> {
   late bool _loading;
   Fire _fire = Fire();
   bool _withEmail = true;
-  late FToast fToast;
   Icon _with = Icon(
     Icons.phone_android,
     color: Colors.black,
@@ -49,28 +47,24 @@ class _SignUpState extends State<SignUp> {
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
           print(net);
           break;
         case ConnectivityResult.wifi:
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
           print(net);
           break;
         default:
           setState(() {
             net = false;
           });
-          _showToast("Check connection");
           print(net);
           break;
       }
     });
     _loading = false;
-    fToast = FToast();
-    fToast.init(context);
+
     super.initState();
   }
 
@@ -316,12 +310,7 @@ class _SignUpState extends State<SignUp> {
                                                     _loading = false;
                                                   });
                                                 });
-                                              } else {
-                                                _showToast(
-                                                    "Enter name, email and password");
                                               }
-                                            } else {
-                                              _showToast("Check connection");
                                             }
                                           } else if (!_withEmail) {
                                             if (net) {
@@ -332,12 +321,7 @@ class _SignUpState extends State<SignUp> {
                                                     name.text.trim(),
                                                     cCode.trim(),
                                                     email_phone.text.trim());
-                                              } else {
-                                                _showToast(
-                                                    "Enter name and number");
                                               }
-                                            } else {
-                                              _showToast("Check connection");
                                             }
                                           }
                                         },
@@ -686,22 +670,6 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
       ),
-    );
-  }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.white,
-        ),
-        child: Text(msg));
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
     );
   }
 }

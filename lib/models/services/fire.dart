@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/models/widgets/helper.dart';
+import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/signin.dart';
-import 'package:textme/pages/signup.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Fire {

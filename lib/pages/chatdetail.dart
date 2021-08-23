@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/pages/usersprofile.dart';
 import 'package:uuid/uuid.dart';
@@ -33,13 +32,10 @@ class _ChatDetailState extends State<ChatDetail> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   late var uuid;
-  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -51,8 +47,8 @@ class _ChatDetailState extends State<ChatDetail> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Navigator.push(
-                    context, ScalePageRoute(widget: HomePage(), out: true));
+                Navigator.push(context,
+                    SlidePageRoute(widget: HomePage(), direction: "left"));
               },
               icon: Icon(Icons.keyboard_arrow_left)),
           titleSpacing: 0,

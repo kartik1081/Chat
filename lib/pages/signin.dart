@@ -7,10 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
-import 'package:textme/models/widgets/helper.dart';
+import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/models/services/fire.dart';
+import 'package:textme/models/widgets/shimmer.dart';
 
 import 'signup.dart';
 
@@ -28,8 +29,8 @@ class _SignInState extends State<SignIn> {
     Icons.phone_android,
     color: Colors.black,
   );
-  late FToast fToast;
   bool net = false;
+  MyShimmer _shimmer = MyShimmer();
   Helper _helper = Helper();
   String sEmailPhone = '', sPassword = '', sOtp = '';
   String cCode = "+91";
@@ -50,28 +51,24 @@ class _SignInState extends State<SignIn> {
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
           print(net);
           break;
         case ConnectivityResult.wifi:
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
           print(net);
           break;
         default:
           setState(() {
             net = false;
           });
-          _showToast("Check connection");
           print(net);
           break;
       }
     });
     _loading = false;
-    fToast = FToast();
-    fToast.init(context);
+    ;
   }
 
   @override
@@ -96,9 +93,7 @@ class _SignInState extends State<SignIn> {
         builder: (context, orientation, deviceType) => Scaffold(
           // backgroundColor: Color(0xFF6E00F3),
           body: _loading
-              ? Center(
-                  child: _helper.loadingShimmer(),
-                )
+              ? Center(child: _shimmer)
               : SizerUtil.orientation == Orientation.portrait
                   ? Container(
                       height: height,
@@ -298,12 +293,8 @@ class _SignInState extends State<SignIn> {
                                                       _loading = false;
                                                     });
                                                   });
-                                                } else {
-                                                  _showToast("Check details");
-                                                }
-                                              } else {
-                                                _showToast("Check connection");
-                                              }
+                                                } else {}
+                                              } else {}
                                             } else if (!_withEmail) {
                                               if (net) {
                                                 if (cCode.isNotEmpty &&
@@ -314,13 +305,8 @@ class _SignInState extends State<SignIn> {
                                                       null,
                                                       cCode.trim(),
                                                       email_phone.text.trim());
-                                                } else {
-                                                  _showToast(
-                                                      "Please enter number");
-                                                }
-                                              } else {
-                                                _showToast("Check connection");
-                                              }
+                                                } else {}
+                                              } else {}
                                             }
                                           },
                                           child: Text(_withEmail
@@ -364,8 +350,6 @@ class _SignInState extends State<SignIn> {
                                                         color: Colors.black,
                                                       );
                                                     });
-                                                    _showToast(
-                                                        "Sign In with number");
                                                   } else if (!_withEmail) {
                                                     setState(() {
                                                       _withEmail = true;
@@ -374,8 +358,6 @@ class _SignInState extends State<SignIn> {
                                                         color: Colors.black,
                                                       );
                                                     });
-                                                    _showToast(
-                                                        "Sign In with email");
                                                   }
                                                 });
                                               },
@@ -402,10 +384,7 @@ class _SignInState extends State<SignIn> {
                                                       _loading = false;
                                                     });
                                                   });
-                                                } else {
-                                                  _showToast(
-                                                      "Check connection");
-                                                }
+                                                } else {}
                                               },
                                               child: Image.asset(
                                                   "assets/google.jpg"),
@@ -676,22 +655,6 @@ class _SignInState extends State<SignIn> {
                     ),
         ),
       ),
-    );
-  }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.white,
-        ),
-        child: Text(msg));
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
     );
   }
 }

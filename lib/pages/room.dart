@@ -4,6 +4,7 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/pages/createroom.dart';
 import 'package:uuid/uuid.dart';
 
@@ -91,17 +92,18 @@ class _ChatRoomState extends State<ChatRoom> {
                                       },
                                       onTap: () {
                                         Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ChatDetail(
-                                              name: snapshot1.data["roomName"],
-                                              userId: snapshot1.data["roomID"],
-                                              group: true,
-                                              profilePic:
-                                                  snapshot1.data["roomPic"],
-                                            ),
-                                          ),
-                                        );
+                                            context,
+                                            ScalePageRoute(
+                                                widget: ChatDetail(
+                                                  name: snapshot1
+                                                      .data["roomName"],
+                                                  userId:
+                                                      snapshot1.data["roomID"],
+                                                  group: true,
+                                                  profilePic:
+                                                      snapshot1.data["roomPic"],
+                                                ),
+                                                out: false));
                                       },
                                       child: Container(
                                         height: 80.0,

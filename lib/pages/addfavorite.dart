@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'chatdetail.dart';
 
@@ -17,13 +16,10 @@ class AddFavorite extends StatefulWidget {
 class _AddFavoriteState extends State<AddFavorite> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -221,11 +217,7 @@ class _AddFavoriteState extends State<AddFavorite> {
                                                                           "favorite": snapshot.data["favorite"]
                                                                               ? false
                                                                               : true
-                                                                        }).whenComplete(() {
-                                                                          !snapshot.data["favorite"]
-                                                                              ? _showToast("Favorite")
-                                                                              : _showToast("Unfavorite");
-                                                                        });
+                                                                        }).whenComplete(() {});
                                                                       },
                                                                       icon:
                                                                           Icon(
@@ -280,22 +272,6 @@ class _AddFavoriteState extends State<AddFavorite> {
           ),
         ),
       ),
-    );
-  }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.white,
-        ),
-        child: Text(msg));
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
     );
   }
 }

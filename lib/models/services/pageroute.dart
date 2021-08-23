@@ -8,7 +8,7 @@ class SlidePageRoute extends PageRouteBuilder {
           pageBuilder: (context, animation, secondaryAnimation) {
             return widget;
           },
-          transitionDuration: Duration(milliseconds: 1000),
+          transitionDuration: Duration(milliseconds: 300),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             switch (direction) {
               case "right":

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:textme/pages/homepage.dart';
 
 // ignore: must_be_immutable
@@ -24,11 +23,8 @@ class _UsersProfileState extends State<UsersProfile> {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late FToast fToast;
   @override
   void initState() {
-    fToast = FToast();
-    fToast.init(context);
     super.initState();
   }
 
@@ -68,7 +64,6 @@ class _UsersProfileState extends State<UsersProfile> {
                                 .collection("ChatWith")
                                 .doc(widget.userId)
                                 .delete();
-                            _showToast("Removed");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -103,7 +98,6 @@ class _UsersProfileState extends State<UsersProfile> {
                               "time": DateTime.now(),
                               "id": widget.userId,
                             });
-                            _showToast("Removed");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -132,32 +126,5 @@ class _UsersProfileState extends State<UsersProfile> {
         ],
       ),
     );
-  }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-      width: 110.0,
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: Colors.grey.withOpacity(0.5),
-      ),
-      child: Center(
-        child: Text(
-          msg,
-        ),
-      ),
-    );
-
-    fToast.showToast(
-        child: toast,
-        toastDuration: Duration(seconds: 2),
-        positionedToastBuilder: (context, child) {
-          return Positioned(
-            child: child,
-            top: MediaQuery.of(context).size.height * 0.8,
-            left: (MediaQuery.of(context).size.width - 100.0) * 0.5,
-          );
-        });
   }
 }

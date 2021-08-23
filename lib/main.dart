@@ -3,33 +3,27 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sizer/sizer.dart';
+import 'package:textme/models/services/localnotifiacation.dart';
+import 'package:textme/models/services/pageroute.dart';
+import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/splash.dart';
 
-late AndroidNotificationChannel channel = const AndroidNotificationChannel(
-  'high_importance_channel', // id
-  'High Importance Notifications', // title
+AndroidNotificationChannel channel = const AndroidNotificationChannel(
+  'ChannelId', // id
+  'ChannelId', // title
   'This channel is used for important notifications.', // description
   importance: Importance.high,
 );
 
-late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+//Receive message while app is on background mode...
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
   print(message.data);
-  flutterLocalNotificationsPlugin.show(
-      message.data.hashCode,
-      message.data['title'],
-      message.data['body'],
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channel.description,
-        ),
-      ));
+  LocalNotification.display(message, channel);
 }
 
 Future<void> main() async {
@@ -58,44 +52,31 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    var initialzationSettingsAndroid =
-        AndroidInitializationSettings("@mipmap/launcher_icon");
-    var initializationSettings =
-        InitializationSettings(android: initialzationSettingsAndroid);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // open while app is terminated...
+    FirebaseMessaging.instance.getInitialMessage().then((value) {
+      if (value != null) {
+        Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
+      }
+    });
+
+    //works when app is on forground...
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                playSound: true,
-                icon: '@mipmap/launcher_icon',
-              ),
-            ));
+        print(message.notification!.title);
+        print(message.notification!.body);
+        LocalNotification.display(message, channel);
       }
     });
+
+    // works when app is on background but not terminated...
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       RemoteNotification? notification = event.notification;
       AndroidNotification? android = event.notification?.android;
       if (notification != null && android != null) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text(notification.title.toString()),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: [Text(notification.body.toString())],
-                    ),
-                  ),
-                ));
+        Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
       }
     });
 

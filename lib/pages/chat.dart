@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:textme/models/services/pageroute.dart';
@@ -32,7 +31,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   FirebaseMessaging _messaging = FirebaseMessaging.instance;
   late int item;
   late File _image;
-  late FToast fToast;
   late String url;
   bool net = false;
 
@@ -49,27 +47,22 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
           setState(() {
             net = true;
           });
-          showToast("Connection successfully");
           print(net);
           break;
         case ConnectivityResult.wifi:
           setState(() {
             net = true;
           });
-          showToast("Connection successfully");
           print(net);
           break;
         default:
           setState(() {
             net = false;
           });
-          showToast("Check connection");
           print(net);
           break;
       }
     });
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -533,21 +526,5 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  showToast(String msg) {
-    Widget toast = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.white,
-        ),
-        child: Text(msg));
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
-    );
   }
 }

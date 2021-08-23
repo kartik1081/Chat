@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/pages/favorites.dart';
 import 'package:textme/pages/signin.dart';
@@ -24,7 +23,6 @@ class _ProfileState extends State<Profile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Fire _fire = Fire();
-  late FToast fToast;
   bool net = false;
 
   @override
@@ -36,27 +34,22 @@ class _ProfileState extends State<Profile> {
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
           print(net);
           break;
         case ConnectivityResult.wifi:
           setState(() {
             net = true;
           });
-          _showToast("Connection successfully");
           print(net);
           break;
         default:
           setState(() {
             net = false;
           });
-          _showToast("Check connection");
           print(net);
           break;
       }
     });
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -81,9 +74,7 @@ class _ProfileState extends State<Profile> {
                           builder: (context) => SignIn(),
                         ),
                       ));
-                } else {
-                  _showToast("Check connections");
-                }
+                } else {}
               } else {
                 null;
               }
@@ -214,22 +205,6 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       ),
-    );
-  }
-
-  _showToast(String msg) {
-    Widget toast = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.white.withOpacity(0.65),
-        ),
-        child: Text(msg));
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
     );
   }
 }

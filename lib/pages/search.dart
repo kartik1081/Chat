@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:textme/models/services/pageroute.dart';
 import 'package:uuid/uuid.dart';
 
 import 'chatdetail.dart';
@@ -269,13 +269,11 @@ class _ListItemState extends State<ListItem>
   bool added;
   // ignore: non_constant_identifier_names
   String add_remove;
-  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
-    fToast.init(context);
+
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 50),
@@ -322,16 +320,15 @@ class _ListItemState extends State<ListItem>
     return InkWell(
       onTap: () {
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatDetail(
-              name: widget.name,
-              userId: widget.id,
-              group: false,
-              profilePic: widget.profilePic,
-            ),
-          ),
-        );
+            context,
+            ScalePageRoute(
+                widget: ChatDetail(
+                  name: widget.name,
+                  userId: widget.id,
+                  group: false,
+                  profilePic: widget.profilePic,
+                ),
+                out: false));
       },
       child: Container(
         height: widget.id != _auth.currentUser!.uid ? 75.0 : 0.0,
@@ -384,7 +381,6 @@ class _ListItemState extends State<ListItem>
                             .collection("ChatWith")
                             .doc(widget.id)
                             .delete();
-                        _showToast(widget.name, "Removed");
                       } else if (!added) {
                         await _firestore
                             .collection("Users")
@@ -398,7 +394,6 @@ class _ListItemState extends State<ListItem>
                           "id": widget.id,
                           "favorite": false
                         });
-                        _showToast(widget.name, "Added");
                       }
 
                       setState(() {
@@ -433,36 +428,6 @@ class _ListItemState extends State<ListItem>
           ),
         ),
       ),
-    );
-  }
-
-  _showToast(String name, String msg) {
-    Widget toast = Container(
-      alignment: Alignment.center,
-      width: MediaQuery.of(context).size.width,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.grey.withOpacity(0.5),
-        ),
-        child: Text(
-          name + " " + msg,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-      ),
-    );
-
-    fToast.showToast(
-      child: toast,
-      toastDuration: Duration(seconds: 2),
-      positionedToastBuilder: (context, child) {
-        return Positioned(
-          child: child,
-          top: MediaQuery.of(context).size.height * 0.8,
-          left: 0.0,
-        );
-      },
     );
   }
 }
