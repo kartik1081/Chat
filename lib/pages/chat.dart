@@ -460,14 +460,18 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                             ),
                                           ),
                                         )
-                                      : Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4.0, horizontal: 8.0),
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            color: Color(0xFF31444B),
+                                      : Shimmer.fromColors(
+                                          baseColor: Color(0xFF31444B),
+                                          highlightColor: Color(0xFF618A99),
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 8.0),
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              color: Color(0xFF31444B),
+                                            ),
                                           ),
                                         );
                                 },

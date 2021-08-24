@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +54,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    // Save the initial token to the database
+    saveTokenToDatabase();
+
+    // Any time the token refreshes, store this in the database too.
+
+    FirebaseMessaging.instance.onTokenRefresh.listen((event) {});
 
     // open while app is terminated...
     FirebaseMessaging.instance.getInitialMessage().then((value) {
@@ -79,8 +87,6 @@ class _MyAppState extends State<MyApp> {
         Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
       }
     });
-
-    getToken();
   }
 
   @override
@@ -114,8 +120,13 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    print(token);
+  saveTokenToDatabase() async {
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      "msgToken":
+          FieldValue.arrayUnion([await FirebaseMessaging.instance.getToken()])
+    });
   }
 }

@@ -31,9 +31,9 @@ class LocalNotification {
       final id = DateTime.now().microsecondsSinceEpoch ~/ 1000;
 
       await _plugin.show(
-          message.notification.hashCode,
-          message.notification!.title,
-          message.notification!.body,
+          message.data.hashCode,
+          message.data["title"],
+          message.data["body"],
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,

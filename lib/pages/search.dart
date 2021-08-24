@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:uuid/uuid.dart';
 
@@ -201,14 +202,20 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                                               add_remove: "Add",
                                             );
                                     } else {
-                                      return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 4.0, horizontal: 8.0),
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          color: Color(0xFF31444B),
+                                      return Shimmer.fromColors(
+                                        baseColor: Color(0xFF31444B),
+                                        highlightColor: Color(0xFF618A99),
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                            vertical: 4.0,
+                                            horizontal: 8.0,
+                                          ),
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            color: Color(0xFF31444B),
+                                          ),
                                         ),
                                       );
                                     }
