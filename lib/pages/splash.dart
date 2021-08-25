@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/pages/homepage.dart';
 import 'package:textme/pages/signin.dart';

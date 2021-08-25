@@ -504,6 +504,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   Future getImage() async {
     try {
       final pickedFile = await ImagePicker()
+          // ignore: deprecated_member_use
           .getImage(source: ImageSource.gallery, imageQuality: 100);
       if (pickedFile != null) {
         setState(() {

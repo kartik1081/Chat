@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:story_view/story_view.dart';
 
 import 'homepage.dart';
 
+// ignore: must_be_immutable
 class StatusDetail extends StatefulWidget {
   StatusDetail({Key? key, required this.userID, required this.profilePic})
       : super(key: key);

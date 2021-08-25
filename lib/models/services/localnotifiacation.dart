@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -28,8 +26,6 @@ class LocalNotification {
   static void display(
       RemoteMessage message, AndroidNotificationChannel channel) async {
     try {
-      final id = DateTime.now().microsecondsSinceEpoch ~/ 1000;
-
       await _plugin.show(
           message.data.hashCode,
           message.data["title"],
@@ -41,7 +37,6 @@ class LocalNotification {
               channel.description,
             ),
           ));
-      ;
     } catch (e) {
       print(e.toString());
     }

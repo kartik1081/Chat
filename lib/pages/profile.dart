@@ -76,6 +76,7 @@ class _ProfileState extends State<Profile> {
                       ));
                 } else {}
               } else {
+                // ignore: unnecessary_statements
                 null;
               }
             },

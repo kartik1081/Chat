@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/pages/homepage.dart';
 
 import 'chatdetail.dart';
@@ -417,6 +416,7 @@ class _CreateRoomState extends State<CreateRoom> {
   Future getImage() async {
     try {
       final pickedFile = await ImagePicker()
+          // ignore: deprecated_member_use
           .getImage(source: ImageSource.gallery, imageQuality: 100);
       if (pickedFile != null) {
         setState(() {

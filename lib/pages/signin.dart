@@ -6,8 +6,6 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/models/services/fire.dart';
@@ -68,7 +66,6 @@ class _SignInState extends State<SignIn> {
       }
     });
     _loading = false;
-    ;
   }
 
   @override

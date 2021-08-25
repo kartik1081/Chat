@@ -239,6 +239,7 @@ class _EditProfileState extends State<EditProfile> {
   Future getImage() async {
     try {
       final pickedFile = await ImagePicker()
+          // ignore: deprecated_member_use
           .getImage(source: ImageSource.gallery, imageQuality: 30);
       if (pickedFile != null) {
         setState(() {

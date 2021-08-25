@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/pages/addfavorite.dart';
 
-import 'chat.dart';
 import 'chatdetail.dart';
 
 class Favorites extends StatefulWidget {
@@ -27,7 +24,6 @@ class _FavoritesState extends State<Favorites> {
   Widget build(BuildContext context) {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     FirebaseAuth _auth = FirebaseAuth.instance;
-    Chat _chat = Chat();
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
