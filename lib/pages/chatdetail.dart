@@ -362,45 +362,55 @@ class _ChatDetailState extends State<ChatDetail> {
                                       widget.userId)
                                   .doc(uuid.toString())
                                   .set({
-                                  "msg": msg.text,
-                                  "msgID": uuid.toString(),
-                                  "stared": false,
-                                  "deleted": false,
-                                  "sendBy": _auth.currentUser!.uid,
-                                  "time": DateTime.now(),
-                                }).whenComplete(() async {
-                                  await _firestore
-                                      .collection("Chats")
-                                      .doc(widget.userId)
-                                      .collection(widget.userId +
-                                          "_" +
-                                          _auth.currentUser!.uid)
-                                      .doc(uuid.toString())
-                                      .set({
                                     "msg": msg.text,
                                     "msgID": uuid.toString(),
                                     "stared": false,
                                     "deleted": false,
                                     "sendBy": _auth.currentUser!.uid,
                                     "time": DateTime.now(),
+                                  })
+                                  .whenComplete(() async {
+                                    await _firestore
+                                        .collection("Chats")
+                                        .doc(widget.userId)
+                                        .collection(widget.userId +
+                                            "_" +
+                                            _auth.currentUser!.uid)
+                                        .doc(uuid.toString())
+                                        .set({
+                                      "msg": msg.text,
+                                      "msgID": uuid.toString(),
+                                      "stared": false,
+                                      "deleted": false,
+                                      "sendBy": _auth.currentUser!.uid,
+                                      "time": DateTime.now(),
+                                    });
+                                  })
+                                  .whenComplete(() => _firestore
+                                          .collection("Notifications")
+                                          .add({
+                                        "msg": msg.text,
+                                        "sendBy": _auth.currentUser!.uid,
+                                        "sendTo": widget.userId
+                                      }))
+                                  .whenComplete(() {
+                                    setState(() {
+                                      msg.clear();
+                                    });
+                                  })
+                                  .whenComplete(() async {
+                                    await _firestore
+                                        .collection("Users")
+                                        .doc(_auth.currentUser!.uid)
+                                        .collection("ChatWith")
+                                        .doc(widget.userId)
+                                        .set({
+                                      "name": widget.name,
+                                      "profilePic": widget.profilePic,
+                                      "time": DateTime.now(),
+                                      "id": widget.userId,
+                                    });
                                   });
-                                }).whenComplete(() {
-                                  setState(() {
-                                    msg.clear();
-                                  });
-                                }).whenComplete(() async {
-                                  await _firestore
-                                      .collection("Users")
-                                      .doc(_auth.currentUser!.uid)
-                                      .collection("ChatWith")
-                                      .doc(widget.userId)
-                                      .set({
-                                    "name": widget.name,
-                                    "profilePic": widget.profilePic,
-                                    "time": DateTime.now(),
-                                    "id": widget.userId,
-                                  });
-                                });
                         } catch (e) {
                           print(e.toString());
                         }
