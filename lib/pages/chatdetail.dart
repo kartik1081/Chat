@@ -103,39 +103,39 @@ class _ChatDetailState extends State<ChatDetail> {
               ),
             ],
           ),
-          actions: [
-            !widget.group
-                ? StreamBuilder<dynamic>(
-                    stream: _firestore
-                        .collection("Users")
-                        .doc(_auth.currentUser!.uid)
-                        .collection("ChatWith")
-                        .doc(widget.userId)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? IconButton(
-                              onPressed: () {
-                                _firestore
-                                    .collection("Users")
-                                    .doc(_auth.currentUser!.uid)
-                                    .collection("ChatWith")
-                                    .doc(widget.userId)
-                                    .update({
-                                  "favorite":
-                                      snapshot.data["favorite"] ? false : true
-                                });
-                              },
-                              icon: Icon(
-                                Icons.favorite,
-                                color: snapshot.data["favorite"]
-                                    ? Colors.red
-                                    : Colors.grey,
-                              ))
-                          : Container();
-                    })
-                : Container()
-          ],
+          // actions: [
+          //   !widget.group
+          //       ? StreamBuilder<dynamic>(
+          //           stream: _firestore
+          //               .collection("Users")
+          //               .doc(_auth.currentUser!.uid)
+          //               .collection("ChatWith")
+          //               .doc(widget.userId)
+          //               .snapshots(),
+          //           builder: (context, snapshot) {
+          //             return snapshot.hasData
+          //                 ? IconButton(
+          //                     onPressed: () {
+          //                       _firestore
+          //                           .collection("Users")
+          //                           .doc(_auth.currentUser!.uid)
+          //                           .collection("ChatWith")
+          //                           .doc(widget.userId)
+          //                           .update({
+          //                         "favorite":
+          //                             snapshot.data["favorite"] ? false : true
+          //                       });
+          //                     },
+          //                     icon: Icon(
+          //                       Icons.favorite,
+          //                       color: snapshot.data["favorite"]
+          //                           ? Colors.red
+          //                           : Colors.grey,
+          //                     ))
+          //                 : Container();
+          //           })
+          //       : Container()
+          // ],
         ),
         body: Column(
           children: [
@@ -349,6 +349,9 @@ class _ChatDetailState extends State<ChatDetail> {
                                   "sendBy": _auth.currentUser!.uid,
                                   "stared": false,
                                   "deleted": false,
+                                }).whenComplete(() {
+                                  _firestore.collection("Notifications").add(
+                                      {"msg": msg.text, "room": widget.userId});
                                 }).whenComplete(() {
                                   setState(() {
                                     msg.clear();
