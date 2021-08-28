@@ -1,63 +1,57 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:textme/pages/addfavorite.dart';
+import 'package:textme/models/services/pageroute.dart';
+import 'package:uuid/uuid.dart';
 
 import 'chatdetail.dart';
+import 'createroom.dart';
 
-class Favorites extends StatefulWidget {
-  const Favorites({Key? key}) : super(key: key);
+class ChatRoom extends StatefulWidget {
+  const ChatRoom({Key? key}) : super(key: key);
 
   @override
-  _FavoritesState createState() => _FavoritesState();
+  _ChatRoomState createState() => _ChatRoomState();
 }
 
-class _FavoritesState extends State<Favorites> {
+class _ChatRoomState extends State<ChatRoom> {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  late var uuid;
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      uuid = Uuid().v1();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    return WillPopScope(
-      onWillPop: () async => true,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Favorites"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddFavorite()));
-                },
-                icon: Icon(Icons.add))
-          ],
-        ),
-        body: Container(
-          child: StreamBuilder<dynamic>(
-            stream: _firestore
-                .collection("Users")
-                .doc(_auth.currentUser!.uid)
-                .collection("ChatWith")
-                .where("favorite", isEqualTo: true)
-                .snapshots(),
-            builder: (context, snapshot0) {
-              if (snapshot0.hasData) {
-                return snapshot0.data.docs.length != 0
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: snapshot0.data.docs.length,
-                        itemBuilder: (context, index) {
-                          return StreamBuilder<dynamic>(
+    return Scaffold(
+      body: Container(
+        child: StreamBuilder<dynamic>(
+          stream: _firestore
+              .collection("Users")
+              .doc(_auth.currentUser!.uid)
+              .collection("InRoom")
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data.docs.length != 0
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        return StreamBuilder<dynamic>(
                             stream: _firestore
-                                .collection("Users")
-                                .doc(snapshot0.data.docs[index]["id"])
+                                .collection("Rooms")
+                                .doc(snapshot.data.docs[index]["id"])
                                 .snapshots(),
                             builder: (context, snapshot1) {
                               return snapshot1.hasData
@@ -68,7 +62,7 @@ class _FavoritesState extends State<Favorites> {
                                             builder: (context) => AlertDialog(
                                                   title: Text("Alert"),
                                                   content: Text(
-                                                      "Want to remove from chatlist?"),
+                                                      "Want to exit from this group?"),
                                                   actions: [
                                                     TextButton(
                                                       onPressed: () =>
@@ -85,35 +79,34 @@ class _FavoritesState extends State<Favorites> {
                                                                 .currentUser!
                                                                 .uid)
                                                             .collection(
-                                                                "ChatWith")
-                                                            .doc(snapshot1
-                                                                .data["id"])
+                                                                "InRoom")
+                                                            .doc(snapshot.data
+                                                                    .docs[index]
+                                                                ["id"])
                                                             .delete();
                                                       },
-                                                      child: Text("ok"),
+                                                      child: Text("delete"),
                                                     ),
                                                   ],
                                                 ));
                                       },
                                       onTap: () {
                                         Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ChatDetail(
-                                              name: snapshot1.data["name"],
-                                              userId: snapshot1.data["id"],
-                                              group: false,
-                                              profilePic:
-                                                  snapshot1.data["profilePic"],
-                                            ),
-                                          ),
-                                        );
+                                            context,
+                                            ScalePageRoute(
+                                                widget: ChatDetail(
+                                                  name: snapshot1
+                                                      .data["roomName"],
+                                                  userId:
+                                                      snapshot1.data["roomID"],
+                                                  group: true,
+                                                  profilePic:
+                                                      snapshot1.data["roomPic"],
+                                                ),
+                                                out: false));
                                       },
                                       child: Container(
-                                        height: snapshot1.data["id"] !=
-                                                _auth.currentUser!.uid
-                                            ? 80.0
-                                            : 0.0,
+                                        height: 80.0,
                                         width:
                                             MediaQuery.of(context).size.width,
                                         child: Padding(
@@ -131,15 +124,15 @@ class _FavoritesState extends State<Favorites> {
                                                         BorderRadius.circular(
                                                             100),
                                                     child: snapshot1
-                                                            .data["profilePic"]
+                                                            .data["roomPic"]
                                                             .isNotEmpty
                                                         ? CachedNetworkImage(
                                                             height: 49,
                                                             width: 49,
                                                             fit: BoxFit.cover,
-                                                            imageUrl: snapshot1
-                                                                    .data[
-                                                                "profilePic"],
+                                                            imageUrl:
+                                                                snapshot1.data[
+                                                                    "roomPic"],
                                                             placeholder:
                                                                 (context, url) {
                                                               return Container(
@@ -169,7 +162,7 @@ class _FavoritesState extends State<Favorites> {
                                                       children: [
                                                         Text(
                                                           snapshot1
-                                                              .data["name"],
+                                                              .data["roomName"],
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -183,24 +176,15 @@ class _FavoritesState extends State<Favorites> {
                                                       ],
                                                     ),
                                                   ),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        _firestore
-                                                            .collection("Users")
-                                                            .doc(_auth
-                                                                .currentUser!
-                                                                .uid)
-                                                            .collection(
-                                                                "ChatWith")
-                                                            .doc(snapshot1
-                                                                .data["id"])
-                                                            .update({
-                                                          "favorite": false
-                                                        }).whenComplete(() {});
-                                                      },
-                                                      icon: Icon(Icons.delete,
-                                                          color:
-                                                              Colors.redAccent))
+                                                  Text(
+                                                    DateTimeFormat.format(
+                                                        snapshot1.data["time"]
+                                                            .toDate(),
+                                                        format: 'H:i'),
+                                                    style: TextStyle(
+                                                        color: Colors.white60,
+                                                        fontSize: 11.5),
+                                                  ),
                                                 ],
                                               ),
                                               Divider()
@@ -219,27 +203,39 @@ class _FavoritesState extends State<Favorites> {
                                         color: Color(0xFF31444B),
                                       ),
                                     );
-                            },
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Text(
-                          "Add user to favorite list",
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white.withOpacity(0.3),
-                          ),
+                            });
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        "Create room",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white.withOpacity(0.3),
                         ),
-                      );
-              } else {
-                return SpinKitFadingCircle(
-                  color: Color(0xFF2EF7F7),
-                );
-              }
-            },
-          ),
+                      ),
+                    );
+            } else {
+              return SpinKitFadingCircle(
+                color: Color(0xFF2EF7F7),
+                size: 50,
+              );
+            }
+          },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateRoom(
+                      uuid: uuid.toString(),
+                    ),
+                fullscreenDialog: true),
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

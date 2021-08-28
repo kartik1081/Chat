@@ -4,7 +4,7 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:textme/pages/chatdetail.dart';
+import 'package:textme/presentation/pages/chatdetail.dart';
 
 class SearchChat extends StatefulWidget {
   const SearchChat({Key? key}) : super(key: key);

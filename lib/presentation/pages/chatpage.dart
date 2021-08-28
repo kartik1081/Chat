@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/pages/room.dart';
-import 'package:textme/pages/setting.dart';
-import 'package:textme/pages/chat.dart';
+
+import 'chat.dart';
+import 'room.dart';
+import 'setting.dart';
 
 // ignore: must_be_immutable
 class ChatPage extends StatefulWidget {

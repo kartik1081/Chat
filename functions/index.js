@@ -26,22 +26,26 @@ exports.sentMSG = functions.firestore
     // .document(`Users/${snapshot.data()["sendTo"]}`)
     // .get();.
     // var sUser = admin.firestore.document(`User/${snapshot.date()["sendBy"]}).get();
-    var message = {
-      data: {
-        // title: sUser["name"]
-        title: "title",
-        body: snapshot.data()["msg"],
-      },
-      // token: rUser["msgToken"]
-      token:
-        "f6FksBeMS_61AIW9mx9sbC:APA91bHvKAa4IwEjQIoXkb7hVCCmf_F2uftSA7qzsbukOVy2JfPN2ZFacRhBE7h3rQrKlOF69iYhNJ2ZLwje8hNVanlKUmiaNiGYyG97nFNUKRddTb5bCBx8o1Gj-bmb4j784KM_0A3n",
-    };
-    
-    admin
-      .messaging()
-      .send(message)
-      .then((response) => {
-        console.log(`Message send successfully..:  ${response}`);
-      });
+
+    if (snapshot.data()["room"] == null) {
+      var message = {
+        data: {
+          // title: sUser["name"]
+          title: "title",
+          body: snapshot.data()["msg"],
+        },
+        // token: rUser["msgToken"]
+        token: snapshot.data()["token"],
+      };
+
+      admin
+        .messaging()
+        .send(message)
+        .then((response) => {
+          console.log(`Message send successfully..:  ${response}`);
+        });
+    } else {
+    }
+
     return functions.firestore.document("Notifications/{documentId}");
   });

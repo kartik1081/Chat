@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/pages/homepage.dart';
+
+import 'homepage.dart';
 
 class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);

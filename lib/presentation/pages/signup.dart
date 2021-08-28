@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sizer/sizer.dart';
-import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/models/services/fire.dart';
+import 'package:textme/presentation/widgets/textField.dart';
 
 import 'signin.dart';
 

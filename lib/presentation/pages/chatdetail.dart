@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/pages/usersprofile.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bubble/bubble.dart';
 import 'homepage.dart';
+import 'usersprofile.dart';
 
 // ignore: must_be_immutable
 class ChatDetail extends StatefulWidget {

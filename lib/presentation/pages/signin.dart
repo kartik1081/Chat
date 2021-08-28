@@ -7,9 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
-import 'package:textme/models/widgets/textField.dart';
 import 'package:textme/models/services/fire.dart';
-import 'package:textme/models/widgets/shimmer.dart';
+import 'package:textme/presentation/widgets/shimmer.dart';
+import 'package:textme/presentation/widgets/textField.dart';
 
 import 'signup.dart';
 

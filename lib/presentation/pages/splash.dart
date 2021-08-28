@@ -4,8 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/pages/homepage.dart';
-import 'package:textme/pages/signin.dart';
+
+import 'homepage.dart';
+import 'signin.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);

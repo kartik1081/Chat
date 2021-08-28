@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/pages/homepage.dart';
+import 'package:textme/presentation/pages/homepage.dart';
 
 class LocalNotification {
   static final FlutterLocalNotificationsPlugin _plugin =

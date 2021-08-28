@@ -3,12 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/pages/homepage.dart';
-import 'package:textme/pages/splash.dart';
+
+import 'cubit/counter_cubit.dart';
+import 'presentation/pages/homepage.dart';
+import 'presentation/pages/splash.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
   'ChannelId', // id
@@ -114,7 +117,10 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           title: 'TextMe',
-          home: Splash(),
+          home: BlocProvider<CounterCubit>(
+            create: (context) => CounterCubit(),
+            child: Splash(),
+          ),
         );
       },
     );

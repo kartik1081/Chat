@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/models/widgets/textField.dart';
-import 'package:textme/pages/homepage.dart';
-import 'package:textme/pages/signin.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:textme/presentation/pages/homepage.dart';
+import 'package:textme/presentation/pages/signin.dart';
+import 'package:textme/presentation/widgets/textField.dart';
 
 class Fire {
   FirebaseAuth _auth = FirebaseAuth.instance;
