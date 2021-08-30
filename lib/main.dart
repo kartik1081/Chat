@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
 
-import 'cubit/counter_cubit.dart';
 import 'presentation/pages/homepage.dart';
 import 'presentation/pages/splash.dart';
 
@@ -58,7 +56,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // Save the initial token to the database
-    saveTokenToDatabase();
+    // ignore: unnecessary_statements
+    FirebaseAuth.instance.currentUser != null ? saveTokenToDatabase() : null;
 
     // Any time the token refreshes, store this in the database too.
 
@@ -117,17 +116,14 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           title: 'TextMe',
-          home: BlocProvider<CounterCubit>(
-            create: (context) => CounterCubit(),
-            child: Splash(),
-          ),
+          home: Splash(),
         );
       },
     );
   }
 
   saveTokenToDatabase() async {
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("Users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
