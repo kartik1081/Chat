@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
+import 'package:textme/models/Providers/network_provider.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/presentation/pages/signin.dart';
@@ -50,6 +51,9 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(
         create: (context) => Authentication(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => networkProvider(),
       )
     ],
     child: MyApp(),
@@ -76,7 +80,13 @@ class _MyAppState extends State<MyApp> {
     // open while app is terminated...
     FirebaseMessaging.instance.getInitialMessage().then((value) {
       if (value != null) {
-        Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
+        Navigator.push(
+            context,
+            ScalePageRoute(
+                widget: HomePage(
+                  users: context.watch<Authentication>().user,
+                ),
+                out: false));
       }
     });
 
@@ -96,7 +106,11 @@ class _MyAppState extends State<MyApp> {
       RemoteNotification? notification = event.notification;
       AndroidNotification? android = event.notification?.android;
       if (notification != null && android != null) {
-        Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
+        Navigator.push(
+            context,
+            ScalePageRoute(
+                widget: HomePage(users: context.watch<Authentication>().user),
+                out: false));
       }
     });
   }
@@ -126,14 +140,10 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           title: 'TextMe',
-          home: _auth(),
+          home: Splash(),
         );
       },
     );
-  }
-
-  Widget _auth() {
-    return FirebaseAuth.instance.currentUser != null ? HomePage() : SignIn();
   }
 
   saveTokenToDatabase() async {

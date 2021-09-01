@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:textme/models/users.dart';
 
 import 'chatpage.dart';
 import 'profile.dart';
 import 'search.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  Users users;
+  HomePage({Key? key, required this.users}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();

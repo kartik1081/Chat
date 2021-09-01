@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bubble/bubble.dart';
@@ -47,8 +49,12 @@ class _ChatDetailState extends State<ChatDetail> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    SlidePageRoute(widget: HomePage(), direction: "left"));
+                Navigator.push(
+                    context,
+                    SlidePageRoute(
+                        widget: HomePage(
+                            users: context.watch<Authentication>().user),
+                        direction: "left"));
               },
               icon: Icon(Icons.keyboard_arrow_left)),
           titleSpacing: 0,

@@ -154,6 +154,7 @@ class _SignInState extends State<SignIn> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     _helper.textField(
+                                                        context,
                                                         false,
                                                         TextInputType
                                                             .emailAddress,
@@ -165,6 +166,7 @@ class _SignInState extends State<SignIn> {
                                                       height: 10.0,
                                                     ),
                                                     _helper.textField(
+                                                        context,
                                                         true,
                                                         TextInputType
                                                             .visiblePassword,
@@ -177,6 +179,7 @@ class _SignInState extends State<SignIn> {
                                               : Column(
                                                   children: [
                                                     _helper.textField(
+                                                      context,
                                                       false,
                                                       TextInputType.phone,
                                                       email_phone,
@@ -482,6 +485,7 @@ class _SignInState extends State<SignIn> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 _helper.textField(
+                                                    context,
                                                     false,
                                                     TextInputType.emailAddress,
                                                     email_phone,
@@ -492,6 +496,7 @@ class _SignInState extends State<SignIn> {
                                                   height: 1.3.h,
                                                 ),
                                                 _helper.textField(
+                                                    context,
                                                     true,
                                                     TextInputType
                                                         .visiblePassword,

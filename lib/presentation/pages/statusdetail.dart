@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:story_view/story_view.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'homepage.dart';
 
@@ -62,7 +64,8 @@ class _StatusDetailState extends State<StatusDetail> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => HomePage(),
+                              builder: (context) => HomePage(
+                                  users: context.watch<Authentication>().user),
                             ),
                           );
                         },

@@ -21,6 +21,7 @@ class _SignUpState extends State<SignUp> {
   late bool _loading;
   Fire _fire = Fire();
   bool _withEmail = true;
+  final _form = GlobalKey<FormState>();
   Icon _with = Icon(
     Icons.phone_android,
     color: Colors.black,
@@ -143,6 +144,7 @@ class _SignUpState extends State<SignUp> {
                                       height: 20,
                                     ),
                                     Form(
+                                      key: _form,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
@@ -152,6 +154,7 @@ class _SignUpState extends State<SignUp> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   _helper.textField(
+                                                      context,
                                                       false,
                                                       TextInputType.name,
                                                       name,
@@ -162,6 +165,7 @@ class _SignUpState extends State<SignUp> {
                                                     height: 10.0,
                                                   ),
                                                   _helper.textField(
+                                                      context,
                                                       false,
                                                       TextInputType
                                                           .emailAddress,
@@ -173,6 +177,7 @@ class _SignUpState extends State<SignUp> {
                                                     height: 10.0,
                                                   ),
                                                   _helper.textField(
+                                                      context,
                                                       true,
                                                       TextInputType
                                                           .visiblePassword,
@@ -185,6 +190,7 @@ class _SignUpState extends State<SignUp> {
                                             : Column(
                                                 children: [
                                                   _helper.textField(
+                                                      context,
                                                       false,
                                                       TextInputType.name,
                                                       name,
@@ -195,6 +201,7 @@ class _SignUpState extends State<SignUp> {
                                                     height: 10.0,
                                                   ),
                                                   _helper.textField(
+                                                      context,
                                                       false,
                                                       TextInputType.phone,
                                                       email_phone,
@@ -483,6 +490,7 @@ class _SignUpState extends State<SignUp> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               _helper.textField(
+                                                  context,
                                                   false,
                                                   TextInputType.name,
                                                   name,
@@ -493,6 +501,7 @@ class _SignUpState extends State<SignUp> {
                                                 height: 1.3.h,
                                               ),
                                               _helper.textField(
+                                                  context,
                                                   false,
                                                   TextInputType.emailAddress,
                                                   email_phone,
@@ -503,6 +512,7 @@ class _SignUpState extends State<SignUp> {
                                                 height: 1.3.h,
                                               ),
                                               _helper.textField(
+                                                  context,
                                                   true,
                                                   TextInputType.visiblePassword,
                                                   password,

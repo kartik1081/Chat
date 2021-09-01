@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 
 import 'homepage.dart';
@@ -21,15 +23,8 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    // _auth.authStateChanges().listen((event) {
-    //   event != null
-    //       ? Navigator.push(
-    //           context, SlidePageRoute(widget: HomePage(), direction: "right"))
-    //       : event == null
-    //           ? Navigator.push(
-    //               context, SlidePageRoute(widget: SignIn(), direction: "left"))
-    //           : Navigator.pop(context);
-    // });
+    Timer(Duration(seconds: 4),
+        () => context.read<Authentication>().loggedInUser(context));
   }
 
   @override

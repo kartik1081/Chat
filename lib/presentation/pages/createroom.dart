@@ -6,7 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 
 import 'chatdetail.dart';
@@ -50,7 +52,8 @@ class _CreateRoomState extends State<CreateRoom> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) =>
+                        HomePage(users: context.watch<Authentication>().user),
                   ),
                 );
                 _firestore.collection("Rooms").doc(widget.uuid).delete();
