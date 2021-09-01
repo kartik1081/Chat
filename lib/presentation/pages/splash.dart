@@ -21,17 +21,15 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 4), () async {
-      _auth.authStateChanges().listen((event) {
-        event != null
-            ? Navigator.push(
-                context, SlidePageRoute(widget: HomePage(), direction: "right"))
-            : event == null
-                ? Navigator.push(context,
-                    SlidePageRoute(widget: SignIn(), direction: "left"))
-                : Navigator.pop(context);
-      });
-    });
+    // _auth.authStateChanges().listen((event) {
+    //   event != null
+    //       ? Navigator.push(
+    //           context, SlidePageRoute(widget: HomePage(), direction: "right"))
+    //       : event == null
+    //           ? Navigator.push(
+    //               context, SlidePageRoute(widget: SignIn(), direction: "left"))
+    //           : Navigator.pop(context);
+    // });
   }
 
   @override

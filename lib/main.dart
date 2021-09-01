@@ -4,9 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
+import 'package:textme/presentation/pages/signin.dart';
 
 import 'presentation/pages/homepage.dart';
 import 'presentation/pages/splash.dart';
@@ -43,7 +46,14 @@ Future<void> main() async {
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
 
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => Authentication(),
+      )
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -116,10 +126,14 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           title: 'TextMe',
-          home: Splash(),
+          home: _auth(),
         );
       },
     );
+  }
+
+  Widget _auth() {
+    return FirebaseAuth.instance.currentUser != null ? HomePage() : SignIn();
   }
 
   saveTokenToDatabase() async {

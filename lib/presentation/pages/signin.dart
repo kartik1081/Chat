@@ -7,8 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/presentation/widgets/shimmer.dart';
+import 'package:provider/provider.dart';
 import 'package:textme/presentation/widgets/textField.dart';
 
 import 'signup.dart';
@@ -275,10 +277,13 @@ class _SignInState extends State<SignIn> {
                                                         .text.isNotEmpty ||
                                                     email_phone.text.endsWith(
                                                         "@gmail.com")) {
-                                                  _fire.signIn(
-                                                      context,
-                                                      email_phone.text.trim(),
-                                                      password.text.trim());
+                                                  context
+                                                      .read<Authentication>()
+                                                      .signIn(
+                                                          context,
+                                                          email_phone.text
+                                                              .trim(),
+                                                          password.text.trim());
                                                   email_phone.clear();
                                                   password.clear();
                                                   setState(() {
