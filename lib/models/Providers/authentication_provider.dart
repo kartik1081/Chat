@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/presentation/pages/homepage.dart';
 import 'package:textme/presentation/pages/signin.dart';
 
 import '../users.dart';
-import 'network_provider.dart';
 
 class Authentication extends ChangeNotifier {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -60,6 +58,7 @@ class Authentication extends ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       _exception(e);
     }
+    print("signIn");
     notifyListeners();
   }
 
@@ -86,6 +85,7 @@ class Authentication extends ChangeNotifier {
       _token = value;
     }).whenComplete(
         () => _storeData(context, credential, null, null, null, store));
+    print("messageToken");
     notifyListeners();
   }
 
@@ -131,7 +131,7 @@ class Authentication extends ChangeNotifier {
         break;
       default:
     }
-
+    print("storeData");
     notifyListeners();
   }
 
@@ -143,20 +143,17 @@ class Authentication extends ChangeNotifier {
         .then((value) {
       _currentUser = Users.currentUser(value);
     }).whenComplete(() => _navigate(context, "home"));
+    print("getUser");
     notifyListeners();
   }
 
   void _navigate(BuildContext context, String widget) {
     switch (widget) {
-      case "signout":
-        Navigator.push(
-            context, SlidePageRoute(widget: SignIn(), direction: "left"));
-        break;
       case "signin":
         Navigator.push(
             context, SlidePageRoute(widget: SignIn(), direction: "left"));
         break;
-      default:
+      case "home":
         Navigator.push(
             context,
             SlidePageRoute(
@@ -165,8 +162,9 @@ class Authentication extends ChangeNotifier {
                 ),
                 direction: "left"));
         break;
+      default:
     }
-
+    print("navigator");
     notifyListeners();
   }
 
@@ -191,33 +189,43 @@ class Authentication extends ChangeNotifier {
         print(e.code);
         break;
     }
+    print("exception");
     notifyListeners();
   }
 
   void loggedInUser(BuildContext context) {
     _auth.authStateChanges().listen((event) {
-      event != null
-          ? _navigate(context, "homepage")
-          : _navigate(context, "signin");
+      // _getUser(context,event);
+
+      if (event != null) {
+        _currentUser = Users.user(event);
+        _navigate(context, "home");
+      } else {
+        _navigate(context, "signin");
+      }
     });
     notifyListeners();
   }
 
   void signOut(BuildContext context) async {
-    await _auth.signOut().whenComplete(() => _navigate(context, "signout"));
+    await _auth.signOut().whenComplete(() => _navigate(context, "signin"));
     notifyListeners();
   }
 
   void checkEmail(String email) {
     if (email.isEmpty || !email.endsWith("@gmail.com")) {
       _emailValidator = "Check email";
+    } else {
+      _emailValidator = '';
     }
     notifyListeners();
   }
 
   void checkPassword(String password) {
     if (password.isEmpty || password.length < 8) {
-      _emailValidator = "Check Password";
+      _passwordValidator = "Check Password";
+    } else {
+      _passwordValidator = '';
     }
     notifyListeners();
   }

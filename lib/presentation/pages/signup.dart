@@ -304,6 +304,7 @@ class _SignUpState extends State<SignUp> {
                                               if (email_phone.text.isNotEmpty &&
                                                   password.text.isNotEmpty &&
                                                   name.text.isNotEmpty) {
+                                                print("Called");
                                                 _fire.signUp(
                                                     context,
                                                     name.text.trim(),

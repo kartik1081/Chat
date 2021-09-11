@@ -21,11 +21,20 @@ class Helper {
       controller: controller,
       focusNode: focusNode,
       autocorrect: true,
-      onChanged: (value) {
-        TextInputType.emailAddress == textInputType
-            ? context.read<Authentication>().checkEmail(value)
-            : null;
-      },
+      // validator: (value) {
+      //   if (TextInputType.emailAddress == textInputType) {
+      //     return context.watch<Authentication>().emailValidator;
+      //   } else if (TextInputType.visiblePassword == textInputType) {
+      //     context.watch<Authentication>().passwordValidator;
+      //   }
+      // },
+      // onChanged: (value) {
+      //   TextInputType.emailAddress == textInputType
+      //       ? context.read<Authentication>().checkEmail(value)
+      //       : TextInputType.visiblePassword == textInputType
+      //           ? context.read<Authentication>().checkPassword(value)
+      //           : null;
+      // },
       decoration: InputDecoration(
         prefixIcon: preFix,
         suffixIcon: obscureText

@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/fire.dart';
 
 import 'editprofile.dart';
@@ -28,28 +29,6 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    Connectivity().onConnectivityChanged.listen((event) {
-      switch (event) {
-        case ConnectivityResult.mobile:
-          setState(() {
-            net = true;
-          });
-          print(net);
-          break;
-        case ConnectivityResult.wifi:
-          setState(() {
-            net = true;
-          });
-          print(net);
-          break;
-        default:
-          setState(() {
-            net = false;
-          });
-          print(net);
-          break;
-      }
-    });
   }
 
   @override
@@ -67,14 +46,7 @@ class _ProfileState extends State<Profile> {
           IconButton(
             onPressed: () {
               if (_auth.currentUser != null) {
-                if (net) {
-                  _fire.signOut(context).whenComplete(() => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignIn(),
-                        ),
-                      ));
-                } else {}
+                context.read<Authentication>().signOut(context);
               } else {
                 // ignore: unnecessary_statements
                 null;

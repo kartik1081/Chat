@@ -280,13 +280,10 @@ class _SignInState extends State<SignIn> {
                                                         .text.isNotEmpty ||
                                                     email_phone.text.endsWith(
                                                         "@gmail.com")) {
-                                                  context
-                                                      .read<Authentication>()
-                                                      .signIn(
-                                                          context,
-                                                          email_phone.text
-                                                              .trim(),
-                                                          password.text.trim());
+                                                  _fire.signIn(
+                                                      context,
+                                                      email_phone.text.trim(),
+                                                      password.text.trim());
                                                   email_phone.clear();
                                                   password.clear();
                                                   setState(() {
