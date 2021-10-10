@@ -2,16 +2,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
-import 'package:textme/models/services/fire.dart';
 
 import 'editprofile.dart';
 import 'favorites.dart';
-import 'signin.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -22,8 +19,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Fire _fire = Fire();
   bool net = false;
 
   @override
@@ -41,7 +36,9 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Profile"),
+        title: Text(
+          "Profile",
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -72,69 +69,52 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  StreamBuilder<dynamic>(
-                    stream: _firestore
-                        .collection("Users")
-                        .doc("${_auth.currentUser!.uid}")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        Map<String, dynamic> data = snapshot.data.data();
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: data["profilePic"].isNotEmpty
-                                  ? CachedNetworkImage(
-                                      height: 65,
-                                      width: 65,
-                                      fit: BoxFit.cover,
-                                      imageUrl: data["profilePic"],
-                                      placeholder: (context, url) {
-                                        return Container(
-                                          height: 100,
-                                          child: Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : Image(
-                                      image: AssetImage("assets/avatar.png"),
-                                      height: 65,
-                                      width: 65,
-                                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                          height: 65,
+                          width: 65,
+                          fit: BoxFit.cover,
+                          imageUrl:
+                              context.watch<Authentication>().user.profilePic,
+                          placeholder: (context, url) {
+                            return Container(
+                              height: 100,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.watch<Authentication>().user.name,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800),
+                          ),
+                          Text(
+                            context.watch<Authentication>().user.email,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  data["name"],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                                Text(
-                                  data["email_phone"],
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        );
-                      }
-                      return CircularProgressIndicator();
-                    },
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 10,

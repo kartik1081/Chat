@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:textme/models/Providers/authentication_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 
 import 'homepage.dart';
@@ -16,11 +14,7 @@ class Setting extends StatelessWidget {
         leading: IconButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  ScalePageRoute(
-                      widget:
-                          HomePage(users: context.watch<Authentication>().user),
-                      out: true));
+                  context, ScalePageRoute(widget: HomePage(), out: true));
             },
             icon: Icon(Icons.arrow_back)),
       ),

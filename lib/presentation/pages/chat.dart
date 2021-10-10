@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/src/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 
 import 'addstatus.dart';
@@ -28,41 +28,13 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> with TickerProviderStateMixin {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseMessaging _messaging = FirebaseMessaging.instance;
   late int item;
   late File _image;
   late String url;
-  bool net = false;
 
   @override
   void initState() {
     super.initState();
-
-    _messaging
-        .getToken()
-        .then((value) => print("FCM token is:" + value.toString()));
-    Connectivity().onConnectivityChanged.listen((event) {
-      switch (event) {
-        case ConnectivityResult.mobile:
-          setState(() {
-            net = true;
-          });
-          print(net);
-          break;
-        case ConnectivityResult.wifi:
-          setState(() {
-            net = true;
-          });
-          print(net);
-          break;
-        default:
-          setState(() {
-            net = false;
-          });
-          print(net);
-          break;
-      }
-    });
   }
 
   @override
@@ -85,64 +57,40 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                       ),
                       width: 90.0,
                       height: 80.0,
-                      child: StreamBuilder<dynamic>(
-                        stream: _firestore
-                            .collection("Users")
-                            .doc(_auth.currentUser!.uid)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          return snapshot.hasData
-                              ? InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => StatusDetail(
-                                          userID: snapshot.data["id"],
-                                          profilePic:
-                                              snapshot.data["profilePic"],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child: snapshot
-                                            .data["profilePic"].isNotEmpty
-                                        ? CachedNetworkImage(
-                                            height: 49,
-                                            width: 49,
-                                            fit: BoxFit.cover,
-                                            imageUrl:
-                                                snapshot.data["profilePic"],
-                                            placeholder: (context, url) {
-                                              return Container(
-                                                height: 100,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : Image(
-                                            image:
-                                                AssetImage("assets/avatar.png"),
-                                            height: 49,
-                                            width: 49,
-                                          ),
-                                  ),
-                                )
-                              : Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 4.0, horizontal: 8.0),
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    color: Color(0xFF31444B),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StatusDetail(
+                                userID: context.watch<Authentication>().user.id,
+                                profilePic: context
+                                    .watch<Authentication>()
+                                    .user
+                                    .profilePic,
+                              ),
+                            ),
+                          );
+                        },
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100.0),
+                            child: CachedNetworkImage(
+                              height: 49,
+                              width: 49,
+                              fit: BoxFit.cover,
+                              imageUrl: context
+                                  .watch<Authentication>()
+                                  .user
+                                  .profilePic,
+                              placeholder: (context, url) {
+                                return Container(
+                                  height: 100,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
                                   ),
                                 );
-                        },
+                              },
+                            )),
                       ),
                     ),
                     Positioned(

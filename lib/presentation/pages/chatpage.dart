@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:textme/models/services/fire.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/pageroute.dart';
+import 'package:provider/provider.dart';
 
 import 'chat.dart';
 import 'room.dart';
@@ -37,7 +38,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Fire _fire = Fire();
     return WillPopScope(
       onWillPop: () async => false,
       child: DefaultTabController(
@@ -59,15 +59,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     ? PopupMenuButton(
                         elevation: 3.2,
                         onSelected: (int value) {
-                          setState(() {
-                            value == 0
-                                ? Navigator.push(
-                                    context,
-                                    ScalePageRoute(
-                                        widget: Setting(), out: false),
-                                  )
-                                : _fire.signOut(context);
-                          });
+                          value == 0
+                              ? Navigator.push(
+                                  context,
+                                  ScalePageRoute(widget: Setting(), out: false),
+                                )
+                              : value == 1
+                                  ? context.watch().loggedIn
+                                      ? context
+                                          .read<Authentication>()
+                                          .signOut(context)
+                                      // ignore: unnecessary_statements
+                                      : null
+                                  // ignore: unnecessary_statements
+                                  : null;
                         },
                         onCanceled: () {
                           print('You have not chossed anything');

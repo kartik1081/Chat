@@ -8,14 +8,14 @@ class SlidePageRoute extends PageRouteBuilder {
           pageBuilder: (context, animation, secondaryAnimation) {
             return widget;
           },
-          transitionDuration: Duration(milliseconds: 300),
+          transitionDuration: Duration(milliseconds: 1000),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             switch (direction) {
               case "right":
                 return new SlideTransition(
                   position: new Tween<Offset>(
                     begin: const Offset(1.0, 0.0),
-                    end: Offset.zero,
+                    end: Offset(0.0, 0.0),
                   ).animate(animation),
                   child: child,
                 );
@@ -23,7 +23,7 @@ class SlidePageRoute extends PageRouteBuilder {
                 return new SlideTransition(
                   position: new Tween<Offset>(
                     begin: const Offset(-1.0, 0.0),
-                    end: Offset.zero,
+                    end: Offset(0.0, 0.0),
                   ).animate(animation),
                   child: child,
                 );
@@ -48,7 +48,7 @@ class ScalePageRoute extends PageRouteBuilder {
           pageBuilder: (context, animation, secondaryAnimation) {
             return widget;
           },
-          transitionDuration: Duration(milliseconds: 300),
+          transitionDuration: Duration(milliseconds: 1000),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return out
                 ? ScaleTransition(

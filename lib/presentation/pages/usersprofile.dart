@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:textme/models/Providers/authentication_provider.dart';
-import 'package:provider/provider.dart';
 
 import 'homepage.dart';
 
@@ -70,9 +68,7 @@ class _UsersProfileState extends State<UsersProfile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                    users:
-                                        context.watch<Authentication>().user),
+                                builder: (context) => HomePage(),
                               ),
                             );
                           },
@@ -106,9 +102,7 @@ class _UsersProfileState extends State<UsersProfile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                    users:
-                                        context.watch<Authentication>().user),
+                                builder: (context) => HomePage(),
                               ),
                             );
                           },

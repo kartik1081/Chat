@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,6 @@ class _SignInState extends State<SignIn> {
     Icons.phone_android,
     color: Colors.black,
   );
-  bool net = false;
   MyShimmer _shimmer = MyShimmer();
   Helper _helper = Helper();
   String sEmailPhone = '', sPassword = '', sOtp = '';
@@ -45,28 +43,7 @@ class _SignInState extends State<SignIn> {
   @override
   void initState() {
     super.initState();
-    Connectivity().onConnectivityChanged.listen((event) {
-      switch (event) {
-        case ConnectivityResult.mobile:
-          setState(() {
-            net = true;
-          });
-          print(net);
-          break;
-        case ConnectivityResult.wifi:
-          setState(() {
-            net = true;
-          });
-          print(net);
-          break;
-        default:
-          setState(() {
-            net = false;
-          });
-          print(net);
-          break;
-      }
-    });
+
     _loading = false;
   }
 
@@ -275,39 +252,30 @@ class _SignInState extends State<SignIn> {
                                           ),
                                           onPressed: () async {
                                             if (_withEmail) {
-                                              if (net) {
-                                                if (email_phone
-                                                        .text.isNotEmpty ||
-                                                    email_phone.text.endsWith(
-                                                        "@gmail.com")) {
-                                                  _fire.signIn(
+                                              context
+                                                  .read<Authentication>()
+                                                  .signIn(
                                                       context,
                                                       email_phone.text.trim(),
                                                       password.text.trim());
-                                                  email_phone.clear();
-                                                  password.clear();
-                                                  setState(() {
-                                                    _loading = true;
-                                                  });
-                                                  Timer(Duration(seconds: 5),
-                                                      () {
-                                                    setState(() {
-                                                      _loading = false;
-                                                    });
-                                                  });
-                                                } else {}
-                                              } else {}
+                                              email_phone.clear();
+                                              password.clear();
+                                              setState(() {
+                                                _loading = true;
+                                              });
+                                              Timer(Duration(seconds: 5), () {
+                                                setState(() {
+                                                  _loading = false;
+                                                });
+                                              });
                                             } else if (!_withEmail) {
-                                              if (net) {
-                                                if (cCode.isNotEmpty &&
-                                                    email_phone
-                                                        .text.isNotEmpty) {
-                                                  _fire.phoneSignIn(
-                                                      context,
-                                                      null,
-                                                      cCode.trim(),
-                                                      email_phone.text.trim());
-                                                } else {}
+                                              if (cCode.isNotEmpty &&
+                                                  email_phone.text.isNotEmpty) {
+                                                _fire.phoneSignIn(
+                                                    context,
+                                                    null,
+                                                    cCode.trim(),
+                                                    email_phone.text.trim());
                                               } else {}
                                             }
                                           },
@@ -375,18 +343,15 @@ class _SignInState extends State<SignIn> {
                                                       MaterialStateProperty.all(
                                                           7.0)),
                                               onPressed: () {
-                                                if (net) {
-                                                  _fire.googleSignIn(context);
+                                                _fire.googleSignIn(context);
+                                                setState(() {
+                                                  _loading = true;
+                                                });
+                                                Timer(Duration(seconds: 5), () {
                                                   setState(() {
-                                                    _loading = true;
+                                                    _loading = false;
                                                   });
-                                                  Timer(Duration(seconds: 5),
-                                                      () {
-                                                    setState(() {
-                                                      _loading = false;
-                                                    });
-                                                  });
-                                                } else {}
+                                                });
                                               },
                                               child: Image.asset(
                                                   "assets/google.jpg"),

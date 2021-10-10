@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,49 +21,63 @@ class Authentication extends ChangeNotifier {
   late Widget _startWidget;
   late String _emailValidator;
   late String _passwordValidator;
+  late bool _loggedIn;
+  late bool _isNet;
   Users get user => _currentUser;
   String? get token => _token;
   Widget get startWidet => _startWidget;
   String get emailValidator => _emailValidator;
   String get passwordValidator => _passwordValidator;
+  bool get loggedIn => _loggedIn;
+  bool get isNet => _isNet;
 
-  void signUp(
+  Future<void> signUp(
       BuildContext context, String name, String email, String password) async {
     try {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then(
-            (value) =>
-                // ignore: unnecessary_null_comparison
-                value != null ? _messgeToken(context, value, "signup") : null,
-          );
+          .then((value) {
+        // ignore: unnecessary_null_comparison
+        if (value != null) {
+          _loggedIn = true;
+          _messgeToken(context, value, "signup");
+        } else {
+          return null;
+        }
+      });
     } on FirebaseAuthException catch (e) {
       _exception(e);
     }
-    notifyListeners();
   }
 
-  void signIn(
+  Future<void> signIn(
     BuildContext context,
     String email,
     String password,
   ) async {
     try {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then(
-            (value) =>
-                // ignore: unnecessary_null_comparison
-                value != null ? _messgeToken(context, value, "signin") : null,
-          );
+      if (email.isNotEmpty || email.endsWith("@gmail.com")) {
+        await _auth
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((value) {
+          // ignore: unnecessary_null_comparison
+          if (value != null) {
+            _loggedIn = true;
+            _messgeToken(context, value, "signin");
+          } else {
+            return null;
+          }
+        });
+      } else {
+        return null;
+      }
     } on FirebaseAuthException catch (e) {
       _exception(e);
     }
     print("signIn");
-    notifyListeners();
   }
 
-  void googleSignIn(BuildContext context) async {
+  Future<void> googleSignIn(BuildContext context) async {
     try {
       googleUser = await GoogleSignIn().signIn();
       googleAuth = await googleUser!.authentication;
@@ -70,21 +85,27 @@ class Authentication extends ChangeNotifier {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      await _auth.signInWithCredential(credential).then((value) =>
-          value != null ? _messgeToken(context, value, "googleSignIn") : null);
+      await _auth.signInWithCredential(credential).then((value) {
+        // ignore: unnecessary_null_comparison
+        if (value != null) {
+          _loggedIn = true;
+          _messgeToken(context, value, "googleSignIn");
+        } else {
+          return null;
+        }
+      });
     } on FirebaseAuthException catch (e) {
       _exception(e);
     }
-    notifyListeners();
   }
 
   // ignore: unused_element
   void _messgeToken(
       BuildContext context, UserCredential credential, String store) {
-    _messaging.getToken().then((value) {
+    _messaging.onTokenRefresh.listen((value) {
       _token = value;
-    }).whenComplete(
-        () => _storeData(context, credential, null, null, null, store));
+      _storeData(context, credential, null, null, null, store);
+    });
     print("messageToken");
     notifyListeners();
   }
@@ -103,13 +124,13 @@ class Authentication extends ChangeNotifier {
           "msgToken": token,
           "profilePic":
               "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
-        }).whenComplete(() => _getUser(context, credential));
+        }).whenComplete(() => _getUser(context, credential, null));
         break;
       case "signin":
         _firestore.collection("Users").doc(credential.user!.uid).update({
           "lastSignIn": DateTime.now(),
           "msgToken": _token,
-        }).whenComplete(() => _getUser(context, credential));
+        }).whenComplete(() => _getUser(context, credential, null));
         break;
       case "googleSignIn":
         credential.additionalUserInfo!.isNewUser
@@ -132,19 +153,22 @@ class Authentication extends ChangeNotifier {
       default:
     }
     print("storeData");
-    notifyListeners();
   }
 
-  void _getUser(BuildContext context, UserCredential credential) {
-    _firestore
-        .collection("Users")
-        .doc(credential.user!.uid)
-        .get()
-        .then((value) {
-      _currentUser = Users.currentUser(value);
-    }).whenComplete(() => _navigate(context, "home"));
+  Future<void> _getUser(
+      BuildContext context, UserCredential? credential, User? users) async {
+    credential != null
+        ? _firestore
+            .collection("Users")
+            .doc(credential.user!.uid)
+            .get()
+            .then((value) {
+            _currentUser = Users.currentUser(value);
+          }).whenComplete(() => _navigate(context, "home"))
+        : _firestore.collection("Users").doc(users!.uid).get().then((value) {
+            _currentUser = Users.currentUser(value);
+          }).whenComplete(() => _navigate(context, "home"));
     print("getUser");
-    notifyListeners();
   }
 
   void _navigate(BuildContext context, String widget) {
@@ -155,17 +179,11 @@ class Authentication extends ChangeNotifier {
         break;
       case "home":
         Navigator.push(
-            context,
-            SlidePageRoute(
-                widget: HomePage(
-                  users: _currentUser,
-                ),
-                direction: "left"));
+            context, SlidePageRoute(widget: HomePage(), direction: "right"));
         break;
       default:
     }
     print("navigator");
-    notifyListeners();
   }
 
   void _exception(FirebaseAuthException e) {
@@ -194,22 +212,32 @@ class Authentication extends ChangeNotifier {
   }
 
   void loggedInUser(BuildContext context) {
-    _auth.authStateChanges().listen((event) {
-      // _getUser(context,event);
-
-      if (event != null) {
-        _currentUser = Users.user(event);
-        _navigate(context, "home");
-      } else {
-        _navigate(context, "signin");
-      }
-    });
+    try {
+      _auth.authStateChanges().listen((event) {
+        print(event);
+        if (event != null) {
+          _loggedIn = true;
+          _getUser(context, null, event);
+        } else {
+          _loggedIn = false;
+          _navigate(context, "signin");
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
     notifyListeners();
   }
 
   void signOut(BuildContext context) async {
-    await _auth.signOut().whenComplete(() => _navigate(context, "signin"));
-    notifyListeners();
+    try {
+      await _auth.signOut().whenComplete(() {
+        _loggedIn = false;
+        _navigate(context, "signin");
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   void checkEmail(String email) {
@@ -218,7 +246,6 @@ class Authentication extends ChangeNotifier {
     } else {
       _emailValidator = '';
     }
-    notifyListeners();
   }
 
   void checkPassword(String password) {
@@ -227,6 +254,30 @@ class Authentication extends ChangeNotifier {
     } else {
       _passwordValidator = '';
     }
+  }
+
+  void checkLoggedin() {
+    _auth.authStateChanges().listen((event) {
+      if (event != null) {
+      } else {}
+    });
+  }
+
+  void checkNetwork() {
+    Connectivity().onConnectivityChanged.listen((event) {
+      switch (event) {
+        case ConnectivityResult.mobile:
+          _isNet = true;
+          break;
+        case ConnectivityResult.wifi:
+          _isNet = true;
+          break;
+        default:
+          _isNet = false;
+          break;
+      }
+      print(_isNet);
+    });
     notifyListeners();
   }
 }

@@ -1,8 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:textme/models/Providers/authentication_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/presentation/pages/homepage.dart';
 
@@ -19,10 +17,7 @@ class LocalNotification {
       onSelectNotification: (payload) async {
         if (payload == "Home Page") {
           Navigator.push(
-              context,
-              ScalePageRoute(
-                  widget: HomePage(users: context.watch<Authentication>().user),
-                  out: false));
+              context, ScalePageRoute(widget: HomePage(), out: false));
         }
       },
     );

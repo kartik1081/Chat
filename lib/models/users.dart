@@ -1,17 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Users {
-  late String? name, email, profilePic;
-  Users.currentUser(DocumentSnapshot<Map<String, dynamic>> json) {
+  late String name, email, profilePic, id, lastSignIn;
+  Users.currentUser(DocumentSnapshot json) {
     name = json["name"];
-    email = json["email"];
+    email = json["email_phone"];
     profilePic = json["profilePic"];
+    id = json["id"];
   }
-  Users.user(User? json) {
-    name = json!.displayName;
-    email = json.email;
-    profilePic = json.photoURL;
-  }
-  Users();
 }

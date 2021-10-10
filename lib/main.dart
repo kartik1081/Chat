@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +5,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
-import 'package:textme/models/Providers/network_provider.dart';
+import 'package:textme/models/Providers/list_provider.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/presentation/pages/signin.dart';
 
 import 'presentation/pages/homepage.dart';
 import 'presentation/pages/splash.dart';
@@ -47,17 +44,9 @@ Future<void> main() async {
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => Authentication(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => networkProvider(),
-      )
-    ],
-    child: MyApp(),
-  ));
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -69,24 +58,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Save the initial token to the database
-    // ignore: unnecessary_statements
-    FirebaseAuth.instance.currentUser != null ? saveTokenToDatabase() : null;
-
-    // Any time the token refreshes, store this in the database too.
-
-    FirebaseMessaging.instance.onTokenRefresh.listen((event) {});
 
     // open while app is terminated...
     FirebaseMessaging.instance.getInitialMessage().then((value) {
       if (value != null) {
-        Navigator.push(
-            context,
-            ScalePageRoute(
-                widget: HomePage(
-                  users: context.watch<Authentication>().user,
-                ),
-                out: false));
+        Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
       }
     });
 
@@ -106,53 +82,50 @@ class _MyAppState extends State<MyApp> {
       RemoteNotification? notification = event.notification;
       AndroidNotification? android = event.notification?.android;
       if (notification != null && android != null) {
-        Navigator.push(
-            context,
-            ScalePageRoute(
-                widget: HomePage(users: context.watch<Authentication>().user),
-                out: false));
+        Navigator.push(context, ScalePageRoute(widget: HomePage(), out: false));
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (BuildContext context, Orientation orientation,
-          DeviceType deviceType) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            scaffoldBackgroundColor: Color(0xFF07232c),
-            appBarTheme: AppBarTheme(
-              titleTextStyle: TextStyle(color: Colors.white70),
-              textTheme: TextTheme(
-                caption: TextStyle(color: Colors.white70),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Authentication(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ListProvider(),
+        )
+      ],
+      child: Sizer(
+        builder: (BuildContext context, Orientation orientation,
+            DeviceType deviceType) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Color(0xFF07232c),
+              appBarTheme: AppBarTheme(
+                titleTextStyle: TextStyle(color: Colors.white70),
+                // ignore: deprecated_member_use
+                textTheme: TextTheme(
+                  caption: TextStyle(color: Colors.white70),
+                ),
+                titleSpacing: 4.0.w,
+                color: Color(0xFF07232c),
+                elevation: 1,
+                iconTheme: IconThemeData(
+                  color: Colors.white,
+                ),
+                actionsIconTheme:
+                    IconThemeData(color: Colors.white70, size: 4.sp),
               ),
-              titleSpacing: 4.0.w,
-              color: Color(0xFF07232c),
-              elevation: 1,
-              iconTheme: IconThemeData(
-                color: Colors.white,
-              ),
-              actionsIconTheme:
-                  IconThemeData(color: Colors.white70, size: 4.sp),
             ),
-          ),
-          title: 'TextMe',
-          home: Splash(),
-        );
-      },
+            title: 'TextMe',
+            home: Splash(),
+          );
+        },
+      ),
     );
-  }
-
-  saveTokenToDatabase() async {
-    await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({
-      "msgToken":
-          FieldValue.arrayUnion([await FirebaseMessaging.instance.getToken()])
-    });
   }
 }

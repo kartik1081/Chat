@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
-import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:textme/presentation/pages/homepage.dart';
@@ -37,12 +35,8 @@ class Fire {
               "lastSignIn": DateTime.now(),
               "msgToken": token,
             }).whenComplete(
-              () => Navigator.push(
-                  context,
-                  SlidePageRoute(
-                      widget:
-                          HomePage(users: context.watch<Authentication>().user),
-                      direction: "right")),
+              () => Navigator.push(context,
+                  SlidePageRoute(widget: HomePage(), direction: "right")),
             );
           }
         },
@@ -79,10 +73,7 @@ class Fire {
           });
         }).whenComplete(() {
           Navigator.push(
-              context,
-              SlidePageRoute(
-                  widget: HomePage(users: context.watch<Authentication>().user),
-                  direction: "right"));
+              context, SlidePageRoute(widget: HomePage(), direction: "right"));
         });
       } else {
         name = '';
@@ -93,17 +84,11 @@ class Fire {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
         Navigator.push(
-            context,
-            SlidePageRoute(
-                widget: HomePage(users: context.watch<Authentication>().user),
-                direction: "left"));
+            context, SlidePageRoute(widget: HomePage(), direction: "left"));
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
         Navigator.push(
-            context,
-            SlidePageRoute(
-                widget: HomePage(users: context.watch<Authentication>().user),
-                direction: "left"));
+            context, SlidePageRoute(widget: HomePage(), direction: "left"));
       }
     } catch (e) {
       print(e.toString());
@@ -144,23 +129,15 @@ class Fire {
                   "msgToken": token,
                   "lastSignIn": DateTime.now()
                 },
-              ).whenComplete(() => Navigator.push(
-                  context,
-                  SlidePageRoute(
-                      widget:
-                          HomePage(users: context.watch<Authentication>().user),
-                      direction: "right")));
+              ).whenComplete(() => Navigator.push(context,
+                  SlidePageRoute(widget: HomePage(), direction: "right")));
             } else {
               _firestore.collection("Users").doc("${value.user!.uid}").update({
                 "lastSignIn": DateTime.now(),
                 "msgToken": token,
               }).whenComplete(
-                () => Navigator.push(
-                    context,
-                    SlidePageRoute(
-                        widget: HomePage(
-                            users: context.watch<Authentication>().user),
-                        direction: "right")),
+                () => Navigator.push(context,
+                    SlidePageRoute(widget: HomePage(), direction: "right")),
               );
             }
           }
@@ -198,12 +175,8 @@ class Fire {
                         "https://firebasestorage.googleapis.com/v0/b/textme-32c91.appspot.com/o/Status%2Favatar.png?alt=media&token=82fbbc78-7e2f-4f0a-9b38-d689e080913f"
                   },
                 ).whenComplete(
-                  () => Navigator.push(
-                      context,
-                      SlidePageRoute(
-                          widget: HomePage(
-                              users: context.watch<Authentication>().user),
-                          direction: "right")),
+                  () => Navigator.push(context,
+                      SlidePageRoute(widget: HomePage(), direction: "right")),
                 );
               }
             });
@@ -269,10 +242,7 @@ class Fire {
                                       () => Navigator.push(
                                           context,
                                           SlidePageRoute(
-                                              widget: HomePage(
-                                                  users: context
-                                                      .watch<Authentication>()
-                                                      .user),
+                                              widget: HomePage(),
                                               direction: "right")),
                                     );
                                   } else {
@@ -285,10 +255,7 @@ class Fire {
                                     }).whenComplete(() => Navigator.push(
                                             context,
                                             SlidePageRoute(
-                                                widget: HomePage(
-                                                    users: context
-                                                        .watch<Authentication>()
-                                                        .user),
+                                                widget: HomePage(),
                                                 direction: "right")));
                                   }
                                 }
