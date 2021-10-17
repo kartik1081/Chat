@@ -9,42 +9,28 @@ import 'package:textme/models/services/fire.dart';
 import 'package:textme/models/users.dart';
 
 class ListProvider extends ChangeNotifier {
-  Authentication _authentication = Authentication();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<Users> _allUsers = [];
+  List<Users> _usersList = [];
   List<Users> _chatWith = [];
-  List<Users> get allUsers => _allUsers;
+  List<Users> get allUsers => _usersList;
   List<Users> get chatWith => _chatWith;
 
-  // Future<void> userList(BuildContext context) async {
-  //   _firestore
-  //       .collection("Users")
-  //       .where("id", isNotEqualTo: context.watch<Authentication>().user.id)
-  //       .snapshots()
-  //       .listen((event) {
-  //     for (var i in event.docs) {
-  //       _allUsers.add(Users.currentUser(i));
-  //     }
-  //     print(_allUsers);
-  //   });
-  //   notifyListeners();
-  // }
-  // searchUserList(BuildContext context) {
-  //   final _authentication = Provider.of<Authentication>(context, listen: false);
-  //   List<Users> _list = [];
-  //   _firestore
-  //       .collection("Users")
-  //       .doc(_authentication.user.id)
-  //       .collection("ChatWith")
-  //       .snapshots()
-  //       .forEach((snapshot) {
-  //     snapshot.docs.forEach((document) {
-  //       _list.add(Users.fromJson(document.data()));
-  //       notifyListeners();
-  //     });
-  //   });
-
-  //   _chatWith = _list;
-  //   print("ChatWith List" + _chatWith.toString());
-  // }
+  void searchUserList(String id) {
+    try {
+      _firestore
+          .collection("Users")
+          .doc(id)
+          .collection("ChatWith")
+          .snapshots()
+          .forEach((snapshot) {
+        snapshot.docs.forEach((document) {
+          var user = Users.fromJson(document.data());
+          _usersList.add(user);
+          notifyListeners();
+        });
+      });
+    } catch (e) {
+      print("searchUserList : " + e.toString());
+    }
+  }
 }

@@ -22,8 +22,8 @@ class _SplashState extends State<Splash> {
     Timer(Duration(seconds: 4), () {
       context.read<Authentication>().loggedInUser(context);
       context.read<Authentication>().checkNetwork();
+      // context.read<Authentication>().searchUserList();
     });
-    // print(context.watch<ListProvider>().allUsers);
   }
 
   @override

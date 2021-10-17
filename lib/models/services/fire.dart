@@ -286,4 +286,20 @@ class Fire {
           context, SlidePageRoute(widget: SignIn(), direction: "left"));
     });
   }
+
+  Stream<List<Users>> searchUserList(String id) {
+    try {
+      return _firestore
+          .collection("Users")
+          .doc(id)
+          .collection("ChatWith")
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((document) => Users.fromJson(document.data()))
+              .toList());
+    } catch (e) {
+      print("searchUserList : " + e.toString());
+      return [] as Stream<List<Users>>;
+    }
+  }
 }

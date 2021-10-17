@@ -163,10 +163,12 @@ class Authentication extends ChangeNotifier {
             .doc(credential.user!.uid)
             .get()
             .then((value) {
-            _currentUser = Users.currentUser(value);
+            Map<String, dynamic>? map = value.data();
+            _currentUser = Users.fromJson(map!);
           }).whenComplete(() => _navigate(context, "home"))
         : _firestore.collection("Users").doc(users!.uid).get().then((value) {
-            _currentUser = Users.currentUser(value);
+            Map<String, dynamic>? map = value.data();
+            _currentUser = Users.fromJson(map!);
           }).whenComplete(() => _navigate(context, "home"));
     print("getUser");
   }
@@ -269,21 +271,5 @@ class Authentication extends ChangeNotifier {
       print(_isNet);
     });
     notifyListeners();
-  }
-
-  Stream<List<Users>> get searchUserList {
-    try {
-      return _firestore
-          .collection("Users")
-          .doc(_currentUser.id)
-          .collection("ChatWith")
-          .snapshots()
-          .map((snapshot) => snapshot.docs
-              .map((document) => Users.fromJson(document.data()))
-              .toList());
-    } catch (e) {
-      print("searchUserList : " + e.toString());
-      return [] as Stream<List<Users>>;
-    }
   }
 }

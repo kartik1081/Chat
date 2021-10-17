@@ -95,39 +95,36 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Fire _fire = Fire();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
+    return Sizer(
+      builder: (BuildContext context, Orientation orientation,
+          DeviceType deviceType) {
+        return ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
-        ),
-      ],
-      child: Sizer(
-        builder: (BuildContext context, Orientation orientation,
-            DeviceType deviceType) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                scaffoldBackgroundColor: Color(0xFF07232c),
-                appBarTheme: AppBarTheme(
-                  titleTextStyle: TextStyle(color: Colors.white70),
-                  // ignore: deprecated_member_use
-                  textTheme: TextTheme(
-                    caption: TextStyle(color: Colors.white70),
-                  ),
-                  titleSpacing: 4.0.w,
-                  color: Color(0xFF07232c),
-                  elevation: 1,
-                  iconTheme: IconThemeData(
-                    color: Colors.white,
-                  ),
-                  actionsIconTheme:
-                      IconThemeData(color: Colors.white70, size: 4.sp),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Color(0xFF07232c),
+              appBarTheme: AppBarTheme(
+                titleTextStyle: TextStyle(color: Colors.white70),
+                // ignore: deprecated_member_use
+                textTheme: TextTheme(
+                  caption: TextStyle(color: Colors.white70),
                 ),
+                titleSpacing: 4.0.w,
+                color: Color(0xFF07232c),
+                elevation: 1,
+                iconTheme: IconThemeData(
+                  color: Colors.white,
+                ),
+                actionsIconTheme:
+                    IconThemeData(color: Colors.white70, size: 4.sp),
               ),
-              title: 'TextMe',
-              home: Splash());
-        },
-      ),
+            ),
+            title: 'TextMe',
+            home: Splash(),
+          ),
+        );
+      },
     );
   }
 }
