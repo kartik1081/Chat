@@ -343,7 +343,12 @@ class _SignInState extends State<SignIn> {
                                                       MaterialStateProperty.all(
                                                           7.0)),
                                               onPressed: () {
-                                                _fire.googleSignIn(context);
+                                                context
+                                                    .read<Authentication>()
+                                                    .googleSignIn(
+                                                      context,
+                                                    );
+
                                                 setState(() {
                                                   _loading = true;
                                                 });
@@ -586,10 +591,21 @@ class _SignInState extends State<SignIn> {
                                                         MaterialStateProperty
                                                             .all(7.0)),
                                                 onPressed: () {
+                                                  context
+                                                      .read<Authentication>()
+                                                      .googleSignIn(
+                                                        context,
+                                                      );
+
                                                   setState(() {
                                                     _loading = true;
                                                   });
-                                                  _fire.googleSignIn(context);
+                                                  Timer(Duration(seconds: 5),
+                                                      () {
+                                                    setState(() {
+                                                      _loading = false;
+                                                    });
+                                                  });
                                                 },
                                                 child: Image.asset(
                                                     "assets/google.jpg"),

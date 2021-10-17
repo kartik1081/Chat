@@ -44,9 +44,6 @@ class _ProfileState extends State<Profile> {
             onPressed: () {
               if (_auth.currentUser != null) {
                 context.read<Authentication>().signOut(context);
-              } else {
-                // ignore: unnecessary_statements
-                null;
               }
             },
             icon: Icon(Icons.logout),

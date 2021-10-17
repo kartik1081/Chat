@@ -6,8 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/Providers/list_provider.dart';
+import 'package:textme/models/services/fire.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
+import 'package:textme/models/users.dart';
+import 'package:textme/presentation/pages/search.dart';
 
 import 'presentation/pages/homepage.dart';
 import 'presentation/pages/splash.dart';
@@ -55,6 +58,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  ListProvider _listProvider = ListProvider();
+
   @override
   void initState() {
     super.initState();
@@ -89,41 +94,38 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    Fire _fire = Fire();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => Authentication(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => ListProvider(),
-        )
       ],
       child: Sizer(
         builder: (BuildContext context, Orientation orientation,
             DeviceType deviceType) {
           return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: Color(0xFF07232c),
-              appBarTheme: AppBarTheme(
-                titleTextStyle: TextStyle(color: Colors.white70),
-                // ignore: deprecated_member_use
-                textTheme: TextTheme(
-                  caption: TextStyle(color: Colors.white70),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                scaffoldBackgroundColor: Color(0xFF07232c),
+                appBarTheme: AppBarTheme(
+                  titleTextStyle: TextStyle(color: Colors.white70),
+                  // ignore: deprecated_member_use
+                  textTheme: TextTheme(
+                    caption: TextStyle(color: Colors.white70),
+                  ),
+                  titleSpacing: 4.0.w,
+                  color: Color(0xFF07232c),
+                  elevation: 1,
+                  iconTheme: IconThemeData(
+                    color: Colors.white,
+                  ),
+                  actionsIconTheme:
+                      IconThemeData(color: Colors.white70, size: 4.sp),
                 ),
-                titleSpacing: 4.0.w,
-                color: Color(0xFF07232c),
-                elevation: 1,
-                iconTheme: IconThemeData(
-                  color: Colors.white,
-                ),
-                actionsIconTheme:
-                    IconThemeData(color: Colors.white70, size: 4.sp),
               ),
-            ),
-            title: 'TextMe',
-            home: Splash(),
-          );
+              title: 'TextMe',
+              home: Splash());
         },
       ),
     );

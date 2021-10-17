@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:textme/models/Providers/list_provider.dart';
+import 'package:textme/models/services/fire.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -13,14 +15,15 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  Fire _fire = Fire();
   @override
   void initState() {
     super.initState();
-
     Timer(Duration(seconds: 4), () {
       context.read<Authentication>().loggedInUser(context);
       context.read<Authentication>().checkNetwork();
     });
+    // print(context.watch<ListProvider>().allUsers);
   }
 
   @override

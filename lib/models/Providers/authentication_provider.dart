@@ -231,10 +231,7 @@ class Authentication extends ChangeNotifier {
 
   void signOut(BuildContext context) async {
     try {
-      await _auth.signOut().whenComplete(() {
-        _loggedIn = false;
-        _navigate(context, "signin");
-      });
+      await _auth.signOut();
     } catch (e) {
       print(e.toString());
     }
@@ -256,13 +253,6 @@ class Authentication extends ChangeNotifier {
     }
   }
 
-  void checkLoggedin() {
-    _auth.authStateChanges().listen((event) {
-      if (event != null) {
-      } else {}
-    });
-  }
-
   void checkNetwork() {
     Connectivity().onConnectivityChanged.listen((event) {
       switch (event) {
@@ -279,5 +269,21 @@ class Authentication extends ChangeNotifier {
       print(_isNet);
     });
     notifyListeners();
+  }
+
+  Stream<List<Users>> get searchUserList {
+    try {
+      return _firestore
+          .collection("Users")
+          .doc(_currentUser.id)
+          .collection("ChatWith")
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((document) => Users.fromJson(document.data()))
+              .toList());
+    } catch (e) {
+      print("searchUserList : " + e.toString());
+      return [] as Stream<List<Users>>;
+    }
   }
 }

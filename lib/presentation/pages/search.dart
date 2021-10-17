@@ -3,8 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:textme/models/Providers/list_provider.dart';
 import 'package:textme/models/services/pageroute.dart';
+import 'package:textme/models/users.dart';
 import 'package:uuid/uuid.dart';
 
 import 'chatdetail.dart';
@@ -34,6 +37,8 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // var list = Provider.of<List<Users>>(context);
+    // print(list[2].name.toString());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

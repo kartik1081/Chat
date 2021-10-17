@@ -8,7 +8,7 @@ class SlidePageRoute extends PageRouteBuilder {
           pageBuilder: (context, animation, secondaryAnimation) {
             return widget;
           },
-          transitionDuration: Duration(milliseconds: 1000),
+          transitionDuration: Duration(milliseconds: 600),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             switch (direction) {
               case "right":
@@ -48,7 +48,7 @@ class ScalePageRoute extends PageRouteBuilder {
           pageBuilder: (context, animation, secondaryAnimation) {
             return widget;
           },
-          transitionDuration: Duration(milliseconds: 1000),
+          transitionDuration: Duration(milliseconds: 600),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return out
                 ? ScaleTransition(
