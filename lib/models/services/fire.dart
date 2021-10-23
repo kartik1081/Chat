@@ -295,7 +295,24 @@ class Fire {
           .collection("ChatWith")
           .snapshots()
           .map((snapshot) => snapshot.docs
-              .map((document) => Users.fromJson(document.data()))
+              .map((document) => Users.chatWith(document.data()))
+              .toList());
+    } catch (e) {
+      print("searchUserList : " + e.toString());
+      return [] as Stream<List<Users>>;
+    }
+  }
+
+  Stream<List<Users>> chatWithUserList(String id) {
+    try {
+      return _firestore
+          .collection("Users")
+          .doc(id)
+          .collection("ChatWith")
+          .orderBy("time", descending: true)
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((document) => Users.chatWith(document.data()))
               .toList());
     } catch (e) {
       print("searchUserList : " + e.toString());

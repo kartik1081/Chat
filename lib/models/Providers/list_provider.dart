@@ -12,25 +12,26 @@ class ListProvider extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Users> _usersList = [];
   List<Users> _chatWith = [];
-  List<Users> get allUsers => _usersList;
+  List<Users> get userList => _usersList;
   List<Users> get chatWith => _chatWith;
 
-  void searchUserList(String id) {
-    try {
-      _firestore
-          .collection("Users")
-          .doc(id)
-          .collection("ChatWith")
-          .snapshots()
-          .forEach((snapshot) {
-        snapshot.docs.forEach((document) {
-          var user = Users.fromJson(document.data());
-          _usersList.add(user);
-          notifyListeners();
-        });
+  // void setUsers(Users document) {
+  //   _usersList.add(document);
+  //   notifyListeners();
+  // }
+
+  Stream<Users> searchUserList(String id) async* {
+    // Users users;
+    _firestore
+        .collection("Users")
+        .doc(id)
+        .collection("ChatWith")
+        .snapshots()
+        .forEach((snapshot) {
+      snapshot.docs.forEach((document) async* {
+        _usersList.add(Users.fromJson(document.data()));
+        notifyListeners();
       });
-    } catch (e) {
-      print("searchUserList : " + e.toString());
-    }
+    }).onError((error, _) => print(error.toString()));
   }
 }

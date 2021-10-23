@@ -42,216 +42,189 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     // var list = Provider.of<List<Users>>(context);
     // print(list[2].name.toString());
-    return StreamProvider<List>(
-      initialData: [],
-      create: (context) {
-        var provider = Provider.of<Authentication>(context, listen: false);
-        _fire.searchUserList(provider.user.id);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: _isSearching
-              ? TextFormField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  keyboardType: TextInputType.multiline,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Type your messege!";
-                    }
-                  },
-                  controller: search,
-                  cursorHeight: 22.0,
-                  decoration: InputDecoration(
-                    hintText: "Search",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    fillColor: Colors.white,
-                    filled: true,
-                    contentPadding:
-                        const EdgeInsets.fromLTRB(13.0, -5.0, 0.0, -5.0),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 0.0000000001, color: Colors.black),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(width: 0.0000000001, color: Colors.white),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                )
-              : Text("Search"),
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _isSearching = !_isSearching;
-                  if (_isSearching) {
-                    search.clear();
-                  }
-                });
-              },
-              icon: Icon(Icons.search),
-            ),
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                    uuid = Uuid().v4();
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateRoom(uuid: uuid.toString()),
-                        fullscreenDialog: true),
-                  );
+    List<Users> _list = Provider.of<List<Users>>(context);
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: _isSearching
+            ? TextFormField(
+                onChanged: (value) {
+                  setState(() {});
                 },
-                child: Text("Room")),
-          ],
-        ),
-        body: SafeArea(
-          child: _isSearching
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: StreamBuilder<dynamic>(
-                    stream: _firestore
-                        .collection("Users")
-                        .where("name", isEqualTo: search.text)
-                        // .orderBy("time", descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (context, index) {
-                                return StreamBuilder<dynamic>(
-                                    stream: _firestore
-                                        .collection("Users")
-                                        .doc(_auth.currentUser!.uid)
-                                        .collection("ChatWith")
-                                        .doc(snapshot.data.docs[index]["id"])
-                                        .snapshots(),
-                                    builder: (context, snapshots) {
-                                      if (snapshots.hasData) {
-                                        Map<String, dynamic>? data =
-                                            snapshots.data.data();
-                                        return data != null
-                                            ? ListItem(
-                                                name: snapshot.data.docs[index]
-                                                    ["name"],
-                                                id: snapshot.data.docs[index]
-                                                    ["id"],
-                                                profilePic: snapshot.data
-                                                    .docs[index]["profilePic"],
-                                                added: true,
-                                                add_remove: "Remove",
-                                              )
-                                            : ListItem(
-                                                name: snapshot.data.docs[index]
-                                                    ["name"],
-                                                id: snapshot.data.docs[index]
-                                                    ["id"],
-                                                profilePic: snapshot.data
-                                                    .docs[index]["profilePic"],
-                                                added: false,
-                                                add_remove: "Add",
-                                              );
-                                      } else {
-                                        return SpinKitFadingCircle(
-                                            color: Color(0xFF2EF7F7));
-                                      }
-                                    });
-                              },
-                            )
-                          : SpinKitFadingCircle(
-                              color: Color(0xFF2EF7F7),
-                            );
-                    },
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: StreamBuilder<dynamic>(
-                    stream: _firestore.collection("Users").snapshots(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? Consumer<List<Users>>(
-                              builder: (context, value, child) {
-                              print(
-                                  "length of list " + value.length.toString());
-                              print(value);
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: value.length,
-                                itemBuilder: (context, index) {
-                                  return StreamBuilder<dynamic>(
-                                      stream: _firestore
-                                          .collection("Users")
-                                          .doc(_auth.currentUser!.uid)
-                                          .collection("ChatWith")
-                                          .doc(snapshot.data.docs[index]["id"])
-                                          .snapshots(),
-                                      builder: (context, snapshots) {
-                                        if (snapshots.hasData) {
-                                          Map<String, dynamic>? data =
-                                              snapshots.data.data();
-                                          return data != null
-                                              ? ListItem(
-                                                  name: snapshot
-                                                      .data.docs[index]["name"],
-                                                  id: snapshot.data.docs[index]
-                                                      ["id"],
-                                                  profilePic:
-                                                      snapshot.data.docs[index]
-                                                          ["profilePic"],
-                                                  added: true,
-                                                  add_remove: "Remove",
-                                                )
-                                              : ListItem(
-                                                  name: snapshot
-                                                      .data.docs[index]["name"],
-                                                  id: snapshot.data.docs[index]
-                                                      ["id"],
-                                                  profilePic:
-                                                      snapshot.data.docs[index]
-                                                          ["profilePic"],
-                                                  added: false,
-                                                  add_remove: "Add",
-                                                );
-                                        } else {
-                                          return Shimmer.fromColors(
-                                            baseColor: Color(0xFF31444B),
-                                            highlightColor: Color(0xFF618A99),
-                                            child: Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                vertical: 4.0,
-                                                horizontal: 8.0,
-                                              ),
-                                              height: 60,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                color: Color(0xFF31444B),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      });
-                                },
-                              );
-                            })
-                          : SpinKitFadingCircle(
-                              color: Color(0xFF2EF7F7),
-                            );
-                    },
+                keyboardType: TextInputType.multiline,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Type your messege!";
+                  }
+                },
+                controller: search,
+                cursorHeight: 22.0,
+                decoration: InputDecoration(
+                  hintText: "Search",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(13.0, -5.0, 0.0, -5.0),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(width: 0.0000000001, color: Colors.black),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 0.0000000001, color: Colors.white),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-        ),
+              )
+            : Text("Search"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+                if (_isSearching) {
+                  search.clear();
+                }
+              });
+            },
+            icon: Icon(Icons.search),
+          ),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  uuid = Uuid().v4();
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateRoom(uuid: uuid.toString()),
+                      fullscreenDialog: true),
+                );
+              },
+              child: Text("Room")),
+        ],
+      ),
+      body: SafeArea(
+        child: _isSearching
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: StreamBuilder<dynamic>(
+                  stream: _firestore
+                      .collection("Users")
+                      .where("name", isEqualTo: search.text)
+                      // .orderBy("time", descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return snapshot.hasData
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              return StreamBuilder<dynamic>(
+                                  stream: _firestore
+                                      .collection("Users")
+                                      .doc(_auth.currentUser!.uid)
+                                      .collection("ChatWith")
+                                      .doc(snapshot.data.docs[index]["id"])
+                                      .snapshots(),
+                                  builder: (context, snapshots) {
+                                    if (snapshots.hasData) {
+                                      Map<String, dynamic>? data =
+                                          snapshots.data.data();
+                                      return data != null
+                                          ? ListItem(
+                                              name: snapshot.data.docs[index]
+                                                  ["name"],
+                                              id: snapshot.data.docs[index]
+                                                  ["id"],
+                                              profilePic: snapshot.data
+                                                  .docs[index]["profilePic"],
+                                              added: true,
+                                              add_remove: "Remove",
+                                            )
+                                          : ListItem(
+                                              name: snapshot.data.docs[index]
+                                                  ["name"],
+                                              id: snapshot.data.docs[index]
+                                                  ["id"],
+                                              profilePic: snapshot.data
+                                                  .docs[index]["profilePic"],
+                                              added: false,
+                                              add_remove: "Add",
+                                            );
+                                    } else {
+                                      return SpinKitFadingCircle(
+                                          color: Color(0xFF2EF7F7));
+                                    }
+                                  });
+                            },
+                          )
+                        : SpinKitFadingCircle(
+                            color: Color(0xFF2EF7F7),
+                          );
+                  },
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: _list != null
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: _list.length,
+                        itemBuilder: (context, index) {
+                          return StreamBuilder<dynamic>(
+                              stream: _firestore
+                                  .collection("Users")
+                                  .doc(_auth.currentUser!.uid)
+                                  .collection("ChatWith")
+                                  .doc(_list[index].id)
+                                  .snapshots(),
+                              builder: (context, snapshots) {
+                                if (snapshots.hasData) {
+                                  Map<String, dynamic>? data =
+                                      snapshots.data.data();
+                                  return _list[index].id != null
+                                      ? ListItem(
+                                          name: _list[index].name,
+                                          id: _list[index].id,
+                                          profilePic: _list[index].profilePic,
+                                          added: true,
+                                          add_remove: "Remove",
+                                        )
+                                      : ListItem(
+                                          name: _list[index].name,
+                                          id: _list[index].id,
+                                          profilePic: _list[index].profilePic,
+                                          added: false,
+                                          add_remove: "Add",
+                                        );
+                                } else {
+                                  return Shimmer.fromColors(
+                                    baseColor: Color(0xFF31444B),
+                                    highlightColor: Color(0xFF618A99),
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                        vertical: 4.0,
+                                        horizontal: 8.0,
+                                      ),
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        color: Color(0xFF31444B),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              });
+                        },
+                      )
+                    : SpinKitFadingCircle(
+                        color: Color(0xFF2EF7F7),
+                      )),
       ),
     );
   }

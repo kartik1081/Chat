@@ -3,7 +3,10 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
+import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/Providers/list_provider.dart';
+import 'package:textme/models/services/fire.dart';
+import 'package:textme/models/users.dart';
 
 import 'chatpage.dart';
 import 'profile.dart';
@@ -18,18 +21,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController controller = PageController();
+  Fire _fire = Fire();
+  // var provider = Provider.of<Authentication>(context);
 
   int _index = 0;
-  List pages = [
-    ChatPage(
-      index: 0,
-    ),
-    Search(),
-    Profile()
-  ];
 
   @override
   Widget build(BuildContext context) {
+    List pages = [
+      StreamProvider.value(
+        initialData: [],
+        value: _fire.chatWithUserList(context.watch<Authentication>().user.id),
+        child: ChatPage(
+          index: 0,
+        ),
+      ),
+      StreamProvider<List<Users>>.value(
+        value: _fire.searchUserList(context.watch<Authentication>().user.id),
+        child: Search(),
+        initialData: [],
+        // catchError: (_, error) {
+        //   return Text(error.toString());
+        // },
+      ),
+      Profile()
+    ];
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
