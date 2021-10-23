@@ -9,7 +9,7 @@ import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/Providers/list_provider.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/models/users.dart';
+import 'package:textme/models/models.dart';
 import 'package:uuid/uuid.dart';
 
 import 'chatdetail.dart';

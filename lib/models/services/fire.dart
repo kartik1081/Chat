@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/src/provider.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/pageroute.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:textme/models/users.dart';
+import 'package:textme/models/models.dart';
 import 'package:textme/presentation/pages/homepage.dart';
 import 'package:textme/presentation/pages/signin.dart';
 import 'package:textme/presentation/widgets/textField.dart';
@@ -313,10 +314,23 @@ class Fire {
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((document) => Users.chatWith(document.data()))
-              .toList());
+              .toList(growable: true));
     } catch (e) {
       print("searchUserList : " + e.toString());
       return [] as Stream<List<Users>>;
     }
   }
+
+  // Users userDetail(Users users) {
+  //   var user;
+  //   _firestore.collection("Users").doc(users.id).snapshots().map((value) {
+  //     var x = value.data();
+  //     user = Users.fromJson(x.);
+  //   });
+  //   return user;
+  // }
+
+  // Stream<List<Message>> msg(){
+
+  // }
 }

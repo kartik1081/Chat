@@ -6,7 +6,7 @@ import 'package:provider/src/provider.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/Providers/list_provider.dart';
 import 'package:textme/models/services/fire.dart';
-import 'package:textme/models/users.dart';
+import 'package:textme/models/models.dart';
 
 import 'chatpage.dart';
 import 'profile.dart';
@@ -29,12 +29,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List pages = [
-      StreamProvider.value(
-        initialData: [],
-        value: _fire.chatWithUserList(context.watch<Authentication>().user.id),
-        child: ChatPage(
-          index: 0,
-        ),
+      ChatPage(
+        index: 0,
       ),
       StreamProvider<List<Users>>.value(
         value: _fire.searchUserList(context.watch<Authentication>().user.id),

@@ -24,3 +24,14 @@ class Users {
         profilePic = json["profilePic"],
         id = json["id"];
 }
+
+class Message {
+  late String msg;
+  late Timestamp time;
+  Message.forG(Map<String, dynamic> json)
+      : msg = json["msg"],
+        time = json["time"];
+  Message.forP(Map<String, dynamic> json)
+      : msg = json["msg"],
+        time = json["time"];
+}

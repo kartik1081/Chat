@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:textme/models/Providers/authentication_provider.dart';
 import 'package:textme/models/services/fire.dart';
-import 'package:textme/models/users.dart';
+import 'package:textme/models/models.dart';
 
 class ListProvider extends ChangeNotifier {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;

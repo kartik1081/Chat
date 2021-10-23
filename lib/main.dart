@@ -9,7 +9,7 @@ import 'package:textme/models/Providers/list_provider.dart';
 import 'package:textme/models/services/fire.dart';
 import 'package:textme/models/services/localnotifiacation.dart';
 import 'package:textme/models/services/pageroute.dart';
-import 'package:textme/models/users.dart';
+import 'package:textme/models/models.dart';
 import 'package:textme/presentation/pages/search.dart';
 
 import 'presentation/pages/homepage.dart';

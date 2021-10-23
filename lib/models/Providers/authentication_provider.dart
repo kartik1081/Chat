@@ -8,7 +8,7 @@ import 'package:textme/models/services/pageroute.dart';
 import 'package:textme/presentation/pages/homepage.dart';
 import 'package:textme/presentation/pages/signin.dart';
 
-import '../users.dart';
+import '../models.dart';
 
 class Authentication extends ChangeNotifier {
   FirebaseAuth _auth = FirebaseAuth.instance;
